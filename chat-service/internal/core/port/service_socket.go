@@ -7,5 +7,7 @@ import "github.com/lxzan/gws"
  */
 
 type SocketService interface {
-	Subscribe(socket *gws.Conn)
+	Save(socket *gws.Conn)
+	Get(socketID string) *gws.Conn
+	Delete(socketID string)
 }

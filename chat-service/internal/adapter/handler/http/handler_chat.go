@@ -44,7 +44,8 @@ func (h *ChatHandler) ChatHandler(writer http.ResponseWriter, request *http.Requ
 		return
 	}
 
-	h.socketService.Subscribe(socket)
+	h.socketService.Save(socket)
+	h.roomService.Create(socket)
 	h.roomService.Subscribe(socket)
 
 	go func() {

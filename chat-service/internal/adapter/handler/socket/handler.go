@@ -2,6 +2,7 @@ package socket
 
 import (
 	"fmt"
+	"github.com/espitman/gws-chat/chat-service/internal/core/port"
 	"github.com/lxzan/gws"
 	"time"
 )
@@ -12,53 +13,54 @@ const (
 )
 
 type Handler struct {
+	socketService port.SocketService
+	roomService   port.RoomService
 }
 
-func NewHandler() Handler {
-	return Handler{}
+func NewHandler(socketService port.SocketService, roomService port.RoomService) Handler {
+	return Handler{
+		socketService: socketService,
+		roomService:   roomService,
+	}
 }
 
-func (c *Handler) OnOpen(socket *gws.Conn) {
+func (h *Handler) OnOpen(socket *gws.Conn) {
 	_ = socket.SetDeadline(time.Now().Add(PingInterval + PingWait))
 	socketID, _ := socket.Session().Load("socketID")
 	socket.WriteString(socketID.(string))
 	fmt.Println("OnOpen")
 }
 
-func (c *Handler) OnClose(socket *gws.Conn, err error) {
+func (h *Handler) OnClose(socket *gws.Conn, err error) {
 	id, _ := socket.Session().Load("roomID")
 	socketID, _ := socket.Session().Load("socketID")
-	//delete(userSockets, socketID.(string))
-	//var a []string
-	//for _, s := range subscribers[id.(string)] {
-	//	if s != socketID {
-	//		a = append(a, s)
-	//	}
-	//}
-	//subscribers[id.(string)] = a
+
+	h.socketService.Delete(socketID.(string))
+	//TODO: unsubscribe
 
 	fmt.Println("OnClose", id, socketID)
 }
 
-func (c *Handler) OnPing(socket *gws.Conn, payload []byte) {
+func (h *Handler) OnPing(socket *gws.Conn, payload []byte) {
 	_ = socket.SetDeadline(time.Now().Add(PingInterval + PingWait))
 	_ = socket.WritePong(nil)
 	fmt.Println("OnPing")
 }
 
-func (c *Handler) OnPong(socket *gws.Conn, payload []byte) {
+func (h *Handler) OnPong(socket *gws.Conn, payload []byte) {
 	fmt.Println("OnPong")
 }
 
-func (c *Handler) OnMessage(socket *gws.Conn, message *gws.Message) {
+func (h *Handler) OnMessage(socket *gws.Conn, message *gws.Message) {
 	defer message.Close()
-	id, _ := socket.Session().Load("roomID")
+	roomID, _ := socket.Session().Load("roomID")
 	socketID, _ := socket.Session().Load("socketID")
-	fmt.Println("OnMessage", id, socketID)
-	//for _, s := range subscribers[id.(string)] {
-	//	if s != socketID {
-	//		sk := userSockets[s]
-	//		sk.WriteMessage(message.Opcode, message.Bytes())
-	//	}
-	//}
+	fmt.Println("OnMessage", roomID, socketID)
+	subscribers := h.roomService.GetSubscribers(roomID.(string))
+	for _, s := range subscribers {
+		sid, _ := s.Session().Load("socketID")
+		if sid != socketID {
+			s.WriteMessage(message.Opcode, message.Bytes())
+		}
+	}
 }

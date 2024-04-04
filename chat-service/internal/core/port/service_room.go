@@ -7,5 +7,7 @@ import "github.com/lxzan/gws"
  */
 
 type RoomService interface {
-	Subscribe(room *gws.Conn)
+	Create(socket *gws.Conn) error
+	Subscribe(socket *gws.Conn) error
+	GetSubscribers(roomID string) []*gws.Conn
 }
