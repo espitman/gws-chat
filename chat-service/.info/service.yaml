@@ -1,0 +1,15 @@
+module: github.com/espitman/gws-chat/chat-service
+name: chat-serive
+http: true
+HTTPInfo:
+    name: message
+    serviceName: message
+    domainName: message
+grpc: false
+GRPCInfo:
+    ProtoPath: ""
+    PBModule: ""
+    Service: ""
+DB:
+    postgreSQL: true
+    mongoDB: false
