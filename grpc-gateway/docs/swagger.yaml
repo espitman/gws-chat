@@ -1,5 +1,14 @@
 basePath: /
 definitions:
+  main.messageServiceV1CreateRoomResponseDto:
+    properties:
+      code:
+        type: integer
+      message:
+        type: string
+      payload:
+        $ref: '#/definitions/message_service.V1CreateRoomResponse'
+    type: object
   main.userServiceV1GetAllResponseDto:
     properties:
       code:
@@ -18,14 +27,17 @@ definitions:
       payload:
         $ref: '#/definitions/user_service.V1LoginResponse'
     type: object
-  main.userServiceV1ValidateTokenResponseDto:
+  message_service.V1CreateRoomRequest:
     properties:
-      code:
+      userid1:
         type: integer
-      message:
+      userid2:
+        type: integer
+    type: object
+  message_service.V1CreateRoomResponse:
+    properties:
+      id:
         type: string
-      payload:
-        $ref: '#/definitions/user_service.V1ValidateTokenResponse'
     type: object
   user_service.User:
     properties:
@@ -79,19 +91,6 @@ definitions:
       user:
         $ref: '#/definitions/user_service.User'
     type: object
-  user_service.V1ValidateTokenRequest:
-    properties:
-      token:
-        description: '@gotags: validate:"required"'
-        type: string
-    required:
-    - token
-    type: object
-  user_service.V1ValidateTokenResponse:
-    properties:
-      user:
-        $ref: '#/definitions/user_service.UserPublic'
-    type: object
 info:
   contact:
     email: s.heidar@jabama.com
@@ -100,6 +99,28 @@ info:
   title: gRPC Gateway
   version: "1.0"
 paths:
+  /api/v1/message-service/room:
+    post:
+      description: V1CreateRoom
+      parameters:
+      - description: body
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/message_service.V1CreateRoomRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/main.messageServiceV1CreateRoomResponseDto'
+      security:
+      - BearerAuth: []
+      summary: V1CreateRoom
+      tags:
+      - message_service
   /api/v1/user-service/all:
     get:
       description: V1GetAll
@@ -142,28 +163,6 @@ paths:
       security:
       - BearerAuth: []
       summary: V1Login
-      tags:
-      - user_service
-  /api/v1/user-service/v1-validate-token:
-    post:
-      description: V1ValidateToken
-      parameters:
-      - description: body
-        in: body
-        name: body
-        required: true
-        schema:
-          $ref: '#/definitions/user_service.V1ValidateTokenRequest'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/main.userServiceV1ValidateTokenResponseDto'
-      security:
-      - BearerAuth: []
-      summary: V1ValidateToken
       tags:
       - user_service
 securityDefinitions:

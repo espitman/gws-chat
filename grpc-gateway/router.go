@@ -1,5 +1,5 @@
 // This file generated automatically by gRPC gateway generator
-// Generated at: 2024-04-06 00:28:32
+// Generated at: 2024-04-06 02:01:20
 
 package main
 
@@ -9,17 +9,20 @@ import (
 )
 
 type router struct {
-	userServiceClient  userpb.UserServiceClient
-	userServiceHandler *userServiceHandler
+	userServiceClient     userpb.UserServiceClient
+	userServiceHandler    *userServiceHandler
+	messageServiceHandler *messageServiceHandler
 }
 
 func newRouter(
 	userServiceClient userpb.UserServiceClient,
 	userServiceHandler *userServiceHandler,
+	messageServiceHandler *messageServiceHandler,
 ) *router {
 	return &router{
-		userServiceClient:  userServiceClient,
-		userServiceHandler: userServiceHandler,
+		userServiceClient:     userServiceClient,
+		userServiceHandler:    userServiceHandler,
+		messageServiceHandler: messageServiceHandler,
 	}
 }
 
@@ -28,4 +31,5 @@ func (r *router) serve(app *fiber.App) {
 	v1 := api.Group("/v1")
 	r.swaggerRouter(app)
 	r.userServiceRouter(v1.Group("/user-service"))
+	r.messageServiceRouter(v1.Group("/message-service"))
 }

@@ -1,5 +1,5 @@
 // This file generated automatically by gRPC gateway generator
-// Generated at: 2024-04-06 00:28:30
+// Generated at: 2024-04-06 02:01:18
 
 package main
 
@@ -58,29 +58,6 @@ func (h *userServiceHandler) V1Login(c *fiber.Ctx) error {
 	_ = fctx.ParamsParser(&reqDto)
 	_ = fctx.BodyParser(&reqDto)
 	res, err := h.pb.V1Login(ctx, &reqDto)
-	if err != nil {
-		return fctx.BadRequest(err)
-	}
-	return fctx.ResponseOk(res)
-}
-
-// V1ValidateToken
-// @Summary V1ValidateToken
-// @Description V1ValidateToken
-// @Tags user_service
-// @Produce json
-// @Security BearerAuth
-// @Param body body userpb.V1ValidateTokenRequest true "body"
-// @Success 200 {object} userServiceV1ValidateTokenResponseDto
-// @Router /api/v1/user-service/v1-validate-token [Post]
-func (h *userServiceHandler) V1ValidateToken(c *fiber.Ctx) error {
-	var fctx = fiberCtx{c}
-	ctx := getCtx(fctx)
-	var reqDto userpb.V1ValidateTokenRequest
-	_ = fctx.QueryParser(&reqDto)
-	_ = fctx.ParamsParser(&reqDto)
-	_ = fctx.BodyParser(&reqDto)
-	res, err := h.pb.V1ValidateToken(ctx, &reqDto)
 	if err != nil {
 		return fctx.BadRequest(err)
 	}

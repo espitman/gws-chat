@@ -1,5 +1,5 @@
 // This file generated automatically by gRPC gateway generator
-// Generated at: 2024-04-06 00:28:32
+// Generated at: 2024-04-06 02:01:20
 
 package main
 
@@ -26,9 +26,12 @@ func main() {
 	app.Use(cors.New())
 	userServiceClient := newUserServiceClient()
 	userServiceHandler := newUserServiceHandler(userServiceClient)
+	messageServiceClient := newMessageServiceClient()
+	messageServiceHandler := newMessageServiceHandler(messageServiceClient)
 	router := newRouter(
 		userServiceClient,
 		userServiceHandler,
+		messageServiceHandler,
 	)
 	router.serve(app)
 	PORT := superConf.Get("app.port")

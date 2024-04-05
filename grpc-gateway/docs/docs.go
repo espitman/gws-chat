@@ -18,6 +18,42 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/api/v1/message-service/room": {
+            "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "V1CreateRoom",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "message_service"
+                ],
+                "summary": "V1CreateRoom",
+                "parameters": [
+                    {
+                        "description": "body",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/message_service.V1CreateRoomRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/main.messageServiceV1CreateRoomResponseDto"
+                        }
+                    }
+                }
+            }
+        },
         "/api/v1/user-service/all": {
             "get": {
                 "security": [
@@ -89,45 +125,23 @@ const docTemplate = `{
                     }
                 }
             }
-        },
-        "/api/v1/user-service/v1-validate-token": {
-            "post": {
-                "security": [
-                    {
-                        "BearerAuth": []
-                    }
-                ],
-                "description": "V1ValidateToken",
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "user_service"
-                ],
-                "summary": "V1ValidateToken",
-                "parameters": [
-                    {
-                        "description": "body",
-                        "name": "body",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/user_service.V1ValidateTokenRequest"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/main.userServiceV1ValidateTokenResponseDto"
-                        }
-                    }
-                }
-            }
         }
     },
     "definitions": {
+        "main.messageServiceV1CreateRoomResponseDto": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "integer"
+                },
+                "message": {
+                    "type": "string"
+                },
+                "payload": {
+                    "$ref": "#/definitions/message_service.V1CreateRoomResponse"
+                }
+            }
+        },
         "main.userServiceV1GetAllResponseDto": {
             "type": "object",
             "properties": {
@@ -156,17 +170,22 @@ const docTemplate = `{
                 }
             }
         },
-        "main.userServiceV1ValidateTokenResponseDto": {
+        "message_service.V1CreateRoomRequest": {
             "type": "object",
             "properties": {
-                "code": {
+                "userid1": {
                     "type": "integer"
                 },
-                "message": {
+                "userid2": {
+                    "type": "integer"
+                }
+            }
+        },
+        "message_service.V1CreateRoomResponse": {
+            "type": "object",
+            "properties": {
+                "id": {
                     "type": "string"
-                },
-                "payload": {
-                    "$ref": "#/definitions/user_service.V1ValidateTokenResponse"
                 }
             }
         },
@@ -246,26 +265,6 @@ const docTemplate = `{
             "properties": {
                 "user": {
                     "$ref": "#/definitions/user_service.User"
-                }
-            }
-        },
-        "user_service.V1ValidateTokenRequest": {
-            "type": "object",
-            "required": [
-                "token"
-            ],
-            "properties": {
-                "token": {
-                    "description": "@gotags: validate:\"required\"",
-                    "type": "string"
-                }
-            }
-        },
-        "user_service.V1ValidateTokenResponse": {
-            "type": "object",
-            "properties": {
-                "user": {
-                    "$ref": "#/definitions/user_service.UserPublic"
                 }
             }
         }
