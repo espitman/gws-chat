@@ -18,7 +18,43 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "/api/v1/user-service/v1-login": {
+        "/api/v1/user-service/all": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "V1GetAll",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "user_service"
+                ],
+                "summary": "V1GetAll",
+                "parameters": [
+                    {
+                        "description": "body",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/user_service.V1GetAllRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/main.userServiceV1GetAllResponseDto"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/user-service/login": {
             "post": {
                 "security": [
                     {
@@ -56,6 +92,20 @@ const docTemplate = `{
         }
     },
     "definitions": {
+        "main.userServiceV1GetAllResponseDto": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "integer"
+                },
+                "message": {
+                    "type": "string"
+                },
+                "payload": {
+                    "$ref": "#/definitions/user_service.V1GetAllResponse"
+                }
+            }
+        },
         "main.userServiceV1LoginResponseDto": {
             "type": "object",
             "properties": {
@@ -87,6 +137,20 @@ const docTemplate = `{
                 },
                 "status": {
                     "type": "string"
+                }
+            }
+        },
+        "user_service.V1GetAllRequest": {
+            "type": "object"
+        },
+        "user_service.V1GetAllResponse": {
+            "type": "object",
+            "properties": {
+                "users": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/user_service.User"
+                    }
                 }
             }
         },

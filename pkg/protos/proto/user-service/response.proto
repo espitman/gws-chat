@@ -5,6 +5,10 @@ package proto;
 option go_package = "github.com/espitman/gws-chat/pkg/protos/protogen/user-service";
 
 message V1LoginResponse {
-   User user = 1;
+  User user = 1;
+}
+
+message V1GetAllResponse {
+  repeated User users = 1;
 }
 

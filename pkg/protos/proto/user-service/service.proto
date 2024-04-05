@@ -8,4 +8,5 @@ option go_package = "github.com/espitman/gws-chat/pkg/protos/protogen/user-servi
 
 service UserService {
   rpc V1Login(V1LoginRequest) returns (V1LoginResponse) {}
+  rpc V1GetAll(V1GetAllRequest) returns (V1GetAllResponse) {}
 }

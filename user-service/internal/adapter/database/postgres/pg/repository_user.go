@@ -41,6 +41,14 @@ func (r *UserRepository) Get(ctx context.Context, d domain.User) (*domain.User, 
 	return userSchemaToUserDomainPointerMapper(u), nil
 }
 
+func (r *UserRepository) GetAll(ctx context.Context) ([]*domain.User, error) {
+	users, err := r.client.User.Query().All(ctx)
+	if err != nil {
+		return nil, err
+	}
+	return userSchemasToUserDomainsPointerMapper(users), nil
+}
+
 //
 //func (r *UserRepository) Update(ctx context.Context, ID int, d domain.User) (*domain.User, error) {
 //	u, err := r.client.User.UpdateOneID(ID).SetName(d.Name).Save(ctx)

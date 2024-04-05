@@ -61,3 +61,7 @@ func (s *UserService) Login(ctx context.Context, user domain.User) (*domain.User
 		Status: pgUser.Status,
 	}, nil
 }
+
+func (s *UserService) GetAll(ctx context.Context) ([]*domain.User, error) {
+	return s.userRepositoryPg.GetAll(ctx)
+}

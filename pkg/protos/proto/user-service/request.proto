@@ -7,3 +7,5 @@ message V1LoginRequest {
   string Name = 2; // @gotags: validate:"required"
   string Password = 3; // @gotags: validate:"required"
 }
+
+message V1GetAllRequest {}

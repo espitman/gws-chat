@@ -1,5 +1,5 @@
 // This file generated automatically by gRPC gateway generator
-// Generated at: 2024-04-05 16:15:24
+// Generated at: 2024-04-05 19:02:48
 
 package main
 
@@ -18,6 +18,29 @@ func newUserServiceHandler(pb userpb.UserServiceClient) *userServiceHandler {
 	}
 }
 
+// V1GetAll
+// @Summary V1GetAll
+// @Description V1GetAll
+// @Tags user_service
+// @Produce json
+// @Security BearerAuth
+// @Param body body userpb.V1GetAllRequest true "body"
+// @Success 200 {object} userServiceV1GetAllResponseDto
+// @Router /api/v1/user-service/all [Get]
+func (h *userServiceHandler) V1GetAll(c *fiber.Ctx) error {
+	var fctx = fiberCtx{c}
+	ctx := getCtx(fctx)
+	var reqDto userpb.V1GetAllRequest
+	_ = fctx.QueryParser(&reqDto)
+	_ = fctx.ParamsParser(&reqDto)
+	_ = fctx.BodyParser(&reqDto)
+	res, err := h.pb.V1GetAll(ctx, &reqDto)
+	if err != nil {
+		return fctx.BadRequest(err)
+	}
+	return fctx.ResponseOk(res)
+}
+
 // V1Login
 // @Summary V1Login
 // @Description V1Login
@@ -26,7 +49,7 @@ func newUserServiceHandler(pb userpb.UserServiceClient) *userServiceHandler {
 // @Security BearerAuth
 // @Param body body userpb.V1LoginRequest true "body"
 // @Success 200 {object} userServiceV1LoginResponseDto
-// @Router /api/v1/user-service/v1-login [Post]
+// @Router /api/v1/user-service/login [Post]
 func (h *userServiceHandler) V1Login(c *fiber.Ctx) error {
 	var fctx = fiberCtx{c}
 	ctx := getCtx(fctx)
