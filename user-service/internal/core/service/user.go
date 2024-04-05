@@ -34,9 +34,13 @@ func (s *UserService) passwordCompare(hashedPassword string, password string) er
 }
 
 func (s *UserService) register(ctx context.Context, user domain.User) (*domain.User, error) {
-	newUser := user
-	newUser.Password = s.passwordGenerator(user.Password)
-	return s.userRepositoryPg.Crete(ctx, newUser)
+	user.Password = s.passwordGenerator(user.Password)
+	user.Avatar = s.avatar(user.Name)
+	return s.userRepositoryPg.Crete(ctx, user)
+}
+
+func (s *UserService) avatar(name string) string {
+	return "https://api.dicebear.com/8.x/thumbs/svg?seed=" + name
 }
 
 func (s *UserService) Login(ctx context.Context, user domain.User) (*domain.User, error) {

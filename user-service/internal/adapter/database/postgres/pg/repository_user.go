@@ -26,6 +26,7 @@ func (r *UserRepository) Crete(ctx context.Context, d domain.User) (*domain.User
 		Create().
 		SetName(d.Name).
 		SetPassword(d.Password).
+		SetAvatar(d.Avatar).
 		Save(ctx)
 	if err != nil {
 		return nil, err
