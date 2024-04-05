@@ -22,6 +22,7 @@ protoc:
 	protoc --go_opt=module=${GO_MODULE} --go_out=. \
   --go-grpc_opt=module=${GO_MODULE} --go-grpc_out=. \
   ./proto/user-service/*.proto \
+  ./proto/message-service/*.proto \
 
 .PHONY: protoc-tag
 protoc-tag:

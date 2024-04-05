@@ -1,0 +1,11 @@
+syntax = "proto3";
+import "proto/message-service/response.proto";
+import "proto/message-service/request.proto";
+
+package proto;
+option go_package = "github.com/espitman/gws-chat/pkg/protos/protogen/message-service";
+
+
+service MessageService {
+  rpc V1CreateRoom(V1CreateRoomRequest) returns (V1CreateRoomResponse) {}
+}

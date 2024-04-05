@@ -1,0 +1,15 @@
+module: github.com/espitman/gws-chat/message-service
+name: message-service
+http: false
+HTTPInfo:
+    name: ""
+    serviceName: ""
+    domainName: ""
+grpc: true
+GRPCInfo:
+    ProtoPath: /Users/espitman/Documents/Go/gws-chat/pkg/protos/proto/message-service/service.proto
+    PBModule: github.com/espitman/gws-chat/pkg/protos/protogen/message-service
+    Service: MessageService
+DB:
+    postgreSQL: true
+    mongoDB: false

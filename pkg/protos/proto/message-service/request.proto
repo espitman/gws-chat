@@ -1,0 +1,8 @@
+syntax = "proto3";
+
+package proto;
+option go_package = "github.com/espitman/gws-chat/pkg/protos/protogen/message-service";
+
+message V1CreateRoomRequest {
+
+}
