@@ -8,10 +8,12 @@ import (
 
 func getCtx(fctx fiberCtx) context.Context {
 	reqHeaders := fctx.GetReqHeaders()
+	//fmt.Println("userID:::", fctx.Locals("userID"))
 
 	headers := make(map[string]string)
 	if _, ok := reqHeaders["Authorization"]; ok {
-		headers["authorization"] = reqHeaders["Authorization"][0]
+		userID := fctx.Locals("userID").(string)
+		headers["authorization"] = userID //reqHeaders["Authorization"][0]
 	} else {
 		headers["authorization"] = "Guest"
 	}

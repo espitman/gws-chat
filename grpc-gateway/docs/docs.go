@@ -173,10 +173,7 @@ const docTemplate = `{
         "message_service.V1CreateRoomRequest": {
             "type": "object",
             "properties": {
-                "userid1": {
-                    "type": "integer"
-                },
-                "userid2": {
+                "userId": {
                     "type": "integer"
                 }
             }

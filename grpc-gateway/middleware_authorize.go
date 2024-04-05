@@ -1,9 +1,9 @@
 package main
 
 import (
-	"fmt"
 	userpb "github.com/espitman/gws-chat/pkg/protos/protogen/user-service"
 	"github.com/gofiber/fiber/v2"
+	"strconv"
 	"strings"
 )
 
@@ -26,9 +26,7 @@ func AuthMiddleware(userServiceClient userpb.UserServiceClient) fiber.Handler {
 				"message": "Unauthorized",
 			})
 		}
-
-		fmt.Println(token)
-
+		c.Locals("userID", strconv.Itoa(int(token.User.Id)))
 		return c.Next()
 	}
 }

@@ -36,6 +36,7 @@ func (s Server) AuthInterceptor() grpc.UnaryServerInterceptor {
 			s := status.New(codes.Unauthenticated, "Unauthenticated")
 			return nil, s.Err()
 		}
+		ctx = context.WithValue(ctx, "userID", userId)
 		return handler(ctx, req)
 	}
 }

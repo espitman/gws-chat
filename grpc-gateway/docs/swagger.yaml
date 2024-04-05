@@ -29,9 +29,7 @@ definitions:
     type: object
   message_service.V1CreateRoomRequest:
     properties:
-      userid1:
-        type: integer
-      userid2:
+      userId:
         type: integer
     type: object
   message_service.V1CreateRoomResponse:
