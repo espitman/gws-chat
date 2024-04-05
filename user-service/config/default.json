@@ -1,7 +1,7 @@
 {
   "app": {
     "grpc": {
-      "port": "8080"
+      "port": "8001"
     },
     "name": "user-service"
   },

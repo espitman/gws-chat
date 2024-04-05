@@ -1,0 +1,54 @@
+// This file generated automatically by gRPC gateway generator
+// Generated at: {{Time}}
+
+package main
+
+import (
+    {{ range .Services }}
+    pb{{.Name|Upper}} "{{.Path}}"
+    {{end}}
+	types "github.com/espitman/gws-chat/grpc-gateway/maker/_types"
+	util "github.com/espitman/gws-chat/grpc-gateway/maker/_util"
+	"reflect"
+)
+
+func getServiceMethods(service string) []types.Method {
+    {{ range .Services }}
+	if service == "{{.Name}}" {
+		ifs := reflect.TypeOf((*pb{{.Name|Upper}}.{{.Name|Upper}}ServiceServer)(nil)).Elem()
+		methods := util.GetMethods(ifs, service)
+		return methods
+	}
+	{{end}}
+	return nil
+}
+
+func createHandlerYaml(services types.Services) error {
+	filename := "./maker/generator/handler.yaml"
+	data := types.Services{
+		Services: services.Services,
+	}
+	return util.YamlWriter(filename, data)
+}
+
+func main() {
+
+    var services types.Services
+    var data struct {
+        Service []types.Service `yaml:"services"`
+    }
+    util.YamlReader("./maker/service.yaml", &data)
+
+    for _, service := range data.Service {
+        methods := getServiceMethods(service.Name)
+        s := types.Service{
+            Name:      service.Name,
+            Port:      service.Port,
+            Path:      service.Path,
+            Method:    methods,
+        }
+        services.Services = append(services.Services, s)
+    }
+
+    createHandlerYaml(services)
+}

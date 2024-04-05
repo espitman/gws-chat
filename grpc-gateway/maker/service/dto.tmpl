@@ -1,0 +1,16 @@
+// This file generated automatically by gRPC gateway generator
+// Generated at: {{Time}}
+
+package main
+
+import {{.PB}} "{{.PBPath}}"
+
+{{- range .Methods }}
+{{- if .Enable }}
+
+type {{$.Name}}Service{{.Name}}ResponseDto struct {
+	ResponseDto
+	Payload {{$.PB}}.{{.Out}}
+}
+{{- end }}
+{{- end }}

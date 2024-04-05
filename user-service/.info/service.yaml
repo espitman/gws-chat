@@ -8,7 +8,7 @@ HTTPInfo:
 grpc: true
 GRPCInfo:
     ProtoPath: /Users/espitman/Documents/Go/gws-chat/pkg/protos/proto/user-service/service.proto
-    PBModule: github.com/espitman/gws-chat/pkg/protos/protogen/order-service
+    PBModule: github.com/espitman/gws-chat/pkg/protos/protogen/user-service
     Service: OrderService
 DB:
     postgreSQL: true

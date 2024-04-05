@@ -1,0 +1,35 @@
+// This file generated automatically by gRPC gateway generator
+// Generated at: {{Time}}
+
+package main
+
+import (
+	"github.com/gofiber/fiber/v2"
+)
+
+type router struct {
+    {{- range .Handlers }}
+	{{.HandlerName}} *{{.HandlerName}}
+	{{- end }}
+}
+
+func newRouter(
+    {{- range .Handlers }}
+    {{.HandlerName}} *{{.HandlerName}},
+    {{- end }}
+) *router {
+	return &router{
+        {{- range .Handlers }}
+		{{.HandlerName}}: {{.HandlerName}},
+        {{- end }}
+	}
+}
+
+func (r *router) serve(app *fiber.App) {
+	api := app.Group("/api")
+	v1 := api.Group("/v1")
+	r.swaggerRouter(app)
+    {{- range .Handlers }}
+	r.{{.RouterName}}(v1.Group("/{{.Name}}-service"))
+	{{- end}}
+}

@@ -2,7 +2,7 @@ package grpc
 
 import (
 	"fmt"
-	pb "github.com/espitman/gws-chat/pkg/protos/protogen/order-service"
+	pb "github.com/espitman/gws-chat/pkg/protos/protogen/user-service"
 	"github.com/espitman/gws-chat/user-service/internal/core/port"
 	"github.com/go-playground/validator/v10"
 	"google.golang.org/grpc"
@@ -35,7 +35,7 @@ func NewServer(
 }
 
 func (s Server) registerServers(gs *grpc.Server) {
-	pb.RegisterOrderServiceServer(gs, s.handler)
+	pb.RegisterUserServiceServer(gs, s.handler)
 }
 
 func (s Server) Run() {

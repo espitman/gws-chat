@@ -1,0 +1,18 @@
+// This file generated automatically by gRPC gateway generator
+// Generated at: {{Time}}
+
+package main
+
+import (
+	{{.PB}} "{{.PBPath}}"
+	"google.golang.org/grpc"
+	"log"
+)
+
+func new{{.ClientName|Upper}}() {{.PB}}.{{.ClientName|Upper}} {
+	cc, err := grpc.Dial("localhost:{{.Port}}", grpc.WithInsecure())
+	if err != nil {
+		log.Println(err)
+	}
+	return {{.PB}}.New{{.ClientName|Upper}}(cc)
+}

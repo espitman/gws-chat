@@ -1,0 +1,77 @@
+basePath: /
+definitions:
+  main.userServiceV1LoginResponseDto:
+    properties:
+      code:
+        type: integer
+      message:
+        type: string
+      payload:
+        $ref: '#/definitions/user_service.V1LoginResponse'
+    type: object
+  user_service.User:
+    properties:
+      avatar:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      password:
+        type: string
+      status:
+        type: string
+    type: object
+  user_service.V1LoginRequest:
+    properties:
+      Name:
+        description: '@gotags: validate:"required"'
+        type: string
+      Password:
+        description: '@gotags: validate:"required"'
+        type: string
+    required:
+    - Name
+    - Password
+    type: object
+  user_service.V1LoginResponse:
+    properties:
+      user:
+        $ref: '#/definitions/user_service.User'
+    type: object
+info:
+  contact:
+    email: s.heidar@jabama.com
+    name: API Support
+  description: This is gRPC Gateway
+  title: gRPC Gateway
+  version: "1.0"
+paths:
+  /api/v1/user-service/v1-login:
+    post:
+      description: V1Login
+      parameters:
+      - description: body
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/user_service.V1LoginRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/main.userServiceV1LoginResponseDto'
+      security:
+      - BearerAuth: []
+      summary: V1Login
+      tags:
+      - user_service
+securityDefinitions:
+  BearerAuth:
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"

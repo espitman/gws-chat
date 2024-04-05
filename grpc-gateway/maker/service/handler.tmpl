@@ -1,0 +1,60 @@
+// This file generated automatically by gRPC gateway generator
+// Generated at: {{Time}}
+
+package main
+
+import (
+	{{.PB}} "{{.PBPath}}"
+	"github.com/gofiber/fiber/v2"
+)
+
+type {{.HandlerName}} struct {
+	pb {{.PB}}.{{.ClientName|Upper}}
+}
+
+func new{{.HandlerName|Upper}}(pb {{.PB}}.{{.ClientName|Upper}}) *{{.HandlerName}} {
+	return &{{.HandlerName}}{
+		pb: pb,
+	}
+}
+
+{{- range .Methods }}
+{{- if .Enable }}
+
+// {{.Name}}
+// @Summary {{.Name}}
+// @Description {{.Name}}
+// @Tags {{$.Name}}_service
+// @Produce json
+// @Security BearerAuth
+{{- if .Body }}
+// @Param body body {{$.PB}}.{{.In}} true "body"
+{{- end }}
+{{- range .Params }}{{- if .Name}}
+// @Param {{.Name}} {{.Kind}} {{.Type}} {{.Required}} "{{.Name}}"
+{{- end }}{{- end }}
+// @Success 200 {object} {{$.Name}}Service{{.Name}}ResponseDto
+// @Router /api/v1/{{$.Name}}-service/{{.SwaggerRoute|Kebab}} [{{.Method}}]
+func (h *{{$.HandlerName}}) {{.Name}}(c *fiber.Ctx) error {
+	var fctx = fiberCtx{c}
+	ctx := getCtx(fctx)
+	var reqDto {{$.PB}}.{{.In}}
+	{{- if .Query }}
+	_ = fctx.QueryParser(&reqDto)
+	{{- end }}
+	{{- if .Param }}
+	_ = fctx.ParamsParser(&reqDto)
+	{{- end }}
+	{{- if .Body }}
+	_ = fctx.BodyParser(&reqDto)
+	{{- end }}
+	res, err := h.pb.{{.Name}}(ctx, &reqDto)
+	if err != nil {
+		return fctx.BadRequest(err)
+	}
+	return fctx.ResponseOk(res)
+}
+{{- end }}
+{{- end }}
+
+

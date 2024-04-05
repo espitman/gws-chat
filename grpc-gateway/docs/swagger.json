@@ -1,0 +1,119 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "This is gRPC Gateway",
+        "title": "gRPC Gateway",
+        "contact": {
+            "name": "API Support",
+            "email": "s.heidar@jabama.com"
+        },
+        "version": "1.0"
+    },
+    "basePath": "/",
+    "paths": {
+        "/api/v1/user-service/v1-login": {
+            "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "V1Login",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "user_service"
+                ],
+                "summary": "V1Login",
+                "parameters": [
+                    {
+                        "description": "body",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/user_service.V1LoginRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/main.userServiceV1LoginResponseDto"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "main.userServiceV1LoginResponseDto": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "integer"
+                },
+                "message": {
+                    "type": "string"
+                },
+                "payload": {
+                    "$ref": "#/definitions/user_service.V1LoginResponse"
+                }
+            }
+        },
+        "user_service.User": {
+            "type": "object",
+            "properties": {
+                "avatar": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                },
+                "status": {
+                    "type": "string"
+                }
+            }
+        },
+        "user_service.V1LoginRequest": {
+            "type": "object",
+            "required": [
+                "Name",
+                "Password"
+            ],
+            "properties": {
+                "Name": {
+                    "description": "@gotags: validate:\"required\"",
+                    "type": "string"
+                },
+                "Password": {
+                    "description": "@gotags: validate:\"required\"",
+                    "type": "string"
+                }
+            }
+        },
+        "user_service.V1LoginResponse": {
+            "type": "object",
+            "properties": {
+                "user": {
+                    "$ref": "#/definitions/user_service.User"
+                }
+            }
+        }
+    },
+    "securityDefinitions": {
+        "BearerAuth": {
+            "type": "apiKey",
+            "name": "Authorization",
+            "in": "header"
+        }
+    }
+}

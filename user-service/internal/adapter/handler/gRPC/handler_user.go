@@ -2,7 +2,7 @@ package grpc
 
 import (
 	"context"
-	pb "github.com/espitman/gws-chat/pkg/protos/protogen/order-service"
+	pb "github.com/espitman/gws-chat/pkg/protos/protogen/user-service"
 	"github.com/espitman/gws-chat/user-service/internal/core/domain"
 )
 

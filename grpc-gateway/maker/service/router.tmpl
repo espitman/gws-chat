@@ -1,0 +1,20 @@
+// This file generated automatically by gRPC gateway generator
+// Generated at: {{Time}}
+
+package main
+
+import "github.com/gofiber/fiber/v2"
+
+func (r *router) {{.RouterName}}(v fiber.Router) {
+    {{- range .Methods }}
+    {{- if .Enable }}
+	v.{{.Method}}(
+	    "/{{.Route|Kebab}}",
+	    {{- if .Authorize }}
+	    AuthMiddleware,
+	    {{- end }}
+	    r.{{$.HandlerName}}.{{.Name}},
+	)
+	{{- end }}
+	{{- end }}
+}
