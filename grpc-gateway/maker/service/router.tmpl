@@ -11,7 +11,7 @@ func (r *router) {{.RouterName}}(v fiber.Router) {
 	v.{{.Method}}(
 	    "/{{.Route|Kebab}}",
 	    {{- if .Authorize }}
-	    AuthMiddleware,
+	    AuthMiddleware(r.userServiceClient),
 	    {{- end }}
 	    r.{{$.HandlerName}}.{{.Name}},
 	)

@@ -89,6 +89,42 @@ const docTemplate = `{
                     }
                 }
             }
+        },
+        "/api/v1/user-service/v1-validate-token": {
+            "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "V1ValidateToken",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "user_service"
+                ],
+                "summary": "V1ValidateToken",
+                "parameters": [
+                    {
+                        "description": "body",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/user_service.V1ValidateTokenRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/main.userServiceV1ValidateTokenResponseDto"
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {
@@ -117,6 +153,20 @@ const docTemplate = `{
                 },
                 "payload": {
                     "$ref": "#/definitions/user_service.V1LoginResponse"
+                }
+            }
+        },
+        "main.userServiceV1ValidateTokenResponseDto": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "integer"
+                },
+                "message": {
+                    "type": "string"
+                },
+                "payload": {
+                    "$ref": "#/definitions/user_service.V1ValidateTokenResponse"
                 }
             }
         },
@@ -196,6 +246,26 @@ const docTemplate = `{
             "properties": {
                 "user": {
                     "$ref": "#/definitions/user_service.User"
+                }
+            }
+        },
+        "user_service.V1ValidateTokenRequest": {
+            "type": "object",
+            "required": [
+                "token"
+            ],
+            "properties": {
+                "token": {
+                    "description": "@gotags: validate:\"required\"",
+                    "type": "string"
+                }
+            }
+        },
+        "user_service.V1ValidateTokenResponse": {
+            "type": "object",
+            "properties": {
+                "user": {
+                    "$ref": "#/definitions/user_service.UserPublic"
                 }
             }
         }

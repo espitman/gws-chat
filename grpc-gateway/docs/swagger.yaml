@@ -18,6 +18,15 @@ definitions:
       payload:
         $ref: '#/definitions/user_service.V1LoginResponse'
     type: object
+  main.userServiceV1ValidateTokenResponseDto:
+    properties:
+      code:
+        type: integer
+      message:
+        type: string
+      payload:
+        $ref: '#/definitions/user_service.V1ValidateTokenResponse'
+    type: object
   user_service.User:
     properties:
       avatar:
@@ -70,6 +79,19 @@ definitions:
       user:
         $ref: '#/definitions/user_service.User'
     type: object
+  user_service.V1ValidateTokenRequest:
+    properties:
+      token:
+        description: '@gotags: validate:"required"'
+        type: string
+    required:
+    - token
+    type: object
+  user_service.V1ValidateTokenResponse:
+    properties:
+      user:
+        $ref: '#/definitions/user_service.UserPublic'
+    type: object
 info:
   contact:
     email: s.heidar@jabama.com
@@ -120,6 +142,28 @@ paths:
       security:
       - BearerAuth: []
       summary: V1Login
+      tags:
+      - user_service
+  /api/v1/user-service/v1-validate-token:
+    post:
+      description: V1ValidateToken
+      parameters:
+      - description: body
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/user_service.V1ValidateTokenRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/main.userServiceV1ValidateTokenResponseDto'
+      security:
+      - BearerAuth: []
+      summary: V1ValidateToken
       tags:
       - user_service
 securityDefinitions:

@@ -1,5 +1,5 @@
 // This file generated automatically by gRPC gateway generator
-// Generated at: 2024-04-05 23:06:56
+// Generated at: 2024-04-06 00:28:30
 
 package main
 
@@ -14,5 +14,10 @@ func (r *router) userServiceRouter(v fiber.Router) {
 	v.Post(
 		"/login",
 		r.userServiceHandler.V1Login,
+	)
+	v.Post(
+		"/v1-validate-token",
+		AuthMiddleware(r.userServiceClient),
+		r.userServiceHandler.V1ValidateToken,
 	)
 }

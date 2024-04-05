@@ -5,20 +5,24 @@ package main
 
 import (
 	"github.com/gofiber/fiber/v2"
+    userpb "github.com/espitman/gws-chat/pkg/protos/protogen/user-service"
 )
 
 type router struct {
+    userServiceClient  userpb.UserServiceClient
     {{- range .Handlers }}
 	{{.HandlerName}} *{{.HandlerName}}
 	{{- end }}
 }
 
 func newRouter(
+    userServiceClient userpb.UserServiceClient,
     {{- range .Handlers }}
     {{.HandlerName}} *{{.HandlerName}},
     {{- end }}
 ) *router {
 	return &router{
+	    userServiceClient:  userServiceClient,
         {{- range .Handlers }}
 		{{.HandlerName}}: {{.HandlerName}},
         {{- end }}

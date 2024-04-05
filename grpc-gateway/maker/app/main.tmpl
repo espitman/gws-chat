@@ -30,6 +30,7 @@ func main() {
 	{{.HandlerName}} := new{{.HandlerName|Upper}}({{.ClientName}})
     {{- end }}
 	router := newRouter(
+	    userServiceClient,
 	    {{- range .Handlers }}
 		{{.HandlerName}},
 		{{- end }}
