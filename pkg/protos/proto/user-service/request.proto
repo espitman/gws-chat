@@ -9,3 +9,7 @@ message V1LoginRequest {
 }
 
 message V1GetAllRequest {}
+
+message V1ValidateTokenRequest {
+  string token = 1; // @gotags: validate:"required"
+}

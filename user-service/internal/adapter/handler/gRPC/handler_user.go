@@ -48,3 +48,20 @@ func (h Handler) V1GetAll(ctx context.Context, req *pb.V1GetAllRequest) (*pb.V1G
 
 	return &resp, nil
 }
+
+func (h Handler) V1ValidateToken(ctx context.Context, req *pb.V1ValidateTokenRequest) (*pb.V1ValidateTokenResponse, error) {
+	user, err := h.userService.ValidateToken(ctx, req.Token)
+	if err != nil {
+		return nil, err
+	}
+	resp := pb.V1ValidateTokenResponse{
+		User: &pb.UserPublic{
+			Id:   int32(user.ID),
+			Name: user.Name,
+		},
+	}
+	if err != nil {
+		return nil, err
+	}
+	return &resp, nil
+}

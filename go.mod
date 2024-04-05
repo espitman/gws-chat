@@ -5,11 +5,11 @@ go 1.22.1
 require (
 	entgo.io/ent v0.13.1
 	github.com/arsmn/fiber-swagger/v2 v2.31.1
-	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/espitman/go-super-cli v0.0.0-20240326123910-d250f980ceea
 	github.com/espitman/go-super-conf v0.0.0-20240312154053-70e4f684e1dc
 	github.com/go-playground/validator/v10 v10.19.0
 	github.com/gofiber/fiber/v2 v2.52.4
+	github.com/golang-jwt/jwt/v5 v5.2.1
 	github.com/google/uuid v1.6.0
 	github.com/hashicorp/go-memdb v1.3.4
 	github.com/jackc/pgx/v5 v5.5.5

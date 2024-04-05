@@ -12,3 +12,6 @@ message V1GetAllResponse {
   repeated UserPublic users = 1;
 }
 
+message V1ValidateTokenResponse {
+  UserPublic user = 1;
+}

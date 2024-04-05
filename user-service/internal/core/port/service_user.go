@@ -12,4 +12,5 @@ import (
 type UserService interface {
 	Login(ctx context.Context, user domain.User) (*domain.User, error)
 	GetAll(ctx context.Context) ([]*domain.User, error)
+	ValidateToken(ctx context.Context, token string) (*domain.User, error)
 }

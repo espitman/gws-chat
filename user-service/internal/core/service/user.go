@@ -4,9 +4,9 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"github.com/dgrijalva/jwt-go"
 	"github.com/espitman/gws-chat/user-service/internal/core/domain"
 	"github.com/espitman/gws-chat/user-service/internal/core/port"
+	"github.com/golang-jwt/jwt/v5"
 	"golang.org/x/crypto/bcrypt"
 	"time"
 )
@@ -47,30 +47,38 @@ func (s *UserService) avatar(name string) string {
 }
 
 func generateJWTToken(user domain.User) (string, error) {
-	token := jwt.New(jwt.SigningMethodHS256)
-	claims := token.Claims.(jwt.MapClaims)
-	claims["id"] = user.ID
-	claims["username"] = user.Name
-	claims["exp"] = time.Now().Add(time.Hour * 24).Unix() // Token expiration time
-	secretKey := []byte("jabamaChat")
-	signedToken, err := token.SignedString(secretKey)
+	hmacSampleSecret := []byte("jabamaChat")
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
+		"id":       user.ID,
+		"username": user.Name,
+		"exp":      time.Now().Add(time.Hour * 24).Unix(),
+	})
+	tokenString, err := token.SignedString(hmacSampleSecret)
 	if err != nil {
 		return "", err
 	}
-	return signedToken, nil
+	return tokenString, nil
 }
 
-func parseJWTToken(tokenString string) (*jwt.Token, error) {
+func parseJWTToken(tokenString string) (*domain.User, error) {
+	var resp domain.User
+	hmacSampleSecret := []byte("jabamaChat")
 	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
 		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
 			return nil, fmt.Errorf("unexpected signing method: %v", token.Header["alg"])
 		}
-		return []byte("jabamaChat"), nil
+		return hmacSampleSecret, nil
 	})
 	if err != nil {
 		return nil, err
 	}
-	return token, nil
+	if claims, ok := token.Claims.(jwt.MapClaims); ok {
+		resp.ID = int(claims["id"].(float64))
+		resp.Name = claims["username"].(string)
+	} else {
+		return nil, err
+	}
+	return &resp, nil
 }
 
 func (s *UserService) Login(ctx context.Context, user domain.User) (*domain.User, error) {
@@ -88,16 +96,25 @@ func (s *UserService) Login(ctx context.Context, user domain.User) (*domain.User
 	if err != nil {
 		return nil, errors.New("invalid password")
 	}
-	token, _ := generateJWTToken(user)
-	return &domain.User{
+	resp := domain.User{
 		ID:     pgUser.ID,
 		Name:   pgUser.Name,
 		Avatar: pgUser.Avatar,
 		Status: pgUser.Status,
-		Token:  token,
-	}, nil
+	}
+	token, _ := generateJWTToken(resp)
+	resp.Token = token
+	return &resp, nil
 }
 
 func (s *UserService) GetAll(ctx context.Context) ([]*domain.User, error) {
 	return s.userRepositoryPg.GetAll(ctx)
+}
+
+func (s *UserService) ValidateToken(ctx context.Context, token string) (*domain.User, error) {
+	user, err := parseJWTToken(token)
+	if err != nil {
+		return nil, err
+	}
+	return user, nil
 }
