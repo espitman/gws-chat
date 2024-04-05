@@ -261,12 +261,12 @@ func (rq *RoomQuery) Clone() *RoomQuery {
 // Example:
 //
 //	var v []struct {
-//		Name string `json:"Name,omitempty"`
+//		RoomID string `json:"RoomID,omitempty"`
 //		Count int `json:"count,omitempty"`
 //	}
 //
 //	client.Room.Query().
-//		GroupBy(room.FieldName).
+//		GroupBy(room.FieldRoomID).
 //		Aggregate(ent.Count()).
 //		Scan(ctx, &v)
 func (rq *RoomQuery) GroupBy(field string, fields ...string) *RoomGroupBy {
@@ -284,11 +284,11 @@ func (rq *RoomQuery) GroupBy(field string, fields ...string) *RoomGroupBy {
 // Example:
 //
 //	var v []struct {
-//		Name string `json:"Name,omitempty"`
+//		RoomID string `json:"RoomID,omitempty"`
 //	}
 //
 //	client.Room.Query().
-//		Select(room.FieldName).
+//		Select(room.FieldRoomID).
 //		Scan(ctx, &v)
 func (rq *RoomQuery) Select(fields ...string) *RoomSelect {
 	rq.ctx.Fields = append(rq.ctx.Fields, fields...)

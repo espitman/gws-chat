@@ -32,7 +32,8 @@ type RoomMutation struct {
 	op            Op
 	typ           string
 	id            *int
-	_Name         *string
+	_RoomID       *string
+	_Users        *string
 	clearedFields map[string]struct{}
 	done          bool
 	oldValue      func(context.Context) (*Room, error)
@@ -137,40 +138,76 @@ func (m *RoomMutation) IDs(ctx context.Context) ([]int, error) {
 	}
 }
 
-// SetName sets the "Name" field.
-func (m *RoomMutation) SetName(s string) {
-	m._Name = &s
+// SetRoomID sets the "RoomID" field.
+func (m *RoomMutation) SetRoomID(s string) {
+	m._RoomID = &s
 }
 
-// Name returns the value of the "Name" field in the mutation.
-func (m *RoomMutation) Name() (r string, exists bool) {
-	v := m._Name
+// RoomID returns the value of the "RoomID" field in the mutation.
+func (m *RoomMutation) RoomID() (r string, exists bool) {
+	v := m._RoomID
 	if v == nil {
 		return
 	}
 	return *v, true
 }
 
-// OldName returns the old "Name" field's value of the Room entity.
+// OldRoomID returns the old "RoomID" field's value of the Room entity.
 // If the Room object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *RoomMutation) OldName(ctx context.Context) (v string, err error) {
+func (m *RoomMutation) OldRoomID(ctx context.Context) (v string, err error) {
 	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldName is only allowed on UpdateOne operations")
+		return v, errors.New("OldRoomID is only allowed on UpdateOne operations")
 	}
 	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldName requires an ID field in the mutation")
+		return v, errors.New("OldRoomID requires an ID field in the mutation")
 	}
 	oldValue, err := m.oldValue(ctx)
 	if err != nil {
-		return v, fmt.Errorf("querying old value for OldName: %w", err)
+		return v, fmt.Errorf("querying old value for OldRoomID: %w", err)
 	}
-	return oldValue.Name, nil
+	return oldValue.RoomID, nil
 }
 
-// ResetName resets all changes to the "Name" field.
-func (m *RoomMutation) ResetName() {
-	m._Name = nil
+// ResetRoomID resets all changes to the "RoomID" field.
+func (m *RoomMutation) ResetRoomID() {
+	m._RoomID = nil
+}
+
+// SetUsers sets the "Users" field.
+func (m *RoomMutation) SetUsers(s string) {
+	m._Users = &s
+}
+
+// Users returns the value of the "Users" field in the mutation.
+func (m *RoomMutation) Users() (r string, exists bool) {
+	v := m._Users
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUsers returns the old "Users" field's value of the Room entity.
+// If the Room object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *RoomMutation) OldUsers(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldUsers is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldUsers requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUsers: %w", err)
+	}
+	return oldValue.Users, nil
+}
+
+// ResetUsers resets all changes to the "Users" field.
+func (m *RoomMutation) ResetUsers() {
+	m._Users = nil
 }
 
 // Where appends a list predicates to the RoomMutation builder.
@@ -207,9 +244,12 @@ func (m *RoomMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *RoomMutation) Fields() []string {
-	fields := make([]string, 0, 1)
-	if m._Name != nil {
-		fields = append(fields, room.FieldName)
+	fields := make([]string, 0, 2)
+	if m._RoomID != nil {
+		fields = append(fields, room.FieldRoomID)
+	}
+	if m._Users != nil {
+		fields = append(fields, room.FieldUsers)
 	}
 	return fields
 }
@@ -219,8 +259,10 @@ func (m *RoomMutation) Fields() []string {
 // schema.
 func (m *RoomMutation) Field(name string) (ent.Value, bool) {
 	switch name {
-	case room.FieldName:
-		return m.Name()
+	case room.FieldRoomID:
+		return m.RoomID()
+	case room.FieldUsers:
+		return m.Users()
 	}
 	return nil, false
 }
@@ -230,8 +272,10 @@ func (m *RoomMutation) Field(name string) (ent.Value, bool) {
 // database failed.
 func (m *RoomMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
 	switch name {
-	case room.FieldName:
-		return m.OldName(ctx)
+	case room.FieldRoomID:
+		return m.OldRoomID(ctx)
+	case room.FieldUsers:
+		return m.OldUsers(ctx)
 	}
 	return nil, fmt.Errorf("unknown Room field %s", name)
 }
@@ -241,12 +285,19 @@ func (m *RoomMutation) OldField(ctx context.Context, name string) (ent.Value, er
 // type.
 func (m *RoomMutation) SetField(name string, value ent.Value) error {
 	switch name {
-	case room.FieldName:
+	case room.FieldRoomID:
 		v, ok := value.(string)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
-		m.SetName(v)
+		m.SetRoomID(v)
+		return nil
+	case room.FieldUsers:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUsers(v)
 		return nil
 	}
 	return fmt.Errorf("unknown Room field %s", name)
@@ -297,8 +348,11 @@ func (m *RoomMutation) ClearField(name string) error {
 // It returns an error if the field is not defined in the schema.
 func (m *RoomMutation) ResetField(name string) error {
 	switch name {
-	case room.FieldName:
-		m.ResetName()
+	case room.FieldRoomID:
+		m.ResetRoomID()
+		return nil
+	case room.FieldUsers:
+		m.ResetUsers()
 		return nil
 	}
 	return fmt.Errorf("unknown Room field %s", name)

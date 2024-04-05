@@ -52,74 +52,144 @@ func IDLTE(id int) predicate.Room {
 	return predicate.Room(sql.FieldLTE(FieldID, id))
 }
 
-// Name applies equality check predicate on the "Name" field. It's identical to NameEQ.
-func Name(v string) predicate.Room {
-	return predicate.Room(sql.FieldEQ(FieldName, v))
+// RoomID applies equality check predicate on the "RoomID" field. It's identical to RoomIDEQ.
+func RoomID(v string) predicate.Room {
+	return predicate.Room(sql.FieldEQ(FieldRoomID, v))
 }
 
-// NameEQ applies the EQ predicate on the "Name" field.
-func NameEQ(v string) predicate.Room {
-	return predicate.Room(sql.FieldEQ(FieldName, v))
+// Users applies equality check predicate on the "Users" field. It's identical to UsersEQ.
+func Users(v string) predicate.Room {
+	return predicate.Room(sql.FieldEQ(FieldUsers, v))
 }
 
-// NameNEQ applies the NEQ predicate on the "Name" field.
-func NameNEQ(v string) predicate.Room {
-	return predicate.Room(sql.FieldNEQ(FieldName, v))
+// RoomIDEQ applies the EQ predicate on the "RoomID" field.
+func RoomIDEQ(v string) predicate.Room {
+	return predicate.Room(sql.FieldEQ(FieldRoomID, v))
 }
 
-// NameIn applies the In predicate on the "Name" field.
-func NameIn(vs ...string) predicate.Room {
-	return predicate.Room(sql.FieldIn(FieldName, vs...))
+// RoomIDNEQ applies the NEQ predicate on the "RoomID" field.
+func RoomIDNEQ(v string) predicate.Room {
+	return predicate.Room(sql.FieldNEQ(FieldRoomID, v))
 }
 
-// NameNotIn applies the NotIn predicate on the "Name" field.
-func NameNotIn(vs ...string) predicate.Room {
-	return predicate.Room(sql.FieldNotIn(FieldName, vs...))
+// RoomIDIn applies the In predicate on the "RoomID" field.
+func RoomIDIn(vs ...string) predicate.Room {
+	return predicate.Room(sql.FieldIn(FieldRoomID, vs...))
 }
 
-// NameGT applies the GT predicate on the "Name" field.
-func NameGT(v string) predicate.Room {
-	return predicate.Room(sql.FieldGT(FieldName, v))
+// RoomIDNotIn applies the NotIn predicate on the "RoomID" field.
+func RoomIDNotIn(vs ...string) predicate.Room {
+	return predicate.Room(sql.FieldNotIn(FieldRoomID, vs...))
 }
 
-// NameGTE applies the GTE predicate on the "Name" field.
-func NameGTE(v string) predicate.Room {
-	return predicate.Room(sql.FieldGTE(FieldName, v))
+// RoomIDGT applies the GT predicate on the "RoomID" field.
+func RoomIDGT(v string) predicate.Room {
+	return predicate.Room(sql.FieldGT(FieldRoomID, v))
 }
 
-// NameLT applies the LT predicate on the "Name" field.
-func NameLT(v string) predicate.Room {
-	return predicate.Room(sql.FieldLT(FieldName, v))
+// RoomIDGTE applies the GTE predicate on the "RoomID" field.
+func RoomIDGTE(v string) predicate.Room {
+	return predicate.Room(sql.FieldGTE(FieldRoomID, v))
 }
 
-// NameLTE applies the LTE predicate on the "Name" field.
-func NameLTE(v string) predicate.Room {
-	return predicate.Room(sql.FieldLTE(FieldName, v))
+// RoomIDLT applies the LT predicate on the "RoomID" field.
+func RoomIDLT(v string) predicate.Room {
+	return predicate.Room(sql.FieldLT(FieldRoomID, v))
 }
 
-// NameContains applies the Contains predicate on the "Name" field.
-func NameContains(v string) predicate.Room {
-	return predicate.Room(sql.FieldContains(FieldName, v))
+// RoomIDLTE applies the LTE predicate on the "RoomID" field.
+func RoomIDLTE(v string) predicate.Room {
+	return predicate.Room(sql.FieldLTE(FieldRoomID, v))
 }
 
-// NameHasPrefix applies the HasPrefix predicate on the "Name" field.
-func NameHasPrefix(v string) predicate.Room {
-	return predicate.Room(sql.FieldHasPrefix(FieldName, v))
+// RoomIDContains applies the Contains predicate on the "RoomID" field.
+func RoomIDContains(v string) predicate.Room {
+	return predicate.Room(sql.FieldContains(FieldRoomID, v))
 }
 
-// NameHasSuffix applies the HasSuffix predicate on the "Name" field.
-func NameHasSuffix(v string) predicate.Room {
-	return predicate.Room(sql.FieldHasSuffix(FieldName, v))
+// RoomIDHasPrefix applies the HasPrefix predicate on the "RoomID" field.
+func RoomIDHasPrefix(v string) predicate.Room {
+	return predicate.Room(sql.FieldHasPrefix(FieldRoomID, v))
 }
 
-// NameEqualFold applies the EqualFold predicate on the "Name" field.
-func NameEqualFold(v string) predicate.Room {
-	return predicate.Room(sql.FieldEqualFold(FieldName, v))
+// RoomIDHasSuffix applies the HasSuffix predicate on the "RoomID" field.
+func RoomIDHasSuffix(v string) predicate.Room {
+	return predicate.Room(sql.FieldHasSuffix(FieldRoomID, v))
 }
 
-// NameContainsFold applies the ContainsFold predicate on the "Name" field.
-func NameContainsFold(v string) predicate.Room {
-	return predicate.Room(sql.FieldContainsFold(FieldName, v))
+// RoomIDEqualFold applies the EqualFold predicate on the "RoomID" field.
+func RoomIDEqualFold(v string) predicate.Room {
+	return predicate.Room(sql.FieldEqualFold(FieldRoomID, v))
+}
+
+// RoomIDContainsFold applies the ContainsFold predicate on the "RoomID" field.
+func RoomIDContainsFold(v string) predicate.Room {
+	return predicate.Room(sql.FieldContainsFold(FieldRoomID, v))
+}
+
+// UsersEQ applies the EQ predicate on the "Users" field.
+func UsersEQ(v string) predicate.Room {
+	return predicate.Room(sql.FieldEQ(FieldUsers, v))
+}
+
+// UsersNEQ applies the NEQ predicate on the "Users" field.
+func UsersNEQ(v string) predicate.Room {
+	return predicate.Room(sql.FieldNEQ(FieldUsers, v))
+}
+
+// UsersIn applies the In predicate on the "Users" field.
+func UsersIn(vs ...string) predicate.Room {
+	return predicate.Room(sql.FieldIn(FieldUsers, vs...))
+}
+
+// UsersNotIn applies the NotIn predicate on the "Users" field.
+func UsersNotIn(vs ...string) predicate.Room {
+	return predicate.Room(sql.FieldNotIn(FieldUsers, vs...))
+}
+
+// UsersGT applies the GT predicate on the "Users" field.
+func UsersGT(v string) predicate.Room {
+	return predicate.Room(sql.FieldGT(FieldUsers, v))
+}
+
+// UsersGTE applies the GTE predicate on the "Users" field.
+func UsersGTE(v string) predicate.Room {
+	return predicate.Room(sql.FieldGTE(FieldUsers, v))
+}
+
+// UsersLT applies the LT predicate on the "Users" field.
+func UsersLT(v string) predicate.Room {
+	return predicate.Room(sql.FieldLT(FieldUsers, v))
+}
+
+// UsersLTE applies the LTE predicate on the "Users" field.
+func UsersLTE(v string) predicate.Room {
+	return predicate.Room(sql.FieldLTE(FieldUsers, v))
+}
+
+// UsersContains applies the Contains predicate on the "Users" field.
+func UsersContains(v string) predicate.Room {
+	return predicate.Room(sql.FieldContains(FieldUsers, v))
+}
+
+// UsersHasPrefix applies the HasPrefix predicate on the "Users" field.
+func UsersHasPrefix(v string) predicate.Room {
+	return predicate.Room(sql.FieldHasPrefix(FieldUsers, v))
+}
+
+// UsersHasSuffix applies the HasSuffix predicate on the "Users" field.
+func UsersHasSuffix(v string) predicate.Room {
+	return predicate.Room(sql.FieldHasSuffix(FieldUsers, v))
+}
+
+// UsersEqualFold applies the EqualFold predicate on the "Users" field.
+func UsersEqualFold(v string) predicate.Room {
+	return predicate.Room(sql.FieldEqualFold(FieldUsers, v))
+}
+
+// UsersContainsFold applies the ContainsFold predicate on the "Users" field.
+func UsersContainsFold(v string) predicate.Room {
+	return predicate.Room(sql.FieldContainsFold(FieldUsers, v))
 }
 
 // And groups predicates with the AND operator between them.

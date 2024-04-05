@@ -16,8 +16,10 @@ type Room struct {
 	config `json:"-"`
 	// ID of the ent.
 	ID int `json:"id,omitempty"`
-	// Name holds the value of the "Name" field.
-	Name         string `json:"Name,omitempty"`
+	// RoomID holds the value of the "RoomID" field.
+	RoomID string `json:"RoomID,omitempty"`
+	// Users holds the value of the "Users" field.
+	Users        string `json:"Users,omitempty"`
 	selectValues sql.SelectValues
 }
 
@@ -28,7 +30,7 @@ func (*Room) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case room.FieldID:
 			values[i] = new(sql.NullInt64)
-		case room.FieldName:
+		case room.FieldRoomID, room.FieldUsers:
 			values[i] = new(sql.NullString)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -51,11 +53,17 @@ func (r *Room) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field id", value)
 			}
 			r.ID = int(value.Int64)
-		case room.FieldName:
+		case room.FieldRoomID:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field Name", values[i])
+				return fmt.Errorf("unexpected type %T for field RoomID", values[i])
 			} else if value.Valid {
-				r.Name = value.String
+				r.RoomID = value.String
+			}
+		case room.FieldUsers:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field Users", values[i])
+			} else if value.Valid {
+				r.Users = value.String
 			}
 		default:
 			r.selectValues.Set(columns[i], values[i])
@@ -93,8 +101,11 @@ func (r *Room) String() string {
 	var builder strings.Builder
 	builder.WriteString("Room(")
 	builder.WriteString(fmt.Sprintf("id=%v, ", r.ID))
-	builder.WriteString("Name=")
-	builder.WriteString(r.Name)
+	builder.WriteString("RoomID=")
+	builder.WriteString(r.RoomID)
+	builder.WriteString(", ")
+	builder.WriteString("Users=")
+	builder.WriteString(r.Users)
 	builder.WriteByte(')')
 	return builder.String()
 }

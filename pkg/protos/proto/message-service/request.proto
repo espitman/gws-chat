@@ -4,5 +4,6 @@ package proto;
 option go_package = "github.com/espitman/gws-chat/pkg/protos/protogen/message-service";
 
 message V1CreateRoomRequest {
-
+  int32 userid1 = 1;
+  int32 userid2 = 2;
 }

@@ -21,7 +21,8 @@ func (Room) Annotations() []schema.Annotation {
 // Fields of the Room.
 func (Room) Fields() []ent.Field {
 	return []ent.Field{
-		field.String("Name"),
+		field.String("RoomID"),
+		field.String("Users").Unique(),
 	}
 }
 

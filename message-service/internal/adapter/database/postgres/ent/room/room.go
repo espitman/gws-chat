@@ -11,8 +11,10 @@ const (
 	Label = "room"
 	// FieldID holds the string denoting the id field in the database.
 	FieldID = "id"
-	// FieldName holds the string denoting the name field in the database.
-	FieldName = "name"
+	// FieldRoomID holds the string denoting the roomid field in the database.
+	FieldRoomID = "room_id"
+	// FieldUsers holds the string denoting the users field in the database.
+	FieldUsers = "users"
 	// Table holds the table name of the room in the database.
 	Table = "chat_rooms"
 )
@@ -20,7 +22,8 @@ const (
 // Columns holds all SQL columns for room fields.
 var Columns = []string{
 	FieldID,
-	FieldName,
+	FieldRoomID,
+	FieldUsers,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -41,7 +44,12 @@ func ByID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldID, opts...).ToFunc()
 }
 
-// ByName orders the results by the Name field.
-func ByName(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldName, opts...).ToFunc()
+// ByRoomID orders the results by the RoomID field.
+func ByRoomID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldRoomID, opts...).ToFunc()
+}
+
+// ByUsers orders the results by the Users field.
+func ByUsers(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldUsers, opts...).ToFunc()
 }

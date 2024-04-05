@@ -12,7 +12,8 @@ var (
 	// ChatRoomsColumns holds the columns for the "chat_rooms" table.
 	ChatRoomsColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt, Increment: true},
-		{Name: "name", Type: field.TypeString},
+		{Name: "room_id", Type: field.TypeString},
+		{Name: "users", Type: field.TypeString, Unique: true},
 	}
 	// ChatRoomsTable holds the schema information for the "chat_rooms" table.
 	ChatRoomsTable = &schema.Table{

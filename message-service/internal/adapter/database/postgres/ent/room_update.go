@@ -27,16 +27,30 @@ func (ru *RoomUpdate) Where(ps ...predicate.Room) *RoomUpdate {
 	return ru
 }
 
-// SetName sets the "Name" field.
-func (ru *RoomUpdate) SetName(s string) *RoomUpdate {
-	ru.mutation.SetName(s)
+// SetRoomID sets the "RoomID" field.
+func (ru *RoomUpdate) SetRoomID(s string) *RoomUpdate {
+	ru.mutation.SetRoomID(s)
 	return ru
 }
 
-// SetNillableName sets the "Name" field if the given value is not nil.
-func (ru *RoomUpdate) SetNillableName(s *string) *RoomUpdate {
+// SetNillableRoomID sets the "RoomID" field if the given value is not nil.
+func (ru *RoomUpdate) SetNillableRoomID(s *string) *RoomUpdate {
 	if s != nil {
-		ru.SetName(*s)
+		ru.SetRoomID(*s)
+	}
+	return ru
+}
+
+// SetUsers sets the "Users" field.
+func (ru *RoomUpdate) SetUsers(s string) *RoomUpdate {
+	ru.mutation.SetUsers(s)
+	return ru
+}
+
+// SetNillableUsers sets the "Users" field if the given value is not nil.
+func (ru *RoomUpdate) SetNillableUsers(s *string) *RoomUpdate {
+	if s != nil {
+		ru.SetUsers(*s)
 	}
 	return ru
 }
@@ -82,8 +96,11 @@ func (ru *RoomUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			}
 		}
 	}
-	if value, ok := ru.mutation.Name(); ok {
-		_spec.SetField(room.FieldName, field.TypeString, value)
+	if value, ok := ru.mutation.RoomID(); ok {
+		_spec.SetField(room.FieldRoomID, field.TypeString, value)
+	}
+	if value, ok := ru.mutation.Users(); ok {
+		_spec.SetField(room.FieldUsers, field.TypeString, value)
 	}
 	if n, err = sqlgraph.UpdateNodes(ctx, ru.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
@@ -105,16 +122,30 @@ type RoomUpdateOne struct {
 	mutation *RoomMutation
 }
 
-// SetName sets the "Name" field.
-func (ruo *RoomUpdateOne) SetName(s string) *RoomUpdateOne {
-	ruo.mutation.SetName(s)
+// SetRoomID sets the "RoomID" field.
+func (ruo *RoomUpdateOne) SetRoomID(s string) *RoomUpdateOne {
+	ruo.mutation.SetRoomID(s)
 	return ruo
 }
 
-// SetNillableName sets the "Name" field if the given value is not nil.
-func (ruo *RoomUpdateOne) SetNillableName(s *string) *RoomUpdateOne {
+// SetNillableRoomID sets the "RoomID" field if the given value is not nil.
+func (ruo *RoomUpdateOne) SetNillableRoomID(s *string) *RoomUpdateOne {
 	if s != nil {
-		ruo.SetName(*s)
+		ruo.SetRoomID(*s)
+	}
+	return ruo
+}
+
+// SetUsers sets the "Users" field.
+func (ruo *RoomUpdateOne) SetUsers(s string) *RoomUpdateOne {
+	ruo.mutation.SetUsers(s)
+	return ruo
+}
+
+// SetNillableUsers sets the "Users" field if the given value is not nil.
+func (ruo *RoomUpdateOne) SetNillableUsers(s *string) *RoomUpdateOne {
+	if s != nil {
+		ruo.SetUsers(*s)
 	}
 	return ruo
 }
@@ -190,8 +221,11 @@ func (ruo *RoomUpdateOne) sqlSave(ctx context.Context) (_node *Room, err error) 
 			}
 		}
 	}
-	if value, ok := ruo.mutation.Name(); ok {
-		_spec.SetField(room.FieldName, field.TypeString, value)
+	if value, ok := ruo.mutation.RoomID(); ok {
+		_spec.SetField(room.FieldRoomID, field.TypeString, value)
+	}
+	if value, ok := ruo.mutation.Users(); ok {
+		_spec.SetField(room.FieldUsers, field.TypeString, value)
 	}
 	_node = &Room{config: ruo.config}
 	_spec.Assign = _node.assignValues

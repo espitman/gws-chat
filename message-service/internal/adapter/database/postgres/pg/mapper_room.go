@@ -7,8 +7,9 @@ import (
 
 func roomSchemaToRoomDomainPointerMapper(c *ent.Room) *domain.Room {
 	return &domain.Room{
-		ID:   c.ID,
-		Name: c.Name,
+		ID:     c.ID,
+		RoomID: c.RoomID,
+		Users:  c.Users,
 	}
 }
 
@@ -22,7 +23,9 @@ func roomSchemasToRoomDomainsPointerMapper(cs []*ent.Room) []*domain.Room {
 
 func roomDomainToRoomSchema(d domain.Room) *ent.Room {
 	return &ent.Room{
-		Name: d.Name,
+		ID:     d.ID,
+		RoomID: d.RoomID,
+		Users:  d.Users,
 	}
 }
 

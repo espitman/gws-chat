@@ -21,9 +21,15 @@ type RoomCreate struct {
 	conflict []sql.ConflictOption
 }
 
-// SetName sets the "Name" field.
-func (rc *RoomCreate) SetName(s string) *RoomCreate {
-	rc.mutation.SetName(s)
+// SetRoomID sets the "RoomID" field.
+func (rc *RoomCreate) SetRoomID(s string) *RoomCreate {
+	rc.mutation.SetRoomID(s)
+	return rc
+}
+
+// SetUsers sets the "Users" field.
+func (rc *RoomCreate) SetUsers(s string) *RoomCreate {
+	rc.mutation.SetUsers(s)
 	return rc
 }
 
@@ -61,8 +67,11 @@ func (rc *RoomCreate) ExecX(ctx context.Context) {
 
 // check runs all checks and user-defined validators on the builder.
 func (rc *RoomCreate) check() error {
-	if _, ok := rc.mutation.Name(); !ok {
-		return &ValidationError{Name: "Name", err: errors.New(`ent: missing required field "Room.Name"`)}
+	if _, ok := rc.mutation.RoomID(); !ok {
+		return &ValidationError{Name: "RoomID", err: errors.New(`ent: missing required field "Room.RoomID"`)}
+	}
+	if _, ok := rc.mutation.Users(); !ok {
+		return &ValidationError{Name: "Users", err: errors.New(`ent: missing required field "Room.Users"`)}
 	}
 	return nil
 }
@@ -91,9 +100,13 @@ func (rc *RoomCreate) createSpec() (*Room, *sqlgraph.CreateSpec) {
 		_spec = sqlgraph.NewCreateSpec(room.Table, sqlgraph.NewFieldSpec(room.FieldID, field.TypeInt))
 	)
 	_spec.OnConflict = rc.conflict
-	if value, ok := rc.mutation.Name(); ok {
-		_spec.SetField(room.FieldName, field.TypeString, value)
-		_node.Name = value
+	if value, ok := rc.mutation.RoomID(); ok {
+		_spec.SetField(room.FieldRoomID, field.TypeString, value)
+		_node.RoomID = value
+	}
+	if value, ok := rc.mutation.Users(); ok {
+		_spec.SetField(room.FieldUsers, field.TypeString, value)
+		_node.Users = value
 	}
 	return _node, _spec
 }
@@ -102,7 +115,7 @@ func (rc *RoomCreate) createSpec() (*Room, *sqlgraph.CreateSpec) {
 // of the `INSERT` statement. For example:
 //
 //	client.Room.Create().
-//		SetName(v).
+//		SetRoomID(v).
 //		OnConflict(
 //			// Update the row with the new values
 //			// the was proposed for insertion.
@@ -111,7 +124,7 @@ func (rc *RoomCreate) createSpec() (*Room, *sqlgraph.CreateSpec) {
 //		// Override some of the fields with custom
 //		// update values.
 //		Update(func(u *ent.RoomUpsert) {
-//			SetName(v+v).
+//			SetRoomID(v+v).
 //		}).
 //		Exec(ctx)
 func (rc *RoomCreate) OnConflict(opts ...sql.ConflictOption) *RoomUpsertOne {
@@ -147,15 +160,27 @@ type (
 	}
 )
 
-// SetName sets the "Name" field.
-func (u *RoomUpsert) SetName(v string) *RoomUpsert {
-	u.Set(room.FieldName, v)
+// SetRoomID sets the "RoomID" field.
+func (u *RoomUpsert) SetRoomID(v string) *RoomUpsert {
+	u.Set(room.FieldRoomID, v)
 	return u
 }
 
-// UpdateName sets the "Name" field to the value that was provided on create.
-func (u *RoomUpsert) UpdateName() *RoomUpsert {
-	u.SetExcluded(room.FieldName)
+// UpdateRoomID sets the "RoomID" field to the value that was provided on create.
+func (u *RoomUpsert) UpdateRoomID() *RoomUpsert {
+	u.SetExcluded(room.FieldRoomID)
+	return u
+}
+
+// SetUsers sets the "Users" field.
+func (u *RoomUpsert) SetUsers(v string) *RoomUpsert {
+	u.Set(room.FieldUsers, v)
+	return u
+}
+
+// UpdateUsers sets the "Users" field to the value that was provided on create.
+func (u *RoomUpsert) UpdateUsers() *RoomUpsert {
+	u.SetExcluded(room.FieldUsers)
 	return u
 }
 
@@ -199,17 +224,31 @@ func (u *RoomUpsertOne) Update(set func(*RoomUpsert)) *RoomUpsertOne {
 	return u
 }
 
-// SetName sets the "Name" field.
-func (u *RoomUpsertOne) SetName(v string) *RoomUpsertOne {
+// SetRoomID sets the "RoomID" field.
+func (u *RoomUpsertOne) SetRoomID(v string) *RoomUpsertOne {
 	return u.Update(func(s *RoomUpsert) {
-		s.SetName(v)
+		s.SetRoomID(v)
 	})
 }
 
-// UpdateName sets the "Name" field to the value that was provided on create.
-func (u *RoomUpsertOne) UpdateName() *RoomUpsertOne {
+// UpdateRoomID sets the "RoomID" field to the value that was provided on create.
+func (u *RoomUpsertOne) UpdateRoomID() *RoomUpsertOne {
 	return u.Update(func(s *RoomUpsert) {
-		s.UpdateName()
+		s.UpdateRoomID()
+	})
+}
+
+// SetUsers sets the "Users" field.
+func (u *RoomUpsertOne) SetUsers(v string) *RoomUpsertOne {
+	return u.Update(func(s *RoomUpsert) {
+		s.SetUsers(v)
+	})
+}
+
+// UpdateUsers sets the "Users" field to the value that was provided on create.
+func (u *RoomUpsertOne) UpdateUsers() *RoomUpsertOne {
+	return u.Update(func(s *RoomUpsert) {
+		s.UpdateUsers()
 	})
 }
 
@@ -347,7 +386,7 @@ func (rcb *RoomCreateBulk) ExecX(ctx context.Context) {
 //		// Override some of the fields with custom
 //		// update values.
 //		Update(func(u *ent.RoomUpsert) {
-//			SetName(v+v).
+//			SetRoomID(v+v).
 //		}).
 //		Exec(ctx)
 func (rcb *RoomCreateBulk) OnConflict(opts ...sql.ConflictOption) *RoomUpsertBulk {
@@ -416,17 +455,31 @@ func (u *RoomUpsertBulk) Update(set func(*RoomUpsert)) *RoomUpsertBulk {
 	return u
 }
 
-// SetName sets the "Name" field.
-func (u *RoomUpsertBulk) SetName(v string) *RoomUpsertBulk {
+// SetRoomID sets the "RoomID" field.
+func (u *RoomUpsertBulk) SetRoomID(v string) *RoomUpsertBulk {
 	return u.Update(func(s *RoomUpsert) {
-		s.SetName(v)
+		s.SetRoomID(v)
 	})
 }
 
-// UpdateName sets the "Name" field to the value that was provided on create.
-func (u *RoomUpsertBulk) UpdateName() *RoomUpsertBulk {
+// UpdateRoomID sets the "RoomID" field to the value that was provided on create.
+func (u *RoomUpsertBulk) UpdateRoomID() *RoomUpsertBulk {
 	return u.Update(func(s *RoomUpsert) {
-		s.UpdateName()
+		s.UpdateRoomID()
+	})
+}
+
+// SetUsers sets the "Users" field.
+func (u *RoomUpsertBulk) SetUsers(v string) *RoomUpsertBulk {
+	return u.Update(func(s *RoomUpsert) {
+		s.SetUsers(v)
+	})
+}
+
+// UpdateUsers sets the "Users" field to the value that was provided on create.
+func (u *RoomUpsertBulk) UpdateUsers() *RoomUpsertBulk {
+	return u.Update(func(s *RoomUpsert) {
+		s.UpdateUsers()
 	})
 }
 
