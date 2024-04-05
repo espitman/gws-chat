@@ -27,6 +27,7 @@ func main() {
 	userServiceClient := newUserServiceClient()
 	userServiceHandler := newUserServiceHandler(userServiceClient)
 	router := newRouter(
+		userServiceClient,
 		userServiceHandler,
 	)
 	router.serve(app)

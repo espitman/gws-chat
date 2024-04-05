@@ -8,7 +8,7 @@ import "github.com/gofiber/fiber/v2"
 func (r *router) userServiceRouter(v fiber.Router) {
 	v.Get(
 		"/all",
-		AuthMiddleware,
+		AuthMiddleware(r.userServiceClient),
 		r.userServiceHandler.V1GetAll,
 	)
 	v.Post(
