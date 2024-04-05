@@ -1,0 +1,17 @@
+{
+  "app": {
+    "grpc": {
+      "port": "8080"
+    },
+    "name": "user-service"
+  },
+  "db": {
+    "postgres": {
+      "dsn": "postgresql://root:agk1Lnu4byF6ifGzEgJREJs3@cho-oyu.liara.cloud:30205/postgres"
+    },
+    "mongodb": {
+      "uri": "mongodb://root:OOJHtnPYutwvqG9p1SZdJOKM@cho-oyu.liara.cloud:32358/my-app?authSource=admin&replicaSet=rs0&directConnection=true",
+      "database": "my-app"
+    }
+  }
+}

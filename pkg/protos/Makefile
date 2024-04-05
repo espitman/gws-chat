@@ -21,8 +21,7 @@ endif
 protoc:
 	protoc --go_opt=module=${GO_MODULE} --go_out=. \
   --go-grpc_opt=module=${GO_MODULE} --go-grpc_out=. \
-  ./proto/price-service/*.proto \
-  ./proto/order-service/*.proto \
+  ./proto/user-service/*.proto \
 
 .PHONY: protoc-tag
 protoc-tag:

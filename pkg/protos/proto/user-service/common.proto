@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+package proto;
+option go_package = "github.com/espitman/gws-chat/pkg/protos/protogen/order-service";
+
+message User {
+  int32 id = 1;
+  string name = 2;
+  string password = 3;
+  string avatar = 4;
+  string status = 5;
+}
+

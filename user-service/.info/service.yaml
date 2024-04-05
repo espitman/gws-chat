@@ -1,0 +1,15 @@
+module: github.com/espitman/gws-chat/user-service
+name: user-service
+http: false
+HTTPInfo:
+    name: ""
+    serviceName: ""
+    domainName: ""
+grpc: true
+GRPCInfo:
+    ProtoPath: /Users/espitman/Documents/Go/gws-chat/pkg/protos/proto/user-service/service.proto
+    PBModule: github.com/espitman/gws-chat/pkg/protos/protogen/order-service
+    Service: OrderService
+DB:
+    postgreSQL: true
+    mongoDB: false

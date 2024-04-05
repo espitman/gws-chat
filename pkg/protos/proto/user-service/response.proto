@@ -1,0 +1,10 @@
+syntax = "proto3";
+import "proto/user-service/common.proto";
+
+package proto;
+option go_package = "github.com/espitman/gws-chat/pkg/protos/protogen/order-service";
+
+message V1LoginResponse {
+   User user = 1;
+}
+

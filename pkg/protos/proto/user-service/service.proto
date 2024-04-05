@@ -1,0 +1,11 @@
+syntax = "proto3";
+import "proto/user-service/response.proto";
+import "proto/user-service/request.proto";
+
+package proto;
+option go_package = "github.com/espitman/gws-chat/pkg/protos/protogen/order-service";
+
+
+service OrderService {
+  rpc V1Login(V1LoginRequest) returns (V1LoginResponse) {}
+}
