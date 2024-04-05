@@ -1,5 +1,5 @@
 // This file generated automatically by gRPC gateway generator
-// Generated at: 2024-04-05 19:02:50
+// Generated at: 2024-04-05 23:06:57
 
 package main
 
@@ -7,6 +7,7 @@ import (
 	superConf "github.com/espitman/go-super-conf"
 	_ "github.com/espitman/gws-chat/grpc-gateway/docs"
 	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/middleware/cors"
 	"log"
 )
 
@@ -22,6 +23,7 @@ import (
 
 func main() {
 	app := fiber.New()
+	app.Use(cors.New())
 	userServiceClient := newUserServiceClient()
 	userServiceHandler := newUserServiceHandler(userServiceClient)
 	router := newRouter(

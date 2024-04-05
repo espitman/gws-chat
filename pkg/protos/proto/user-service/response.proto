@@ -9,6 +9,6 @@ message V1LoginResponse {
 }
 
 message V1GetAllResponse {
-  repeated User users = 1;
+  repeated UserPublic users = 1;
 }
 

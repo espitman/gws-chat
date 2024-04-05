@@ -6,4 +6,5 @@ type User struct {
 	Password string
 	Avatar   string
 	Status   string
+	Token    string
 }

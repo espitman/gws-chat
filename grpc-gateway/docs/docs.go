@@ -137,6 +137,26 @@ const docTemplate = `{
                 },
                 "status": {
                     "type": "string"
+                },
+                "token": {
+                    "type": "string"
+                }
+            }
+        },
+        "user_service.UserPublic": {
+            "type": "object",
+            "properties": {
+                "avatar": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "status": {
+                    "type": "string"
                 }
             }
         },
@@ -149,7 +169,7 @@ const docTemplate = `{
                 "users": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/user_service.User"
+                        "$ref": "#/definitions/user_service.UserPublic"
                     }
                 }
             }

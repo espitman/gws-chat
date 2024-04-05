@@ -9,5 +9,13 @@ message User {
   string password = 3;
   string avatar = 4;
   string status = 5;
+  string token = 6;
 }
 
+
+message UserPublic {
+  int32 id = 1;
+  string name = 2;
+  string avatar = 3;
+  string status = 4;
+}

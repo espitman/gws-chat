@@ -30,6 +30,19 @@ definitions:
         type: string
       status:
         type: string
+      token:
+        type: string
+    type: object
+  user_service.UserPublic:
+    properties:
+      avatar:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      status:
+        type: string
     type: object
   user_service.V1GetAllRequest:
     type: object
@@ -37,7 +50,7 @@ definitions:
     properties:
       users:
         items:
-          $ref: '#/definitions/user_service.User'
+          $ref: '#/definitions/user_service.UserPublic'
         type: array
     type: object
   user_service.V1LoginRequest:
