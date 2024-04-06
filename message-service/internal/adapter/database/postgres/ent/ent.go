@@ -12,6 +12,7 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
+	"github.com/espitman/gws-chat/message-service/internal/adapter/database/postgres/ent/member"
 	"github.com/espitman/gws-chat/message-service/internal/adapter/database/postgres/ent/room"
 )
 
@@ -73,7 +74,8 @@ var (
 func checkColumn(table, column string) error {
 	initCheck.Do(func() {
 		columnCheck = sql.NewColumnCheck(map[string]func(string) bool{
-			room.Table: room.ValidColumn,
+			member.Table: member.ValidColumn,
+			room.Table:   room.ValidColumn,
 		})
 	})
 	return columnCheck(table, column)

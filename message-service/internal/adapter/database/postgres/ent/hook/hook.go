@@ -9,6 +9,18 @@ import (
 	"github.com/espitman/gws-chat/message-service/internal/adapter/database/postgres/ent"
 )
 
+// The MemberFunc type is an adapter to allow the use of ordinary
+// function as Member mutator.
+type MemberFunc func(context.Context, *ent.MemberMutation) (ent.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f MemberFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	if mv, ok := m.(*ent.MemberMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.MemberMutation", m)
+}
+
 // The RoomFunc type is an adapter to allow the use of ordinary
 // function as Room mutator.
 type RoomFunc func(context.Context, *ent.RoomMutation) (ent.Value, error)

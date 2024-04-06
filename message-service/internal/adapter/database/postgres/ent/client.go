@@ -14,6 +14,7 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect"
 	"entgo.io/ent/dialect/sql"
+	"github.com/espitman/gws-chat/message-service/internal/adapter/database/postgres/ent/member"
 	"github.com/espitman/gws-chat/message-service/internal/adapter/database/postgres/ent/room"
 )
 
@@ -22,6 +23,8 @@ type Client struct {
 	config
 	// Schema is the client for creating, migrating and dropping schema.
 	Schema *migrate.Schema
+	// Member is the client for interacting with the Member builders.
+	Member *MemberClient
 	// Room is the client for interacting with the Room builders.
 	Room *RoomClient
 }
@@ -35,6 +38,7 @@ func NewClient(opts ...Option) *Client {
 
 func (c *Client) init() {
 	c.Schema = migrate.NewSchema(c.driver)
+	c.Member = NewMemberClient(c.config)
 	c.Room = NewRoomClient(c.config)
 }
 
@@ -128,6 +132,7 @@ func (c *Client) Tx(ctx context.Context) (*Tx, error) {
 	return &Tx{
 		ctx:    ctx,
 		config: cfg,
+		Member: NewMemberClient(cfg),
 		Room:   NewRoomClient(cfg),
 	}, nil
 }
@@ -148,6 +153,7 @@ func (c *Client) BeginTx(ctx context.Context, opts *sql.TxOptions) (*Tx, error) 
 	return &Tx{
 		ctx:    ctx,
 		config: cfg,
+		Member: NewMemberClient(cfg),
 		Room:   NewRoomClient(cfg),
 	}, nil
 }
@@ -155,7 +161,7 @@ func (c *Client) BeginTx(ctx context.Context, opts *sql.TxOptions) (*Tx, error) 
 // Debug returns a new debug-client. It's used to get verbose logging on specific operations.
 //
 //	client.Debug().
-//		Room.
+//		Member.
 //		Query().
 //		Count(ctx)
 func (c *Client) Debug() *Client {
@@ -177,22 +183,159 @@ func (c *Client) Close() error {
 // Use adds the mutation hooks to all the entity clients.
 // In order to add hooks to a specific client, call: `client.Node.Use(...)`.
 func (c *Client) Use(hooks ...Hook) {
+	c.Member.Use(hooks...)
 	c.Room.Use(hooks...)
 }
 
 // Intercept adds the query interceptors to all the entity clients.
 // In order to add interceptors to a specific client, call: `client.Node.Intercept(...)`.
 func (c *Client) Intercept(interceptors ...Interceptor) {
+	c.Member.Intercept(interceptors...)
 	c.Room.Intercept(interceptors...)
 }
 
 // Mutate implements the ent.Mutator interface.
 func (c *Client) Mutate(ctx context.Context, m Mutation) (Value, error) {
 	switch m := m.(type) {
+	case *MemberMutation:
+		return c.Member.mutate(ctx, m)
 	case *RoomMutation:
 		return c.Room.mutate(ctx, m)
 	default:
 		return nil, fmt.Errorf("ent: unknown mutation type %T", m)
+	}
+}
+
+// MemberClient is a client for the Member schema.
+type MemberClient struct {
+	config
+}
+
+// NewMemberClient returns a client for the Member from the given config.
+func NewMemberClient(c config) *MemberClient {
+	return &MemberClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `member.Hooks(f(g(h())))`.
+func (c *MemberClient) Use(hooks ...Hook) {
+	c.hooks.Member = append(c.hooks.Member, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `member.Intercept(f(g(h())))`.
+func (c *MemberClient) Intercept(interceptors ...Interceptor) {
+	c.inters.Member = append(c.inters.Member, interceptors...)
+}
+
+// Create returns a builder for creating a Member entity.
+func (c *MemberClient) Create() *MemberCreate {
+	mutation := newMemberMutation(c.config, OpCreate)
+	return &MemberCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of Member entities.
+func (c *MemberClient) CreateBulk(builders ...*MemberCreate) *MemberCreateBulk {
+	return &MemberCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *MemberClient) MapCreateBulk(slice any, setFunc func(*MemberCreate, int)) *MemberCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &MemberCreateBulk{err: fmt.Errorf("calling to MemberClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*MemberCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &MemberCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for Member.
+func (c *MemberClient) Update() *MemberUpdate {
+	mutation := newMemberMutation(c.config, OpUpdate)
+	return &MemberUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *MemberClient) UpdateOne(m *Member) *MemberUpdateOne {
+	mutation := newMemberMutation(c.config, OpUpdateOne, withMember(m))
+	return &MemberUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *MemberClient) UpdateOneID(id int) *MemberUpdateOne {
+	mutation := newMemberMutation(c.config, OpUpdateOne, withMemberID(id))
+	return &MemberUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for Member.
+func (c *MemberClient) Delete() *MemberDelete {
+	mutation := newMemberMutation(c.config, OpDelete)
+	return &MemberDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *MemberClient) DeleteOne(m *Member) *MemberDeleteOne {
+	return c.DeleteOneID(m.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *MemberClient) DeleteOneID(id int) *MemberDeleteOne {
+	builder := c.Delete().Where(member.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &MemberDeleteOne{builder}
+}
+
+// Query returns a query builder for Member.
+func (c *MemberClient) Query() *MemberQuery {
+	return &MemberQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeMember},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a Member entity by its id.
+func (c *MemberClient) Get(ctx context.Context, id int) (*Member, error) {
+	return c.Query().Where(member.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *MemberClient) GetX(ctx context.Context, id int) *Member {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// Hooks returns the client hooks.
+func (c *MemberClient) Hooks() []Hook {
+	return c.hooks.Member
+}
+
+// Interceptors returns the client interceptors.
+func (c *MemberClient) Interceptors() []Interceptor {
+	return c.inters.Member
+}
+
+func (c *MemberClient) mutate(ctx context.Context, m *MemberMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&MemberCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&MemberUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&MemberUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&MemberDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("ent: unknown Member mutation op: %q", m.Op())
 	}
 }
 
@@ -332,9 +475,9 @@ func (c *RoomClient) mutate(ctx context.Context, m *RoomMutation) (Value, error)
 // hooks and interceptors per client, for fast access.
 type (
 	hooks struct {
-		Room []ent.Hook
+		Member, Room []ent.Hook
 	}
 	inters struct {
-		Room []ent.Interceptor
+		Member, Room []ent.Interceptor
 	}
 )

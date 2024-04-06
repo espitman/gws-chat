@@ -17,10 +17,16 @@ func main() {
 		roomRepositoryPg,
 	)
 
+	memberRepositoryPg := pg.NewMemberRepository(pgDB.Client)
+	memberService := service.NewMemberService(
+		memberRepositoryPg,
+	)
+
 	// +salvation NewRepository
 	gRPC.Run(
 		validate,
 		roomService,
+		memberService,
 		// +salvation RunServiceGRPC
 	)
 }

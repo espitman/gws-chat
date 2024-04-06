@@ -7,3 +7,7 @@ option go_package = "github.com/espitman/gws-chat/pkg/protos/protogen/message-se
 message V1CreateRoomResponse {
   string id = 1;
 }
+
+message V1AddMemberToRoomResponse {
+  repeated RoomMember members = 1;
+}

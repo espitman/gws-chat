@@ -20,12 +20,15 @@ func NewServer(
 	port string,
 	validate *validator.Validate,
 	roomService port.RoomService,
+	memberService port.MemberService,
 	// +salvation NewServer
 ) *Server {
 	handler := NewHandler(
 		validate,
 		roomService,
+		memberService,
 		// +salvation NewHandler
+
 	)
 	return &Server{
 		port:     port,

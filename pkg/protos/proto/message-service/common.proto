@@ -2,3 +2,9 @@ syntax = "proto3";
 
 package proto;
 option go_package = "github.com/espitman/gws-chat/pkg/protos/protogen/message-service";
+
+message RoomMember {
+  int32 id = 1 ;
+  string roomID = 2;
+  int32 userID = 3;
+}

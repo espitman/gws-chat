@@ -6,5 +6,8 @@ import (
 	"entgo.io/ent/dialect/sql"
 )
 
+// Member is the predicate function for member builders.
+type Member func(*sql.Selector)
+
 // Room is the predicate function for room builders.
 type Room func(*sql.Selector)
