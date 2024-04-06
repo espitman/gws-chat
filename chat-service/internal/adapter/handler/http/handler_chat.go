@@ -1,10 +1,11 @@
 package http
 
 import (
+	"net/http"
+
 	"github.com/espitman/gws-chat/chat-service/internal/core/port"
 	"github.com/go-playground/validator/v10"
 	"github.com/julienschmidt/httprouter"
-	"net/http"
 )
 
 type ChatHandler struct {
@@ -33,11 +34,11 @@ func NewChatHandler(
 
 func (h *ChatHandler) ChatHandler(writer http.ResponseWriter, request *http.Request, ps httprouter.Params) {
 
-	auth := request.Header.Get("auth")
+	auth := "" //request.Header.Get("auth")
 	id := ps.ByName("id")
-	if auth != "saeed" {
-		http.Error(writer, "Forbidden", 403)
-	}
+	//if auth != "saeed" {
+	//	http.Error(writer, "Forbidden", 403)
+	//}
 
 	socket, err := h.socketConnectService.Open(writer, request, auth, id)
 	if err != nil {

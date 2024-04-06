@@ -2,9 +2,10 @@ package http
 
 import (
 	"fmt"
-	"github.com/julienschmidt/httprouter"
 	"log"
 	"net/http"
+
+	"github.com/julienschmidt/httprouter"
 )
 
 type Server struct {
@@ -29,18 +30,27 @@ func NewServer(
 }
 
 func (s *Server) Run() {
-	//app := fiber.New()
-	//routes := newRouter(
-	//    s.messageHandler,
-	//    // +salvation RouterRun
-	//)
-	//routes.serve(app)
-	//_ = app.Listen(":" + s.port)
-
 	router := httprouter.New()
-	router.GET("/chat/:id", s.chatHandler.ChatHandler)
-	fmt.Println("App run on port 6666")
-	//info()
-	log.Fatal(http.ListenAndServe(":6666", router))
 
+	router.GET("/chat/:id", corsMiddleware(s.chatHandler.ChatHandler))
+	router.GET("/", corsMiddleware(Index))
+
+	//info()
+	log.Fatal(http.ListenAndServe(":8085", router))
+
+}
+
+func Index(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
+	_, _ = fmt.Fprint(w, "Welcome!\n")
+}
+
+func corsMiddleware(next httprouter.Handle) httprouter.Handle {
+	return func(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
+		header := w.Header()
+		header.Set("Access-Control-Allow-Origin", "*")
+		header.Set("Access-Control-Allow-Credentials", "true")
+		header.Set("Access-Control-Allow-Headers", "*")
+		header.Set("Access-Control-Allow-Methods", "*")
+		next(w, r, ps)
+	}
 }

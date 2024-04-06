@@ -1,11 +1,12 @@
 package service
 
 import (
+	"net/http"
+
 	"github.com/espitman/gws-chat/chat-service/internal/adapter/handler/socket"
 	"github.com/espitman/gws-chat/chat-service/internal/core/port"
 	"github.com/google/uuid"
 	"github.com/lxzan/gws"
-	"net/http"
 )
 
 /**
@@ -21,9 +22,9 @@ type SocketConnectService struct {
 func NewSocketConnectService(socketService port.SocketService, roomService port.RoomService) *SocketConnectService {
 	sh := socket.NewHandler(socketService, roomService)
 	upgrader := gws.NewUpgrader(&sh, &gws.ServerOption{
-		ParallelEnabled:   true,                                 // Parallel message processing
-		Recovery:          gws.Recovery,                         // Exception recovery
-		PermessageDeflate: gws.PermessageDeflate{Enabled: true}, // Enable compression
+		ParallelEnabled:   true,         // Parallel message processing
+		Recovery:          gws.Recovery, // Exception recovery
+		PermessageDeflate: gws.PermessageDeflate{Enabled: true},
 	})
 	return &SocketConnectService{
 		upgrader:      upgrader,
