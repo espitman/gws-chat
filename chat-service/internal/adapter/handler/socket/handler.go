@@ -2,9 +2,10 @@ package socket
 
 import (
 	"fmt"
+	"time"
+
 	"github.com/espitman/gws-chat/chat-service/internal/core/port"
 	"github.com/lxzan/gws"
-	"time"
 )
 
 const (
@@ -55,7 +56,7 @@ func (h *Handler) OnMessage(socket *gws.Conn, message *gws.Message) {
 	defer message.Close()
 	roomID, _ := socket.Session().Load("roomID")
 	socketID, _ := socket.Session().Load("socketID")
-	fmt.Println("OnMessage", roomID, socketID)
+	fmt.Println("OnMessage", roomID, socketID, message.Data)
 	subscribers := h.roomService.GetSubscribers(roomID.(string))
 	for _, s := range subscribers {
 		sid, _ := s.Session().Load("socketID")

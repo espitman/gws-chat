@@ -2,12 +2,13 @@ package main
 
 import (
 	"fmt"
-	"github.com/google/uuid"
-	"github.com/julienschmidt/httprouter"
-	"github.com/lxzan/gws"
 	"log"
 	"net/http"
 	"time"
+
+	"github.com/google/uuid"
+	"github.com/julienschmidt/httprouter"
+	"github.com/lxzan/gws"
 )
 
 const (
@@ -97,7 +98,7 @@ func ChatHandler(writer http.ResponseWriter, request *http.Request, ps httproute
 
 	socketID := uuid.NewString()
 
-	fmt.Println(auth, id)
+	//fmt.Println(auth, id)
 
 	socket, err := upgrader.Upgrade(writer, request)
 
