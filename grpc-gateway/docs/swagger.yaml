@@ -126,8 +126,6 @@ definitions:
       status:
         type: string
     type: object
-  user_service.V1GetAllRequest:
-    type: object
   user_service.V1GetAllResponse:
     properties:
       users:
@@ -254,13 +252,6 @@ paths:
   /api/v1/user-service/all:
     get:
       description: V1GetAll
-      parameters:
-      - description: body
-        in: body
-        name: body
-        required: true
-        schema:
-          $ref: '#/definitions/user_service.V1GetAllRequest'
       produces:
       - application/json
       responses:

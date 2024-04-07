@@ -2,7 +2,6 @@ package grpcclientuser
 
 import (
 	"context"
-	"fmt"
 
 	"github.com/espitman/gws-chat/message-service/internal/core/domain"
 	userpb "github.com/espitman/gws-chat/pkg/protos/protogen/user-service"
@@ -29,7 +28,6 @@ func (g *GrpcClientUser) Get(ctx context.Context, userID uint32) (*domain.User, 
 		UserID: userID,
 	}
 	result, err := g.pb.V1Get(ctx, &reqDto)
-	fmt.Println(result)
 	if err != nil {
 		return nil, err
 	}

@@ -1,5 +1,5 @@
 // This file generated automatically by gRPC gateway generator
-// Generated at: 2024-04-07 23:18:43
+// Generated at: 2024-04-07 23:32:20
 
 package main
 
@@ -45,16 +45,12 @@ func (h *userServiceHandler) V1Get(c *fiber.Ctx) error {
 // @Tags user_service
 // @Produce json
 // @Security BearerAuth
-// @Param body body userpb.V1GetAllRequest true "body"
 // @Success 200 {object} userServiceV1GetAllResponseDto
 // @Router /api/v1/user-service/all [Get]
 func (h *userServiceHandler) V1GetAll(c *fiber.Ctx) error {
 	var fctx = fiberCtx{c}
 	ctx := getCtx(fctx)
 	var reqDto userpb.V1GetAllRequest
-	_ = fctx.QueryParser(&reqDto)
-	_ = fctx.ParamsParser(&reqDto)
-	_ = fctx.BodyParser(&reqDto)
 	res, err := h.pb.V1GetAll(ctx, &reqDto)
 	if err != nil {
 		return fctx.BadRequest(err)

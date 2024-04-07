@@ -139,17 +139,6 @@ const docTemplate = `{
                     "user_service"
                 ],
                 "summary": "V1GetAll",
-                "parameters": [
-                    {
-                        "description": "body",
-                        "name": "body",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/user_service.V1GetAllRequest"
-                        }
-                    }
-                ],
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -427,9 +416,6 @@ const docTemplate = `{
                     "type": "string"
                 }
             }
-        },
-        "user_service.V1GetAllRequest": {
-            "type": "object"
         },
         "user_service.V1GetAllResponse": {
             "type": "object",

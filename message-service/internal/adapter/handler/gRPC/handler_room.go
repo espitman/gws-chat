@@ -56,7 +56,7 @@ func (h Handler) V1GetRoom(ctx context.Context, req *pb.V1GetRoomRequest) (*pb.V
 	return &pb.V1GetRoomResponse{
 		RoomID:     result.RoomID,
 		UserID:     int32(result.UserID),
-		UserName:   result.RoomID,
+		UserName:   result.UserName,
 		UserAvatar: result.UserAvatar,
 		UserStatus: result.UserStatus,
 	}, nil
