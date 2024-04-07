@@ -2,6 +2,7 @@ package port
 
 import (
 	"context"
+
 	"github.com/espitman/gws-chat/message-service/internal/core/domain"
 )
 
@@ -11,4 +12,5 @@ import (
 
 type RoomRepositoryPg interface {
 	Crete(ctx context.Context, room domain.Room) (*domain.Room, error)
+	Get(ctx context.Context, roomID string) (*domain.Room, error)
 }

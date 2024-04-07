@@ -16,7 +16,6 @@ require (
 	github.com/julienschmidt/httprouter v1.3.0
 	github.com/lxzan/gws v1.8.1
 	github.com/magefile/mage v1.15.0
-	github.com/rs/cors v1.10.1
 	github.com/swaggo/swag v1.16.3
 	go.mongodb.org/mongo-driver v1.14.0
 	golang.org/x/crypto v0.22.0

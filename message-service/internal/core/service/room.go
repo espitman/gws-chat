@@ -2,11 +2,15 @@ package service
 
 import (
 	"context"
+	"errors"
+	"fmt"
+	"sort"
+	"strconv"
+	"strings"
+
 	"github.com/espitman/gws-chat/message-service/internal/core/domain"
 	"github.com/espitman/gws-chat/message-service/internal/core/port"
 	"github.com/google/uuid"
-	"sort"
-	"strconv"
 )
 
 /**
@@ -34,6 +38,24 @@ func generateRoomUsers(user1 uint32, user2 uint32) string {
 	return result
 }
 
+func isRoomMember(userID uint32, users string) bool {
+	allUsers := strings.Split(users, ",")
+	fmt.Println(userID, allUsers)
+	for _, user := range allUsers {
+		id, _ := strconv.Atoi(user)
+		if uint32(id) == userID {
+			return true
+		}
+	}
+	return false
+}
+
+func getUseIDFromCtx(ctx context.Context) uint32 {
+	userIDString := ctx.Value("userID").(string)
+	userID, _ := strconv.Atoi(userIDString)
+	return uint32(userID)
+}
+
 func (s *RoomService) Crete(ctx context.Context, roomInput domain.CreateRoomInput) (*domain.Room, error) {
 	var result domain.Room
 	room := domain.Room{
@@ -48,4 +70,21 @@ func (s *RoomService) Crete(ctx context.Context, roomInput domain.CreateRoomInpu
 	result.RoomID = pgRoom.RoomID
 	result.Users = pgRoom.Users
 	return &result, nil
+}
+
+func (s *RoomService) Get(ctx context.Context, roomID string) (*domain.RoomInfo, error) {
+	userID := getUseIDFromCtx(ctx)
+	pgRoom, err := s.roomRepositoryPg.Get(ctx, roomID)
+	isMember := isRoomMember(userID, pgRoom.Users)
+	if !isMember {
+		return nil, errors.New("forbidden")
+	}
+	fmt.Println(pgRoom.Users, userID)
+	if err != nil {
+		return nil, err
+	}
+	return &domain.RoomInfo{
+		ID:     pgRoom.ID,
+		RoomID: pgRoom.RoomID,
+	}, nil
 }

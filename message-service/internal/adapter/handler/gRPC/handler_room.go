@@ -47,3 +47,13 @@ func (h Handler) V1AddMemberToRoom(ctx context.Context, req *pb.V1AddMemberToRoo
 	}
 	return &resp, nil
 }
+
+func (h Handler) V1GetRoom(ctx context.Context, req *pb.V1GetRoomRequest) (*pb.V1GetRoomResponse, error) {
+	result, err := h.roomService.Get(ctx, req.RoomID)
+	if err != nil {
+		return nil, err
+	}
+	return &pb.V1GetRoomResponse{
+		RoomID: result.RoomID,
+	}, nil
+}

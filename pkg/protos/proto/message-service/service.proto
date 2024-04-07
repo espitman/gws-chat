@@ -9,4 +9,5 @@ option go_package = "github.com/espitman/gws-chat/pkg/protos/protogen/message-se
 service MessageService {
   rpc V1CreateRoom(V1CreateRoomRequest) returns (V1CreateRoomResponse) {}
   rpc V1AddMemberToRoom(V1AddMemberToRoomRequest) returns (V1AddMemberToRoomResponse) {}
+  rpc V1GetRoom(V1GetRoomRequest) returns (V1GetRoomResponse) {}
 }

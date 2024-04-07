@@ -11,3 +11,7 @@ message V1AddMemberToRoomRequest {
   string roomID = 1;
   int32 userId = 2;
 }
+
+message V1GetRoomRequest {
+  string roomID = 1;
+}

@@ -11,3 +11,10 @@ message V1CreateRoomResponse {
 message V1AddMemberToRoomResponse {
   repeated RoomMember members = 1;
 }
+
+message V1GetRoomResponse{
+  string roomID = 1;
+  int32 userID = 2;
+  string userName = 3;
+  string userAvatar = 4;
+}

@@ -5,3 +5,11 @@ type Room struct {
 	RoomID string
 	Users  string
 }
+
+type RoomInfo struct {
+	ID         int
+	RoomID     string
+	UserID     uint32
+	UserName   string
+	UserAvatar string
+}
