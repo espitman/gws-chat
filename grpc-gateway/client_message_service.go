@@ -1,13 +1,12 @@
 // This file generated automatically by gRPC gateway generator
-// Generated at: 2024-04-06 02:49:07
+// Generated at: 2024-04-07 23:18:43
 
 package main
 
 import (
-	"log"
-
 	messagepb "github.com/espitman/gws-chat/pkg/protos/protogen/message-service"
 	"google.golang.org/grpc"
+	"log"
 )
 
 func newMessageServiceClient() messagepb.MessageServiceClient {

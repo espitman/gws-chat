@@ -1,5 +1,5 @@
 // This file generated automatically by gRPC gateway generator
-// Generated at: 2024-04-06 02:49:07
+// Generated at: 2024-04-07 23:18:43
 
 package main
 
@@ -16,6 +16,27 @@ func newUserServiceHandler(pb userpb.UserServiceClient) *userServiceHandler {
 	return &userServiceHandler{
 		pb: pb,
 	}
+}
+
+// V1Get
+// @Summary V1Get
+// @Description V1Get
+// @Tags user_service
+// @Produce json
+// @Security BearerAuth
+// @Param userID path string true "userID"
+// @Success 200 {object} userServiceV1GetResponseDto
+// @Router /api/v1/user-service/{userID} [Get]
+func (h *userServiceHandler) V1Get(c *fiber.Ctx) error {
+	var fctx = fiberCtx{c}
+	ctx := getCtx(fctx)
+	var reqDto userpb.V1GetRequest
+	_ = fctx.ParamsParser(&reqDto)
+	res, err := h.pb.V1Get(ctx, &reqDto)
+	if err != nil {
+		return fctx.BadRequest(err)
+	}
+	return fctx.ResponseOk(res)
 }
 
 // V1GetAll

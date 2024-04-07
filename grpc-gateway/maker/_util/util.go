@@ -1,6 +1,7 @@
 package _util
 
 import (
+	"fmt"
 	"strings"
 	"time"
 	"unicode"
@@ -52,6 +53,7 @@ func ToKebabCase(input string) string {
 
 func KebabCase(input string) string {
 	segments := strings.Split(input, "/")
+	fmt.Println(segments)
 	var output string
 	for _, segment := range segments {
 		fc := GetFirstChar(segment)

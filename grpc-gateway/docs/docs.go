@@ -54,6 +54,76 @@ const docTemplate = `{
                 }
             }
         },
+        "/api/v1/message-service/room/{RoomID}": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "V1GetRoom",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "message_service"
+                ],
+                "summary": "V1GetRoom",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "RoomID",
+                        "name": "RoomID",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/main.messageServiceV1GetRoomResponseDto"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/message-service/v1-add-member-to-room": {
+            "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "V1AddMemberToRoom",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "message_service"
+                ],
+                "summary": "V1AddMemberToRoom",
+                "parameters": [
+                    {
+                        "description": "body",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/message_service.V1AddMemberToRoomRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/main.messageServiceV1AddMemberToRoomResponseDto"
+                        }
+                    }
+                }
+            }
+        },
         "/api/v1/user-service/all": {
             "get": {
                 "security": [
@@ -125,9 +195,57 @@ const docTemplate = `{
                     }
                 }
             }
+        },
+        "/api/v1/user-service/{userID}": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "V1Get",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "user_service"
+                ],
+                "summary": "V1Get",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "userID",
+                        "name": "userID",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/main.userServiceV1GetResponseDto"
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {
+        "main.messageServiceV1AddMemberToRoomResponseDto": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "integer"
+                },
+                "message": {
+                    "type": "string"
+                },
+                "payload": {
+                    "$ref": "#/definitions/message_service.V1AddMemberToRoomResponse"
+                }
+            }
+        },
         "main.messageServiceV1CreateRoomResponseDto": {
             "type": "object",
             "properties": {
@@ -139,6 +257,20 @@ const docTemplate = `{
                 },
                 "payload": {
                     "$ref": "#/definitions/message_service.V1CreateRoomResponse"
+                }
+            }
+        },
+        "main.messageServiceV1GetRoomResponseDto": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "integer"
+                },
+                "message": {
+                    "type": "string"
+                },
+                "payload": {
+                    "$ref": "#/definitions/message_service.V1GetRoomResponse"
                 }
             }
         },
@@ -156,6 +288,20 @@ const docTemplate = `{
                 }
             }
         },
+        "main.userServiceV1GetResponseDto": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "integer"
+                },
+                "message": {
+                    "type": "string"
+                },
+                "payload": {
+                    "$ref": "#/definitions/user_service.V1GetResponse"
+                }
+            }
+        },
         "main.userServiceV1LoginResponseDto": {
             "type": "object",
             "properties": {
@@ -167,6 +313,42 @@ const docTemplate = `{
                 },
                 "payload": {
                     "$ref": "#/definitions/user_service.V1LoginResponse"
+                }
+            }
+        },
+        "message_service.RoomMember": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer"
+                },
+                "roomID": {
+                    "type": "string"
+                },
+                "userID": {
+                    "type": "integer"
+                }
+            }
+        },
+        "message_service.V1AddMemberToRoomRequest": {
+            "type": "object",
+            "properties": {
+                "roomID": {
+                    "type": "string"
+                },
+                "userId": {
+                    "type": "integer"
+                }
+            }
+        },
+        "message_service.V1AddMemberToRoomResponse": {
+            "type": "object",
+            "properties": {
+                "members": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/message_service.RoomMember"
+                    }
                 }
             }
         },
@@ -182,6 +364,26 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "id": {
+                    "type": "string"
+                }
+            }
+        },
+        "message_service.V1GetRoomResponse": {
+            "type": "object",
+            "properties": {
+                "roomID": {
+                    "type": "string"
+                },
+                "userAvatar": {
+                    "type": "string"
+                },
+                "userID": {
+                    "type": "integer"
+                },
+                "userName": {
+                    "type": "string"
+                },
+                "userStatus": {
                     "type": "string"
                 }
             }
@@ -237,6 +439,14 @@ const docTemplate = `{
                     "items": {
                         "$ref": "#/definitions/user_service.UserPublic"
                     }
+                }
+            }
+        },
+        "user_service.V1GetResponse": {
+            "type": "object",
+            "properties": {
+                "user": {
+                    "$ref": "#/definitions/user_service.UserPublic"
                 }
             }
         },

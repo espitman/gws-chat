@@ -1,5 +1,14 @@
 basePath: /
 definitions:
+  main.messageServiceV1AddMemberToRoomResponseDto:
+    properties:
+      code:
+        type: integer
+      message:
+        type: string
+      payload:
+        $ref: '#/definitions/message_service.V1AddMemberToRoomResponse'
+    type: object
   main.messageServiceV1CreateRoomResponseDto:
     properties:
       code:
@@ -8,6 +17,15 @@ definitions:
         type: string
       payload:
         $ref: '#/definitions/message_service.V1CreateRoomResponse'
+    type: object
+  main.messageServiceV1GetRoomResponseDto:
+    properties:
+      code:
+        type: integer
+      message:
+        type: string
+      payload:
+        $ref: '#/definitions/message_service.V1GetRoomResponse'
     type: object
   main.userServiceV1GetAllResponseDto:
     properties:
@@ -18,6 +36,15 @@ definitions:
       payload:
         $ref: '#/definitions/user_service.V1GetAllResponse'
     type: object
+  main.userServiceV1GetResponseDto:
+    properties:
+      code:
+        type: integer
+      message:
+        type: string
+      payload:
+        $ref: '#/definitions/user_service.V1GetResponse'
+    type: object
   main.userServiceV1LoginResponseDto:
     properties:
       code:
@@ -27,6 +54,29 @@ definitions:
       payload:
         $ref: '#/definitions/user_service.V1LoginResponse'
     type: object
+  message_service.RoomMember:
+    properties:
+      id:
+        type: integer
+      roomID:
+        type: string
+      userID:
+        type: integer
+    type: object
+  message_service.V1AddMemberToRoomRequest:
+    properties:
+      roomID:
+        type: string
+      userId:
+        type: integer
+    type: object
+  message_service.V1AddMemberToRoomResponse:
+    properties:
+      members:
+        items:
+          $ref: '#/definitions/message_service.RoomMember'
+        type: array
+    type: object
   message_service.V1CreateRoomRequest:
     properties:
       userId:
@@ -35,6 +85,19 @@ definitions:
   message_service.V1CreateRoomResponse:
     properties:
       id:
+        type: string
+    type: object
+  message_service.V1GetRoomResponse:
+    properties:
+      roomID:
+        type: string
+      userAvatar:
+        type: string
+      userID:
+        type: integer
+      userName:
+        type: string
+      userStatus:
         type: string
     type: object
   user_service.User:
@@ -71,6 +134,11 @@ definitions:
         items:
           $ref: '#/definitions/user_service.UserPublic'
         type: array
+    type: object
+  user_service.V1GetResponse:
+    properties:
+      user:
+        $ref: '#/definitions/user_service.UserPublic'
     type: object
   user_service.V1LoginRequest:
     properties:
@@ -119,6 +187,70 @@ paths:
       summary: V1CreateRoom
       tags:
       - message_service
+  /api/v1/message-service/room/{RoomID}:
+    get:
+      description: V1GetRoom
+      parameters:
+      - description: RoomID
+        in: path
+        name: RoomID
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/main.messageServiceV1GetRoomResponseDto'
+      security:
+      - BearerAuth: []
+      summary: V1GetRoom
+      tags:
+      - message_service
+  /api/v1/message-service/v1-add-member-to-room:
+    post:
+      description: V1AddMemberToRoom
+      parameters:
+      - description: body
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/message_service.V1AddMemberToRoomRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/main.messageServiceV1AddMemberToRoomResponseDto'
+      security:
+      - BearerAuth: []
+      summary: V1AddMemberToRoom
+      tags:
+      - message_service
+  /api/v1/user-service/{userID}:
+    get:
+      description: V1Get
+      parameters:
+      - description: userID
+        in: path
+        name: userID
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/main.userServiceV1GetResponseDto'
+      security:
+      - BearerAuth: []
+      summary: V1Get
+      tags:
+      - user_service
   /api/v1/user-service/all:
     get:
       description: V1GetAll

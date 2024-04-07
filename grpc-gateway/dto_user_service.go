@@ -1,9 +1,14 @@
 // This file generated automatically by gRPC gateway generator
-// Generated at: 2024-04-06 02:49:07
+// Generated at: 2024-04-07 23:18:43
 
 package main
 
 import userpb "github.com/espitman/gws-chat/pkg/protos/protogen/user-service"
+
+type userServiceV1GetResponseDto struct {
+	ResponseDto
+	Payload userpb.V1GetResponse
+}
 
 type userServiceV1GetAllResponseDto struct {
 	ResponseDto

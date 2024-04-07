@@ -1,15 +1,14 @@
 // This file generated automatically by gRPC gateway generator
-// Generated at: 2024-04-06 02:49:08
+// Generated at: 2024-04-07 23:18:44
 
 package main
 
 import (
-	"log"
-
 	superConf "github.com/espitman/go-super-conf"
 	_ "github.com/espitman/gws-chat/grpc-gateway/docs"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
+	"log"
 )
 
 // @title           gRPC Gateway
@@ -36,5 +35,5 @@ func main() {
 	)
 	router.serve(app)
 	PORT := superConf.Get("app.port")
-	log.Fatal(app.Listen("0.0.0.0:" + PORT))
+	log.Fatal(app.Listen(":" + PORT))
 }
