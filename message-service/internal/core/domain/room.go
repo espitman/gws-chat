@@ -12,4 +12,5 @@ type RoomInfo struct {
 	UserID     uint32
 	UserName   string
 	UserAvatar string
+	UserStatus string
 }

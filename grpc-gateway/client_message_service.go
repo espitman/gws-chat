@@ -4,9 +4,10 @@
 package main
 
 import (
+	"log"
+
 	messagepb "github.com/espitman/gws-chat/pkg/protos/protogen/message-service"
 	"google.golang.org/grpc"
-	"log"
 )
 
 func newMessageServiceClient() messagepb.MessageServiceClient {

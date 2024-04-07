@@ -2,6 +2,7 @@ package grpc
 
 import (
 	"context"
+
 	pb "github.com/espitman/gws-chat/pkg/protos/protogen/user-service"
 	"github.com/espitman/gws-chat/user-service/internal/core/domain"
 )
@@ -64,4 +65,19 @@ func (h Handler) V1ValidateToken(ctx context.Context, req *pb.V1ValidateTokenReq
 		return nil, err
 	}
 	return &resp, nil
+}
+
+func (h Handler) V1Get(ctx context.Context, req *pb.V1GetRequest) (*pb.V1GetResponse, error) {
+	result, err := h.userService.Get(ctx, req.UserID)
+	if err != nil {
+		return nil, err
+	}
+	return &pb.V1GetResponse{
+		User: &pb.UserPublic{
+			Id:     int32(result.ID),
+			Name:   result.Name,
+			Avatar: result.Avatar,
+			Status: result.Status,
+		},
+	}, nil
 }

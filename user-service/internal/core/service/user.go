@@ -4,11 +4,12 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"time"
+
 	"github.com/espitman/gws-chat/user-service/internal/core/domain"
 	"github.com/espitman/gws-chat/user-service/internal/core/port"
 	"github.com/golang-jwt/jwt/v5"
 	"golang.org/x/crypto/bcrypt"
-	"time"
 )
 
 /**
@@ -82,7 +83,7 @@ func parseJWTToken(tokenString string) (*domain.User, error) {
 }
 
 func (s *UserService) Login(ctx context.Context, user domain.User) (*domain.User, error) {
-	pgUser, err := s.userRepositoryPg.Get(ctx, user)
+	pgUser, err := s.userRepositoryPg.GetByName(ctx, user)
 	if err != nil {
 		if err.Error() != "ent: user not found" {
 			return nil, err
@@ -108,6 +109,7 @@ func (s *UserService) Login(ctx context.Context, user domain.User) (*domain.User
 }
 
 func (s *UserService) GetAll(ctx context.Context) ([]*domain.User, error) {
+
 	return s.userRepositoryPg.GetAll(ctx)
 }
 
@@ -117,4 +119,17 @@ func (s *UserService) ValidateToken(ctx context.Context, token string) (*domain.
 		return nil, err
 	}
 	return user, nil
+}
+
+func (s *UserService) Get(ctx context.Context, userID uint32) (*domain.User, error) {
+	pgUser, err := s.userRepositoryPg.Get(ctx, userID)
+	if err != nil {
+		return nil, err
+	}
+	return &domain.User{
+		ID:     pgUser.ID,
+		Name:   pgUser.Name,
+		Avatar: pgUser.Avatar,
+		Status: pgUser.Status,
+	}, nil
 }

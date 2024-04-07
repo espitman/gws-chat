@@ -25,6 +25,7 @@ type UserServiceClient interface {
 	V1Login(ctx context.Context, in *V1LoginRequest, opts ...grpc.CallOption) (*V1LoginResponse, error)
 	V1GetAll(ctx context.Context, in *V1GetAllRequest, opts ...grpc.CallOption) (*V1GetAllResponse, error)
 	V1ValidateToken(ctx context.Context, in *V1ValidateTokenRequest, opts ...grpc.CallOption) (*V1ValidateTokenResponse, error)
+	V1Get(ctx context.Context, in *V1GetRequest, opts ...grpc.CallOption) (*V1GetResponse, error)
 }
 
 type userServiceClient struct {
@@ -62,6 +63,15 @@ func (c *userServiceClient) V1ValidateToken(ctx context.Context, in *V1ValidateT
 	return out, nil
 }
 
+func (c *userServiceClient) V1Get(ctx context.Context, in *V1GetRequest, opts ...grpc.CallOption) (*V1GetResponse, error) {
+	out := new(V1GetResponse)
+	err := c.cc.Invoke(ctx, "/proto.UserService/V1Get", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // UserServiceServer is the server API for UserService service.
 // All implementations must embed UnimplementedUserServiceServer
 // for forward compatibility
@@ -69,6 +79,7 @@ type UserServiceServer interface {
 	V1Login(context.Context, *V1LoginRequest) (*V1LoginResponse, error)
 	V1GetAll(context.Context, *V1GetAllRequest) (*V1GetAllResponse, error)
 	V1ValidateToken(context.Context, *V1ValidateTokenRequest) (*V1ValidateTokenResponse, error)
+	V1Get(context.Context, *V1GetRequest) (*V1GetResponse, error)
 	mustEmbedUnimplementedUserServiceServer()
 }
 
@@ -84,6 +95,9 @@ func (UnimplementedUserServiceServer) V1GetAll(context.Context, *V1GetAllRequest
 }
 func (UnimplementedUserServiceServer) V1ValidateToken(context.Context, *V1ValidateTokenRequest) (*V1ValidateTokenResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method V1ValidateToken not implemented")
+}
+func (UnimplementedUserServiceServer) V1Get(context.Context, *V1GetRequest) (*V1GetResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method V1Get not implemented")
 }
 func (UnimplementedUserServiceServer) mustEmbedUnimplementedUserServiceServer() {}
 
@@ -152,6 +166,24 @@ func _UserService_V1ValidateToken_Handler(srv interface{}, ctx context.Context, 
 	return interceptor(ctx, in, info, handler)
 }
 
+func _UserService_V1Get_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(V1GetRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(UserServiceServer).V1Get(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/proto.UserService/V1Get",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(UserServiceServer).V1Get(ctx, req.(*V1GetRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // UserService_ServiceDesc is the grpc.ServiceDesc for UserService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -170,6 +202,10 @@ var UserService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "V1ValidateToken",
 			Handler:    _UserService_V1ValidateToken_Handler,
+		},
+		{
+			MethodName: "V1Get",
+			Handler:    _UserService_V1Get_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

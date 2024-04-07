@@ -2,6 +2,7 @@ package pg
 
 import (
 	"context"
+
 	"github.com/espitman/gws-chat/user-service/internal/adapter/database/postgres/ent"
 	"github.com/espitman/gws-chat/user-service/internal/adapter/database/postgres/ent/user"
 	"github.com/espitman/gws-chat/user-service/internal/core/domain"
@@ -34,7 +35,15 @@ func (r *UserRepository) Crete(ctx context.Context, d domain.User) (*domain.User
 	return userSchemaToUserDomainPointerMapper(newD), nil
 }
 
-func (r *UserRepository) Get(ctx context.Context, d domain.User) (*domain.User, error) {
+func (r *UserRepository) Get(ctx context.Context, userID uint32) (*domain.User, error) {
+	u, err := r.client.User.Get(ctx, int(userID))
+	if err != nil {
+		return nil, err
+	}
+	return userSchemaToUserDomainPointerMapper(u), nil
+}
+
+func (r *UserRepository) GetByName(ctx context.Context, d domain.User) (*domain.User, error) {
 	u, err := r.client.User.Query().Where(user.Name(d.Name)).First(ctx)
 	if err != nil {
 		return nil, err
@@ -60,7 +69,7 @@ func (r *UserRepository) GetAll(ctx context.Context) ([]*domain.User, error) {
 //}
 //
 //func (r *UserRepository) Delete(ctx context.Context, ID int) (*domain.User, error) {
-//	u, err := r.client.User.Get(ctx, ID)
+//	u, err := r.client.User.GetByName(ctx, ID)
 //	if err != nil {
 //		return nil, err
 //	}

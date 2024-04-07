@@ -13,3 +13,7 @@ message V1GetAllRequest {}
 message V1ValidateTokenRequest {
   string token = 1; // @gotags: validate:"required"
 }
+
+message V1GetRequest {
+  uint32 UserID = 1; // @gotags: validate:"required"
+}

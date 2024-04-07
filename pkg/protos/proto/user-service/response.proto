@@ -15,3 +15,8 @@ message V1GetAllResponse {
 message V1ValidateTokenResponse {
   UserPublic user = 1;
 }
+
+
+message V1GetResponse {
+  UserPublic user = 1;
+}

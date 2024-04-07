@@ -4,9 +4,10 @@
 package main
 
 import (
+	"log"
+
 	userpb "github.com/espitman/gws-chat/pkg/protos/protogen/user-service"
 	"google.golang.org/grpc"
-	"log"
 )
 
 func newUserServiceClient() userpb.UserServiceClient {
