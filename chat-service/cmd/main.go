@@ -1,22 +1,18 @@
 package main
 
 import (
-	superConf "github.com/espitman/go-super-conf"
 	"github.com/espitman/gws-chat/chat-service/cmd/api"
 	"github.com/espitman/gws-chat/chat-service/internal/adapter/database/memdb"
-	"github.com/espitman/gws-chat/chat-service/internal/adapter/database/postgres/pg"
+	grpcclientmessage "github.com/espitman/gws-chat/chat-service/internal/adapter/grpcclient/message"
 	"github.com/espitman/gws-chat/chat-service/internal/core/service"
 	validatorutil "github.com/espitman/gws-chat/pkg/util/validator"
 )
 
 func main() {
 	validate := validatorutil.NewValidator()
-	dsn := superConf.Get("db.postgres.dsn")
-	pgDB := pg.NewDB(dsn)
-	messageRepositoryPg := pg.NewMessageRepository(pgDB.Client)
-	messageService := service.NewMessageService(
-		messageRepositoryPg,
-	)
+
+	messageRepositoryGrpc := grpcclientmessage.NewGrpcClientMessage()
+	messageService := service.NewMessageService(*messageRepositoryGrpc)
 
 	socketRepositoryMD := memdb.NewSocketRepository()
 	socketService := service.NewSocketService(socketRepositoryMD)
@@ -24,7 +20,7 @@ func main() {
 	roomRepositoryMD := memdb.NewRoomRepository()
 	roomService := service.NewRoomService(roomRepositoryMD)
 
-	socketConnectService := service.NewSocketConnectService(socketService, roomService)
+	socketConnectService := service.NewSocketConnectService(socketService, roomService, messageService)
 
 	// +salvation NewRepository
 	api.Run(

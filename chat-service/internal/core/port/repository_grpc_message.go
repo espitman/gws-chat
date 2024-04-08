@@ -6,10 +6,6 @@ import (
 	"github.com/espitman/gws-chat/chat-service/internal/core/domain"
 )
 
-/**
- * messageService implemented by service.messageService interface
- */
-
-type MessageService interface {
+type MessageRepositoryGrpc interface {
 	Create(ctx context.Context, message domain.Message) (*domain.Message, error)
 }

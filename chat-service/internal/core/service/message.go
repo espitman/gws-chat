@@ -2,8 +2,9 @@ package service
 
 import (
 	"context"
+
+	grpcclientmessage "github.com/espitman/gws-chat/chat-service/internal/adapter/grpcclient/message"
 	"github.com/espitman/gws-chat/chat-service/internal/core/domain"
-	"github.com/espitman/gws-chat/chat-service/internal/core/port"
 )
 
 /**
@@ -11,57 +12,15 @@ import (
  */
 
 type MessageService struct {
-	messageRepositoryPg port.MessageRepositoryPg
+	messageRepositoryGrpc grpcclientmessage.GrpcClientMessage
 }
 
-func NewMessageService(
-	messageRepositoryPg port.MessageRepositoryPg,
-) *MessageService {
+func NewMessageService(messageRepositoryGrpc grpcclientmessage.GrpcClientMessage) *MessageService {
 	return &MessageService{
-		messageRepositoryPg: messageRepositoryPg,
+		messageRepositoryGrpc,
 	}
 }
 
-func (s *MessageService) Crete(ctx context.Context, message domain.Message) (*domain.Message, error) {
-	var result domain.Message
-	pgMessage, err := s.messageRepositoryPg.Crete(ctx, message)
-	if err != nil {
-		return nil, err
-	}
-	result.ID = pgMessage.ID
-	result.Name = pgMessage.Name
-	message.ID = pgMessage.ID
-	return &result, nil
-}
-
-func (s *MessageService) Get(ctx context.Context, ID int) (*domain.Message, error) {
-	var result domain.Message
-	pgMessage, err := s.messageRepositoryPg.Get(ctx, ID)
-	if err != nil {
-		return nil, err
-	}
-	result.ID = pgMessage.ID
-	result.Name = pgMessage.Name
-	return &result, nil
-}
-
-func (s *MessageService) Update(ctx context.Context, ID int, message domain.Message) (*domain.Message, error) {
-	var result domain.Message
-	pgMessage, err := s.messageRepositoryPg.Update(ctx, ID, message)
-	if err != nil {
-		return nil, err
-	}
-	result = *pgMessage
-	return &result, nil
-}
-
-func (s *MessageService) Delete(ctx context.Context, ID int) (*domain.Message, error) {
-	var result domain.Message
-	var err error
-	pgMessage, err := s.messageRepositoryPg.Delete(ctx, ID)
-	if err != nil {
-		return nil, err
-	}
-	result = *pgMessage
-	return &result, nil
+func (s *MessageService) Create(ctx context.Context, message domain.Message) (*domain.Message, error) {
+	return s.messageRepositoryGrpc.Create(ctx, message)
 }

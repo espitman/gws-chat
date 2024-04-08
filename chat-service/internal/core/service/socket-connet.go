@@ -14,13 +14,14 @@ import (
  */
 
 type SocketConnectService struct {
-	upgrader      *gws.Upgrader
-	socketService port.SocketService
-	roomService   port.RoomService
+	upgrader       *gws.Upgrader
+	socketService  port.SocketService
+	roomService    port.RoomService
+	messageService port.MessageService
 }
 
-func NewSocketConnectService(socketService port.SocketService, roomService port.RoomService) *SocketConnectService {
-	sh := socket.NewHandler(socketService, roomService)
+func NewSocketConnectService(socketService port.SocketService, roomService port.RoomService, messageService port.MessageService) *SocketConnectService {
+	sh := socket.NewHandler(socketService, roomService, messageService)
 	upgrader := gws.NewUpgrader(&sh, &gws.ServerOption{
 		ParallelEnabled:   true,         // Parallel message processing
 		Recovery:          gws.Recovery, // Exception recovery
@@ -40,5 +41,6 @@ func (s *SocketConnectService) Open(writer http.ResponseWriter, request *http.Re
 	}
 	iSocket.Session().Store("socketID", socketID)
 	iSocket.Session().Store("roomID", roomID)
+	iSocket.Session().Store("userID", userID)
 	return iSocket, nil
 }

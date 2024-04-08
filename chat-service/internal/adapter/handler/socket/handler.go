@@ -1,9 +1,12 @@
 package socket
 
 import (
+	"context"
 	"fmt"
+	"strconv"
 	"time"
 
+	"github.com/espitman/gws-chat/chat-service/internal/core/domain"
 	"github.com/espitman/gws-chat/chat-service/internal/core/port"
 	"github.com/lxzan/gws"
 )
@@ -14,14 +17,16 @@ const (
 )
 
 type Handler struct {
-	socketService port.SocketService
-	roomService   port.RoomService
+	socketService  port.SocketService
+	roomService    port.RoomService
+	messageService port.MessageService
 }
 
-func NewHandler(socketService port.SocketService, roomService port.RoomService) Handler {
+func NewHandler(socketService port.SocketService, roomService port.RoomService, messageService port.MessageService) Handler {
 	return Handler{
-		socketService: socketService,
-		roomService:   roomService,
+		socketService:  socketService,
+		roomService:    roomService,
+		messageService: messageService,
 	}
 }
 
@@ -56,7 +61,21 @@ func (h *Handler) OnMessage(socket *gws.Conn, message *gws.Message) {
 	defer message.Close()
 	roomID, _ := socket.Session().Load("roomID")
 	socketID, _ := socket.Session().Load("socketID")
-	fmt.Println("OnMessage", roomID, socketID, message.Data)
+	userID, _ := socket.Session().Load("userID")
+	fmt.Println("OnMessage", roomID, socketID, message.Data, userID)
+
+	u, _ := strconv.Atoi(userID.(string))
+
+	msg := domain.Message{
+		RoomID: roomID.(string),
+		UserID: uint32(u),
+		Body:   message.Data.String(),
+	}
+	_, err := h.messageService.Create(context.Background(), msg)
+	if err != nil {
+		fmt.Println(err)
+	}
+
 	subscribers := h.roomService.GetSubscribers(roomID.(string))
 	for _, s := range subscribers {
 		sid, _ := s.Session().Load("socketID")

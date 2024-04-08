@@ -34,7 +34,7 @@ func NewChatHandler(
 
 func (h *ChatHandler) ChatHandler(writer http.ResponseWriter, request *http.Request, ps httprouter.Params) {
 
-	auth := "" //request.Header.Get("auth")
+	auth := request.Header.Get("auth")
 	id := ps.ByName("id")
 	//if auth != "saeed" {
 	//	http.Error(writer, "Forbidden", 403)
