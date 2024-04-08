@@ -8,3 +8,11 @@ message RoomMember {
   string roomID = 2;
   int32 userID = 3;
 }
+
+message Message {
+  uint32 id = 1;
+  string roomID = 2;
+  int32 userId = 3;
+  string body = 4;
+  string time = 5;
+}

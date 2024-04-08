@@ -4,6 +4,7 @@ import (
 	"context"
 
 	"github.com/espitman/gws-chat/message-service/internal/adapter/database/postgres/ent"
+	"github.com/espitman/gws-chat/message-service/internal/adapter/database/postgres/ent/message"
 	"github.com/espitman/gws-chat/message-service/internal/core/domain"
 )
 
@@ -41,4 +42,12 @@ func (r *MessageRepository) Get(ctx context.Context, ID int) (*domain.Message, e
 		return nil, err
 	}
 	return messageSchemaToMessageDomainPointerMapper(u), nil
+}
+
+func (r *MessageRepository) GetRoomMessages(ctx context.Context, roomID string) ([]*domain.Message, error) {
+	messages, err := r.client.Message.Query().Where(message.RoomID(roomID)).All(ctx)
+	if err != nil {
+		return nil, err
+	}
+	return messageSchemasToMessageDomainsPointerMapper(messages), nil
 }

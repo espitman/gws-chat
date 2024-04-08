@@ -79,10 +79,33 @@ func (h Handler) V1AddMessage(ctx context.Context, req *pb.V1AddMessageRequest) 
 		return nil, err
 	}
 	return &pb.V1AddMessageResponse{
-		Id:     result.ID,
-		RoomID: result.RoomID,
-		UserId: int32(result.UserID),
-		Body:   result.Body,
-		Time:   timeutil.DateToString(result.Time),
+		Message: &pb.Message{
+			Id:     result.ID,
+			RoomID: result.RoomID,
+			UserId: int32(result.UserID),
+			Body:   result.Body,
+			Time:   timeutil.DateToString(result.Time),
+		},
 	}, nil
+}
+
+func (h Handler) V1GetRoomMessages(ctx context.Context, req *pb.V1GetRoomMessagesRequest) (*pb.V1GetRoomMessagesResponse, error) {
+	//userIDCtx := ctx.Value("userID").(string)
+	//userID, _ := strconv.Atoi(userIDCtx)
+	var messages []*pb.Message
+
+	result, err := h.messageService.GetRoomMessages(ctx, req.RoomID)
+	if err != nil {
+		return nil, err
+	}
+	for _, m := range result {
+		messages = append(messages, &pb.Message{
+			Id:     m.ID,
+			RoomID: m.RoomID,
+			UserId: int32(m.UserID),
+			Body:   m.Body,
+			Time:   timeutil.DateToString(m.Time),
+		})
+	}
+	return &pb.V1GetRoomMessagesResponse{Messages: messages}, nil
 }

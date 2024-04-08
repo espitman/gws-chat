@@ -13,4 +13,5 @@ import (
 type MessageRepositoryPg interface {
 	Crete(ctx context.Context, message domain.Message) (*domain.Message, error)
 	Get(ctx context.Context, ID int) (*domain.Message, error)
+	GetRoomMessages(ctx context.Context, roomID string) ([]*domain.Message, error)
 }

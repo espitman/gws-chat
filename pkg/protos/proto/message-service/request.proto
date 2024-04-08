@@ -21,3 +21,7 @@ message V1AddMessageRequest {
   string body = 2;
   string time = 3;
 }
+
+message V1GetRoomMessagesRequest {
+  string roomID = 1;
+}

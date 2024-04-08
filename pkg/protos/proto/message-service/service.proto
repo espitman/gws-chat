@@ -11,4 +11,5 @@ service MessageService {
   rpc V1AddMemberToRoom(V1AddMemberToRoomRequest) returns (V1AddMemberToRoomResponse) {}
   rpc V1GetRoom(V1GetRoomRequest) returns (V1GetRoomResponse) {}
   rpc V1AddMessage(V1AddMessageRequest) returns (V1AddMessageResponse) {}
+  rpc V1GetRoomMessages(V1GetRoomMessagesRequest) returns (V1GetRoomMessagesResponse) {}
 }

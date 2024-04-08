@@ -50,3 +50,7 @@ func (s *MessageService) Get(ctx context.Context, ID int) (*domain.Message, erro
 		Time:   pgMessage.Time,
 	}, nil
 }
+
+func (s *MessageService) GetRoomMessages(ctx context.Context, roomID string) ([]*domain.Message, error) {
+	return s.messageRepositoryPg.GetRoomMessages(ctx, roomID)
+}
