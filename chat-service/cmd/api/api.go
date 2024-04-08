@@ -13,10 +13,11 @@ func Run(
 	socketConnectService port.SocketConnetService,
 	socketService port.SocketService,
 	roomService port.RoomService,
+	userService port.UserService,
 	// +salvation RunType
 ) {
 
-	chatHandler := http.NewChatHandler(validate, messageService, socketConnectService, socketService, roomService)
+	chatHandler := http.NewChatHandler(validate, messageService, socketConnectService, socketService, roomService, userService)
 	messageHandler := http.NewMessageHandler(validate, messageService, socketService)
 	// +salvation NewHandler
 

@@ -1,8 +1,9 @@
 package port
 
 import (
-	"github.com/lxzan/gws"
 	"net/http"
+
+	"github.com/lxzan/gws"
 )
 
 /**
@@ -10,5 +11,5 @@ import (
  */
 
 type SocketConnetService interface {
-	Open(writer http.ResponseWriter, request *http.Request, auth string, id string) (*gws.Conn, error)
+	Open(writer http.ResponseWriter, request *http.Request, userID string, roomID string) (*gws.Conn, error)
 }
