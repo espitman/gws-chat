@@ -3,7 +3,6 @@ package service
 import (
 	"context"
 	"errors"
-	"fmt"
 	"sort"
 	"strconv"
 	"strings"
@@ -88,14 +87,22 @@ func (s *RoomService) Crete(ctx context.Context, roomInput domain.CreateRoomInpu
 func (s *RoomService) Get(ctx context.Context, roomID string) (*domain.RoomInfo, error) {
 	userID := s.getUseIDFromCtx(ctx)
 	pgRoom, err := s.roomRepositoryPg.Get(ctx, roomID)
+	if err != nil {
+		return nil, err
+	}
+
 	isMember := s.isRoomMember(userID, pgRoom.Users)
 	if !isMember {
 		return nil, errors.New("forbidden")
 	}
-	fmt.Println(pgRoom.Users, userID)
+
+	user, err := s.userService.Get(ctx, userID)
+	if err != nil {
+		return nil, err
+	}
 
 	audienceID := s.getAudienceID(userID, pgRoom.Users)
-	user, err := s.userService.Get(ctx, audienceID)
+	audience, err := s.userService.Get(ctx, audienceID)
 	if err != nil {
 		return nil, err
 	}
@@ -104,11 +111,19 @@ func (s *RoomService) Get(ctx context.Context, roomID string) (*domain.RoomInfo,
 		return nil, err
 	}
 	return &domain.RoomInfo{
-		ID:         pgRoom.ID,
-		RoomID:     pgRoom.RoomID,
-		UserID:     user.ID,
-		UserName:   user.Name,
-		UserAvatar: user.Avatar,
-		UserStatus: user.Status,
+		ID:     pgRoom.ID,
+		RoomID: pgRoom.RoomID,
+		User: domain.User{
+			ID:     user.ID,
+			Name:   user.Name,
+			Avatar: user.Avatar,
+			Status: user.Status,
+		},
+		Audience: domain.User{
+			ID:     audience.ID,
+			Name:   audience.Name,
+			Avatar: audience.Avatar,
+			Status: audience.Status,
+		},
 	}, nil
 }

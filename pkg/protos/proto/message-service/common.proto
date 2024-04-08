@@ -3,6 +3,11 @@ syntax = "proto3";
 package proto;
 option go_package = "github.com/espitman/gws-chat/pkg/protos/protogen/message-service";
 
+enum MessageType {
+  TYPE_SENT = 0;
+  TYPE_RECEIVED = 1;
+}
+
 message RoomMember {
   int32 id = 1 ;
   string roomID = 2;
@@ -12,7 +17,17 @@ message RoomMember {
 message Message {
   uint32 id = 1;
   string roomID = 2;
-  int32 userId = 3;
-  string body = 4;
-  string time = 5;
+  int32 userID = 3;
+  string userName = 4;
+  string userAvatar = 5;
+  string body = 6;
+  string time = 7;
+  MessageType type = 8;
+}
+
+message MessageUser {
+  int32 id = 1;
+  string name = 2;
+  string avatar = 3;
+  string status = 4;
 }

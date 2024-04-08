@@ -1,5 +1,5 @@
 // This file generated automatically by gRPC gateway generator
-// Generated at: 2024-04-07 23:32:20
+// Generated at: 2024-04-08 21:18:42
 
 package main
 
@@ -12,6 +12,11 @@ func (r *router) messageServiceRouter(v fiber.Router) {
 		r.messageServiceHandler.V1AddMemberToRoom,
 	)
 	v.Post(
+		"/v1-add-message",
+		AuthMiddleware(r.userServiceClient),
+		r.messageServiceHandler.V1AddMessage,
+	)
+	v.Post(
 		"/room",
 		AuthMiddleware(r.userServiceClient),
 		r.messageServiceHandler.V1CreateRoom,
@@ -20,5 +25,10 @@ func (r *router) messageServiceRouter(v fiber.Router) {
 		"/room/:RoomID",
 		AuthMiddleware(r.userServiceClient),
 		r.messageServiceHandler.V1GetRoom,
+	)
+	v.Get(
+		"/room/:RoomID/messages",
+		AuthMiddleware(r.userServiceClient),
+		r.messageServiceHandler.V1GetRoomMessages,
 	)
 }

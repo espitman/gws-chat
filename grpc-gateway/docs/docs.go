@@ -88,6 +88,40 @@ const docTemplate = `{
                 }
             }
         },
+        "/api/v1/message-service/room/{RoomID}/messages": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "V1GetRoomMessages",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "message_service"
+                ],
+                "summary": "V1GetRoomMessages",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "RoomID",
+                        "name": "RoomID",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/main.messageServiceV1GetRoomMessagesResponseDto"
+                        }
+                    }
+                }
+            }
+        },
         "/api/v1/message-service/v1-add-member-to-room": {
             "post": {
                 "security": [
@@ -119,6 +153,42 @@ const docTemplate = `{
                         "description": "OK",
                         "schema": {
                             "$ref": "#/definitions/main.messageServiceV1AddMemberToRoomResponseDto"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/message-service/v1-add-message": {
+            "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "V1AddMessage",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "message_service"
+                ],
+                "summary": "V1AddMessage",
+                "parameters": [
+                    {
+                        "description": "body",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/message_service.V1AddMessageRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/main.messageServiceV1AddMessageResponseDto"
                         }
                     }
                 }
@@ -235,6 +305,20 @@ const docTemplate = `{
                 }
             }
         },
+        "main.messageServiceV1AddMessageResponseDto": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "integer"
+                },
+                "message": {
+                    "type": "string"
+                },
+                "payload": {
+                    "$ref": "#/definitions/message_service.V1AddMessageResponse"
+                }
+            }
+        },
         "main.messageServiceV1CreateRoomResponseDto": {
             "type": "object",
             "properties": {
@@ -246,6 +330,20 @@ const docTemplate = `{
                 },
                 "payload": {
                     "$ref": "#/definitions/message_service.V1CreateRoomResponse"
+                }
+            }
+        },
+        "main.messageServiceV1GetRoomMessagesResponseDto": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "integer"
+                },
+                "message": {
+                    "type": "string"
+                },
+                "payload": {
+                    "$ref": "#/definitions/message_service.V1GetRoomMessagesResponse"
                 }
             }
         },
@@ -305,6 +403,26 @@ const docTemplate = `{
                 }
             }
         },
+        "message_service.Message": {
+            "type": "object",
+            "properties": {
+                "body": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "roomID": {
+                    "type": "string"
+                },
+                "time": {
+                    "type": "string"
+                },
+                "userId": {
+                    "type": "integer"
+                }
+            }
+        },
         "message_service.RoomMember": {
             "type": "object",
             "properties": {
@@ -341,6 +459,28 @@ const docTemplate = `{
                 }
             }
         },
+        "message_service.V1AddMessageRequest": {
+            "type": "object",
+            "properties": {
+                "body": {
+                    "type": "string"
+                },
+                "roomID": {
+                    "type": "string"
+                },
+                "time": {
+                    "type": "string"
+                }
+            }
+        },
+        "message_service.V1AddMessageResponse": {
+            "type": "object",
+            "properties": {
+                "message": {
+                    "$ref": "#/definitions/message_service.Message"
+                }
+            }
+        },
         "message_service.V1CreateRoomRequest": {
             "type": "object",
             "properties": {
@@ -354,6 +494,17 @@ const docTemplate = `{
             "properties": {
                 "id": {
                     "type": "string"
+                }
+            }
+        },
+        "message_service.V1GetRoomMessagesResponse": {
+            "type": "object",
+            "properties": {
+                "messages": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/message_service.Message"
+                    }
                 }
             }
         },

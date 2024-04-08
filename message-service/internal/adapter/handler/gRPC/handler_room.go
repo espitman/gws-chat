@@ -51,16 +51,47 @@ func (h Handler) V1AddMemberToRoom(ctx context.Context, req *pb.V1AddMemberToRoo
 }
 
 func (h Handler) V1GetRoom(ctx context.Context, req *pb.V1GetRoomRequest) (*pb.V1GetRoomResponse, error) {
-	result, err := h.roomService.Get(ctx, req.RoomID)
+	//userIDCtx := ctx.Value("userID").(string)
+	//userID, _ := strconv.Atoi(userIDCtx)
+
+	roomInfo, err := h.roomService.Get(ctx, req.RoomID)
 	if err != nil {
 		return nil, err
 	}
+
+	var messages []*pb.Message
+	messagesResult, err := h.messageService.GetRoomMessages(ctx, roomInfo)
+	if err != nil {
+		return nil, err
+	}
+	for _, m := range messagesResult {
+		messages = append(messages, &pb.Message{
+			Id:         m.ID,
+			RoomID:     m.RoomID,
+			UserID:     int32(m.UserID),
+			UserName:   m.UserName,
+			UserAvatar: m.UserAvatar,
+			Body:       m.Body,
+			Time:       timeutil.DateToString(m.Time),
+			Type:       m.Type,
+		})
+	}
+
 	return &pb.V1GetRoomResponse{
-		RoomID:     result.RoomID,
-		UserID:     int32(result.UserID),
-		UserName:   result.UserName,
-		UserAvatar: result.UserAvatar,
-		UserStatus: result.UserStatus,
+		RoomID: roomInfo.RoomID,
+		User: &pb.MessageUser{
+			Id:     int32(roomInfo.User.ID),
+			Name:   roomInfo.User.Name,
+			Avatar: roomInfo.User.Avatar,
+			Status: roomInfo.User.Status,
+		},
+		Audience: &pb.MessageUser{
+			Id:     int32(roomInfo.Audience.ID),
+			Name:   roomInfo.Audience.Name,
+			Avatar: roomInfo.Audience.Avatar,
+			Status: roomInfo.Audience.Status,
+		},
+		Messages: messages,
 	}, nil
 }
 
@@ -82,7 +113,7 @@ func (h Handler) V1AddMessage(ctx context.Context, req *pb.V1AddMessageRequest) 
 		Message: &pb.Message{
 			Id:     result.ID,
 			RoomID: result.RoomID,
-			UserId: int32(result.UserID),
+			UserID: int32(result.UserID),
 			Body:   result.Body,
 			Time:   timeutil.DateToString(result.Time),
 		},
@@ -94,7 +125,12 @@ func (h Handler) V1GetRoomMessages(ctx context.Context, req *pb.V1GetRoomMessage
 	//userID, _ := strconv.Atoi(userIDCtx)
 	var messages []*pb.Message
 
-	result, err := h.messageService.GetRoomMessages(ctx, req.RoomID)
+	roomInfo, err := h.roomService.Get(ctx, req.RoomID)
+	if err != nil {
+		return nil, err
+	}
+
+	result, err := h.messageService.GetRoomMessages(ctx, roomInfo)
 	if err != nil {
 		return nil, err
 	}
@@ -102,7 +138,7 @@ func (h Handler) V1GetRoomMessages(ctx context.Context, req *pb.V1GetRoomMessage
 		messages = append(messages, &pb.Message{
 			Id:     m.ID,
 			RoomID: m.RoomID,
-			UserId: int32(m.UserID),
+			UserID: int32(m.UserID),
 			Body:   m.Body,
 			Time:   timeutil.DateToString(m.Time),
 		})

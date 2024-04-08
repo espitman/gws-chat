@@ -1,5 +1,5 @@
 // This file generated automatically by gRPC gateway generator
-// Generated at: 2024-04-07 23:32:20
+// Generated at: 2024-04-08 21:18:42
 
 package main
 
@@ -35,6 +35,29 @@ func (h *messageServiceHandler) V1AddMemberToRoom(c *fiber.Ctx) error {
 	_ = fctx.ParamsParser(&reqDto)
 	_ = fctx.BodyParser(&reqDto)
 	res, err := h.pb.V1AddMemberToRoom(ctx, &reqDto)
+	if err != nil {
+		return fctx.BadRequest(err)
+	}
+	return fctx.ResponseOk(res)
+}
+
+// V1AddMessage
+// @Summary V1AddMessage
+// @Description V1AddMessage
+// @Tags message_service
+// @Produce json
+// @Security BearerAuth
+// @Param body body messagepb.V1AddMessageRequest true "body"
+// @Success 200 {object} messageServiceV1AddMessageResponseDto
+// @Router /api/v1/message-service/v1-add-message [Post]
+func (h *messageServiceHandler) V1AddMessage(c *fiber.Ctx) error {
+	var fctx = fiberCtx{c}
+	ctx := getCtx(fctx)
+	var reqDto messagepb.V1AddMessageRequest
+	_ = fctx.QueryParser(&reqDto)
+	_ = fctx.ParamsParser(&reqDto)
+	_ = fctx.BodyParser(&reqDto)
+	res, err := h.pb.V1AddMessage(ctx, &reqDto)
 	if err != nil {
 		return fctx.BadRequest(err)
 	}
@@ -77,6 +100,27 @@ func (h *messageServiceHandler) V1GetRoom(c *fiber.Ctx) error {
 	var reqDto messagepb.V1GetRoomRequest
 	_ = fctx.ParamsParser(&reqDto)
 	res, err := h.pb.V1GetRoom(ctx, &reqDto)
+	if err != nil {
+		return fctx.BadRequest(err)
+	}
+	return fctx.ResponseOk(res)
+}
+
+// V1GetRoomMessages
+// @Summary V1GetRoomMessages
+// @Description V1GetRoomMessages
+// @Tags message_service
+// @Produce json
+// @Security BearerAuth
+// @Param RoomID path string true "RoomID"
+// @Success 200 {object} messageServiceV1GetRoomMessagesResponseDto
+// @Router /api/v1/message-service/room/{RoomID}/messages [Get]
+func (h *messageServiceHandler) V1GetRoomMessages(c *fiber.Ctx) error {
+	var fctx = fiberCtx{c}
+	ctx := getCtx(fctx)
+	var reqDto messagepb.V1GetRoomMessagesRequest
+	_ = fctx.ParamsParser(&reqDto)
+	res, err := h.pb.V1GetRoomMessages(ctx, &reqDto)
 	if err != nil {
 		return fctx.BadRequest(err)
 	}

@@ -9,6 +9,15 @@ definitions:
       payload:
         $ref: '#/definitions/message_service.V1AddMemberToRoomResponse'
     type: object
+  main.messageServiceV1AddMessageResponseDto:
+    properties:
+      code:
+        type: integer
+      message:
+        type: string
+      payload:
+        $ref: '#/definitions/message_service.V1AddMessageResponse'
+    type: object
   main.messageServiceV1CreateRoomResponseDto:
     properties:
       code:
@@ -17,6 +26,15 @@ definitions:
         type: string
       payload:
         $ref: '#/definitions/message_service.V1CreateRoomResponse'
+    type: object
+  main.messageServiceV1GetRoomMessagesResponseDto:
+    properties:
+      code:
+        type: integer
+      message:
+        type: string
+      payload:
+        $ref: '#/definitions/message_service.V1GetRoomMessagesResponse'
     type: object
   main.messageServiceV1GetRoomResponseDto:
     properties:
@@ -54,6 +72,19 @@ definitions:
       payload:
         $ref: '#/definitions/user_service.V1LoginResponse'
     type: object
+  message_service.Message:
+    properties:
+      body:
+        type: string
+      id:
+        type: integer
+      roomID:
+        type: string
+      time:
+        type: string
+      userId:
+        type: integer
+    type: object
   message_service.RoomMember:
     properties:
       id:
@@ -77,6 +108,20 @@ definitions:
           $ref: '#/definitions/message_service.RoomMember'
         type: array
     type: object
+  message_service.V1AddMessageRequest:
+    properties:
+      body:
+        type: string
+      roomID:
+        type: string
+      time:
+        type: string
+    type: object
+  message_service.V1AddMessageResponse:
+    properties:
+      message:
+        $ref: '#/definitions/message_service.Message'
+    type: object
   message_service.V1CreateRoomRequest:
     properties:
       userId:
@@ -86,6 +131,13 @@ definitions:
     properties:
       id:
         type: string
+    type: object
+  message_service.V1GetRoomMessagesResponse:
+    properties:
+      messages:
+        items:
+          $ref: '#/definitions/message_service.Message'
+        type: array
     type: object
   message_service.V1GetRoomResponse:
     properties:
@@ -206,6 +258,27 @@ paths:
       summary: V1GetRoom
       tags:
       - message_service
+  /api/v1/message-service/room/{RoomID}/messages:
+    get:
+      description: V1GetRoomMessages
+      parameters:
+      - description: RoomID
+        in: path
+        name: RoomID
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/main.messageServiceV1GetRoomMessagesResponseDto'
+      security:
+      - BearerAuth: []
+      summary: V1GetRoomMessages
+      tags:
+      - message_service
   /api/v1/message-service/v1-add-member-to-room:
     post:
       description: V1AddMemberToRoom
@@ -226,6 +299,28 @@ paths:
       security:
       - BearerAuth: []
       summary: V1AddMemberToRoom
+      tags:
+      - message_service
+  /api/v1/message-service/v1-add-message:
+    post:
+      description: V1AddMessage
+      parameters:
+      - description: body
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/message_service.V1AddMessageRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/main.messageServiceV1AddMessageResponseDto'
+      security:
+      - BearerAuth: []
+      summary: V1AddMessage
       tags:
       - message_service
   /api/v1/user-service/{userID}:

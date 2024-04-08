@@ -7,10 +7,8 @@ type Room struct {
 }
 
 type RoomInfo struct {
-	ID         int
-	RoomID     string
-	UserID     uint32
-	UserName   string
-	UserAvatar string
-	UserStatus string
+	ID       int
+	RoomID   string
+	User     User
+	Audience User
 }
