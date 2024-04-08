@@ -11,6 +11,7 @@ func Run(
 	validate *validator.Validate,
 	roomService port.RoomService,
 	memberService port.MemberService,
+	messageService port.MessageService,
 	// +salvation Run
 ) {
 	gRPC := grpc.NewServer(
@@ -18,6 +19,7 @@ func Run(
 		validate,
 		roomService,
 		memberService,
+		messageService,
 		// +salvation RunService
 	)
 	gRPC.Run()

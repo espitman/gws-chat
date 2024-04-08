@@ -28,11 +28,17 @@ func main() {
 		memberRepositoryPg,
 	)
 
+	messageRepositoryPg := pg.NewMessageRepository(pgDB.Client)
+	messageService := service.NewMessageService(
+		messageRepositoryPg,
+	)
+
 	// +salvation NewRepository
 	gRPC.Run(
 		validate,
 		roomService,
 		memberService,
+		messageService,
 		// +salvation RunServiceGRPC
 	)
 }

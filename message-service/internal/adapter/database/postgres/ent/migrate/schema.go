@@ -21,6 +21,20 @@ var (
 		Columns:    ChatRoomsMembersColumns,
 		PrimaryKey: []*schema.Column{ChatRoomsMembersColumns[0]},
 	}
+	// ChatMessagesColumns holds the columns for the "chat_messages" table.
+	ChatMessagesColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeInt, Increment: true},
+		{Name: "room_id", Type: field.TypeString},
+		{Name: "user_id", Type: field.TypeUint32},
+		{Name: "body", Type: field.TypeString},
+		{Name: "time", Type: field.TypeTime},
+	}
+	// ChatMessagesTable holds the schema information for the "chat_messages" table.
+	ChatMessagesTable = &schema.Table{
+		Name:       "chat_messages",
+		Columns:    ChatMessagesColumns,
+		PrimaryKey: []*schema.Column{ChatMessagesColumns[0]},
+	}
 	// ChatRoomsColumns holds the columns for the "chat_rooms" table.
 	ChatRoomsColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt, Increment: true},
@@ -36,6 +50,7 @@ var (
 	// Tables holds all the tables in the schema.
 	Tables = []*schema.Table{
 		ChatRoomsMembersTable,
+		ChatMessagesTable,
 		ChatRoomsTable,
 	}
 )
@@ -43,6 +58,9 @@ var (
 func init() {
 	ChatRoomsMembersTable.Annotation = &entsql.Annotation{
 		Table: "chat_rooms_members",
+	}
+	ChatMessagesTable.Annotation = &entsql.Annotation{
+		Table: "chat_messages",
 	}
 	ChatRoomsTable.Annotation = &entsql.Annotation{
 		Table: "chat_rooms",

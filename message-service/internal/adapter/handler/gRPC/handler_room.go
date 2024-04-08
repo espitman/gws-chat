@@ -3,9 +3,11 @@ package grpc
 import (
 	"context"
 	"strconv"
+	"time"
 
 	"github.com/espitman/gws-chat/message-service/internal/core/domain"
 	pb "github.com/espitman/gws-chat/pkg/protos/protogen/message-service"
+	timeutil "github.com/espitman/gws-chat/pkg/util/time"
 )
 
 func (h Handler) V1CreateRoom(ctx context.Context, req *pb.V1CreateRoomRequest) (*pb.V1CreateRoomResponse, error) {
@@ -59,5 +61,28 @@ func (h Handler) V1GetRoom(ctx context.Context, req *pb.V1GetRoomRequest) (*pb.V
 		UserName:   result.UserName,
 		UserAvatar: result.UserAvatar,
 		UserStatus: result.UserStatus,
+	}, nil
+}
+
+func (h Handler) V1AddMessage(ctx context.Context, req *pb.V1AddMessageRequest) (*pb.V1AddMessageResponse, error) {
+	userIDCtx := ctx.Value("userID").(string)
+	userID, _ := strconv.Atoi(userIDCtx)
+
+	msg := domain.Message{
+		RoomID: req.RoomID,
+		UserID: uint32(userID),
+		Body:   req.Body,
+		Time:   time.Now(),
+	}
+	result, err := h.messageService.Crete(ctx, msg)
+	if err != nil {
+		return nil, err
+	}
+	return &pb.V1AddMessageResponse{
+		Id:     result.ID,
+		RoomID: result.RoomID,
+		UserId: int32(result.UserID),
+		Body:   result.Body,
+		Time:   timeutil.DateToString(result.Time),
 	}, nil
 }

@@ -44,7 +44,7 @@ func (s *UserService) register(ctx context.Context, user domain.User) (*domain.U
 }
 
 func (s *UserService) avatar(name string) string {
-	return "https://api.dicebear.com/8.x/thumbs/svg?seed=" + name
+	return "https://api.dicebear.com/8.x/avataaars/svg?seed=" + name
 }
 
 func generateJWTToken(user domain.User) (string, error) {

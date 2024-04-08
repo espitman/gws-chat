@@ -15,3 +15,9 @@ message V1AddMemberToRoomRequest {
 message V1GetRoomRequest {
   string roomID = 1;
 }
+
+message V1AddMessageRequest {
+  string roomID = 1;
+  string body = 2;
+  string time = 3;
+}

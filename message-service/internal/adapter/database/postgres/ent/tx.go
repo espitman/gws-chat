@@ -14,6 +14,8 @@ type Tx struct {
 	config
 	// Member is the client for interacting with the Member builders.
 	Member *MemberClient
+	// Message is the client for interacting with the Message builders.
+	Message *MessageClient
 	// Room is the client for interacting with the Room builders.
 	Room *RoomClient
 
@@ -148,6 +150,7 @@ func (tx *Tx) Client() *Client {
 
 func (tx *Tx) init() {
 	tx.Member = NewMemberClient(tx.config)
+	tx.Message = NewMessageClient(tx.config)
 	tx.Room = NewRoomClient(tx.config)
 }
 

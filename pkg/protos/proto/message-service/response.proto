@@ -19,3 +19,11 @@ message V1GetRoomResponse{
   string userAvatar = 4;
   string userStatus = 5;
 }
+
+message V1AddMessageResponse {
+  uint32 id = 1;
+  string roomID = 2;
+  int32 userId = 3;
+  string body = 4;
+  string time = 5;
+}

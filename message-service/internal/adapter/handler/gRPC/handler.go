@@ -8,9 +8,10 @@ import (
 
 type Handler struct {
 	pb.UnimplementedMessageServiceServer
-	validate      *validator.Validate
-	roomService   port.RoomService
-	memberService port.MemberService
+	validate       *validator.Validate
+	roomService    port.RoomService
+	memberService  port.MemberService
+	messageService port.MessageService
 	// +salvation Handler
 
 }
@@ -19,12 +20,14 @@ func NewHandler(
 	validate *validator.Validate,
 	roomService port.RoomService,
 	memberService port.MemberService,
+	messageService port.MessageService,
 	// +salvation NewHandlerType
 ) *Handler {
 	return &Handler{
-		validate:      validate,
-		roomService:   roomService,
-		memberService: memberService,
+		validate:       validate,
+		roomService:    roomService,
+		memberService:  memberService,
+		messageService: messageService,
 		// +salvation NewHandler
 	}
 }

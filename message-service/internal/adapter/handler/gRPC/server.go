@@ -21,12 +21,14 @@ func NewServer(
 	validate *validator.Validate,
 	roomService port.RoomService,
 	memberService port.MemberService,
+	messageService port.MessageService,
 	// +salvation NewServer
 ) *Server {
 	handler := NewHandler(
 		validate,
 		roomService,
 		memberService,
+		messageService,
 		// +salvation NewHandler
 
 	)

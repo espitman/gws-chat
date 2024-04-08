@@ -25,6 +25,7 @@ type MessageServiceClient interface {
 	V1CreateRoom(ctx context.Context, in *V1CreateRoomRequest, opts ...grpc.CallOption) (*V1CreateRoomResponse, error)
 	V1AddMemberToRoom(ctx context.Context, in *V1AddMemberToRoomRequest, opts ...grpc.CallOption) (*V1AddMemberToRoomResponse, error)
 	V1GetRoom(ctx context.Context, in *V1GetRoomRequest, opts ...grpc.CallOption) (*V1GetRoomResponse, error)
+	V1AddMessage(ctx context.Context, in *V1AddMessageRequest, opts ...grpc.CallOption) (*V1AddMessageResponse, error)
 }
 
 type messageServiceClient struct {
@@ -62,6 +63,15 @@ func (c *messageServiceClient) V1GetRoom(ctx context.Context, in *V1GetRoomReque
 	return out, nil
 }
 
+func (c *messageServiceClient) V1AddMessage(ctx context.Context, in *V1AddMessageRequest, opts ...grpc.CallOption) (*V1AddMessageResponse, error) {
+	out := new(V1AddMessageResponse)
+	err := c.cc.Invoke(ctx, "/proto.MessageService/V1AddMessage", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // MessageServiceServer is the server API for MessageService service.
 // All implementations must embed UnimplementedMessageServiceServer
 // for forward compatibility
@@ -69,6 +79,7 @@ type MessageServiceServer interface {
 	V1CreateRoom(context.Context, *V1CreateRoomRequest) (*V1CreateRoomResponse, error)
 	V1AddMemberToRoom(context.Context, *V1AddMemberToRoomRequest) (*V1AddMemberToRoomResponse, error)
 	V1GetRoom(context.Context, *V1GetRoomRequest) (*V1GetRoomResponse, error)
+	V1AddMessage(context.Context, *V1AddMessageRequest) (*V1AddMessageResponse, error)
 	mustEmbedUnimplementedMessageServiceServer()
 }
 
@@ -84,6 +95,9 @@ func (UnimplementedMessageServiceServer) V1AddMemberToRoom(context.Context, *V1A
 }
 func (UnimplementedMessageServiceServer) V1GetRoom(context.Context, *V1GetRoomRequest) (*V1GetRoomResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method V1GetRoom not implemented")
+}
+func (UnimplementedMessageServiceServer) V1AddMessage(context.Context, *V1AddMessageRequest) (*V1AddMessageResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method V1AddMessage not implemented")
 }
 func (UnimplementedMessageServiceServer) mustEmbedUnimplementedMessageServiceServer() {}
 
@@ -152,6 +166,24 @@ func _MessageService_V1GetRoom_Handler(srv interface{}, ctx context.Context, dec
 	return interceptor(ctx, in, info, handler)
 }
 
+func _MessageService_V1AddMessage_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(V1AddMessageRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MessageServiceServer).V1AddMessage(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/proto.MessageService/V1AddMessage",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MessageServiceServer).V1AddMessage(ctx, req.(*V1AddMessageRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // MessageService_ServiceDesc is the grpc.ServiceDesc for MessageService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -170,6 +202,10 @@ var MessageService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "V1GetRoom",
 			Handler:    _MessageService_V1GetRoom_Handler,
+		},
+		{
+			MethodName: "V1AddMessage",
+			Handler:    _MessageService_V1AddMessage_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
