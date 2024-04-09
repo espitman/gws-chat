@@ -2,6 +2,7 @@ package service
 
 import (
 	"context"
+	"sort"
 	"strconv"
 	"strings"
 
@@ -115,5 +116,10 @@ func (s *ChatService) GetUserChats(ctx context.Context, userID uint32) ([]*domai
 			Time:   message.Time,
 		})
 	}
+
+	sort.Slice(chats, func(i, j int) bool {
+		return chats[j].Time.Before(chats[i].Time)
+	})
+
 	return chats, nil
 }
