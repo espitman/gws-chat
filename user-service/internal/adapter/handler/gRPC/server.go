@@ -2,12 +2,13 @@ package grpc
 
 import (
 	"fmt"
+	"net"
+
 	pb "github.com/espitman/gws-chat/pkg/protos/protogen/user-service"
 	"github.com/espitman/gws-chat/user-service/internal/core/port"
 	"github.com/go-playground/validator/v10"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
-	"net"
 )
 
 type Server struct {
@@ -47,7 +48,7 @@ func (s Server) Run() {
 	gs := grpc.NewServer(
 		grpc.ChainUnaryInterceptor(
 			s.ValidateInterceptor(),
-			//s.AuthInterceptor(),
+			s.AuthInterceptor(),
 		),
 	)
 	s.registerServers(gs)

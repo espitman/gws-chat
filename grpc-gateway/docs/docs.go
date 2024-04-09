@@ -209,6 +209,14 @@ const docTemplate = `{
                     "user_service"
                 ],
                 "summary": "V1GetAll",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "me",
+                        "name": "me",
+                        "in": "query"
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK",

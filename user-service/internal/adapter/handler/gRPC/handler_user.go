@@ -2,6 +2,7 @@ package grpc
 
 import (
 	"context"
+	"strconv"
 
 	pb "github.com/espitman/gws-chat/pkg/protos/protogen/user-service"
 	"github.com/espitman/gws-chat/user-service/internal/core/domain"
@@ -31,9 +32,12 @@ func (h Handler) V1Login(ctx context.Context, req *pb.V1LoginRequest) (*pb.V1Log
 }
 
 func (h Handler) V1GetAll(ctx context.Context, req *pb.V1GetAllRequest) (*pb.V1GetAllResponse, error) {
+	userIDCtx := ctx.Value("userID").(string)
+	userID, _ := strconv.Atoi(userIDCtx)
+
 	var resp pb.V1GetAllResponse
 	var users []*pb.UserPublic
-	result, err := h.userService.GetAll(ctx)
+	result, err := h.userService.GetAll(ctx, req.Me, uint32(userID))
 	if err != nil {
 		return nil, err
 	}

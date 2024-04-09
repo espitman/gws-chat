@@ -22,6 +22,12 @@ func (s Server) ValidateInterceptor() grpc.UnaryServerInterceptor {
 
 func (s Server) AuthInterceptor() grpc.UnaryServerInterceptor {
 	return func(ctx context.Context, req any, info *grpc.UnaryServerInfo, handler grpc.UnaryHandler) (resp any, err error) {
+
+		if strings.Contains(info.FullMethod, "V1Login") ||
+			strings.Contains(info.FullMethod, "V1ValidateToken") {
+			return handler(ctx, req)
+		}
+
 		md, ok := metadata.FromIncomingContext(ctx)
 		if !ok {
 			s := status.New(codes.Unauthenticated, "Unauthenticated")

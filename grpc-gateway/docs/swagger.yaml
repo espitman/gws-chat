@@ -372,6 +372,11 @@ paths:
   /api/v1/user-service/all:
     get:
       description: V1GetAll
+      parameters:
+      - description: me
+        in: query
+        name: me
+        type: string
       produces:
       - application/json
       responses:

@@ -51,8 +51,12 @@ func (r *UserRepository) GetByName(ctx context.Context, d domain.User) (*domain.
 	return userSchemaToUserDomainPointerMapper(u), nil
 }
 
-func (r *UserRepository) GetAll(ctx context.Context) ([]*domain.User, error) {
-	users, err := r.client.User.Query().All(ctx)
+func (r *UserRepository) GetAll(ctx context.Context, me bool, userID int) ([]*domain.User, error) {
+	q := r.client.User.Query()
+	if !me {
+		q.Where(user.IDNEQ(userID))
+	}
+	users, err := q.All(ctx)
 	if err != nil {
 		return nil, err
 	}

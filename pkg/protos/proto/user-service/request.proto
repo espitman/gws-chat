@@ -8,7 +8,9 @@ message V1LoginRequest {
   string Password = 3; // @gotags: validate:"required"
 }
 
-message V1GetAllRequest {}
+message V1GetAllRequest {
+  bool me = 1; // @gotags: validate:"boolean"
+}
 
 message V1ValidateTokenRequest {
   string token = 1; // @gotags: validate:"required"

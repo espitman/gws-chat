@@ -2,7 +2,6 @@ package grpcclientmessage
 
 import (
 	"context"
-	"fmt"
 	"strconv"
 
 	"github.com/espitman/gws-chat/chat-service/internal/core/domain"
@@ -32,8 +31,6 @@ func (g *GrpcClientMessage) Create(ctx context.Context, message domain.Message) 
 		Body:   message.Body,
 		Time:   message.Time,
 	}
-	fmt.Println("@@@@", &reqDto)
-
 	md := metadata.Pairs("Authorization", strconv.Itoa(int(message.UserID)))
 	ctx = metadata.NewOutgoingContext(ctx, md)
 
@@ -42,10 +39,10 @@ func (g *GrpcClientMessage) Create(ctx context.Context, message domain.Message) 
 		return nil, err
 	}
 	return &domain.Message{
-		ID:     result.Id,
-		RoomID: result.RoomID,
-		UserID: uint32(result.UserId),
-		Body:   result.Body,
-		Time:   result.Time,
+		ID:     result.Message.Id,
+		RoomID: result.Message.RoomID,
+		UserID: uint32(result.Message.UserID),
+		Body:   result.Message.Body,
+		Time:   result.Message.Time,
 	}, nil
 }

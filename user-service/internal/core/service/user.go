@@ -108,9 +108,8 @@ func (s *UserService) Login(ctx context.Context, user domain.User) (*domain.User
 	return &resp, nil
 }
 
-func (s *UserService) GetAll(ctx context.Context) ([]*domain.User, error) {
-
-	return s.userRepositoryPg.GetAll(ctx)
+func (s *UserService) GetAll(ctx context.Context, me bool, userID uint32) ([]*domain.User, error) {
+	return s.userRepositoryPg.GetAll(ctx, me, int(userID))
 }
 
 func (s *UserService) ValidateToken(ctx context.Context, token string) (*domain.User, error) {
