@@ -39,9 +39,17 @@ func (r *RoomRepository) Crete(ctx context.Context, d domain.Room) (*domain.Room
 }
 
 func (r *RoomRepository) Get(ctx context.Context, roomID string) (*domain.Room, error) {
-	room, err := r.client.Room.Query().Where(room.RoomID(roomID)).First(ctx)
+	aRoom, err := r.client.Room.Query().Where(room.RoomID(roomID)).First(ctx)
 	if err != nil {
 		return nil, err
 	}
-	return roomSchemaToRoomDomainPointerMapper(room), nil
+	return roomSchemaToRoomDomainPointerMapper(aRoom), nil
+}
+
+func (r *RoomRepository) GetRooms(ctx context.Context, IDs []string) ([]*domain.Room, error) {
+	rooms, err := r.client.Room.Query().Where(room.RoomIDIn(IDs...)).All(ctx)
+	if err != nil {
+		return nil, err
+	}
+	return roomSchemasToRoomDomainsPointerMapper(rooms), nil
 }

@@ -298,7 +298,7 @@ info:
   title: gRPC Gateway
   version: "1.0"
 paths:
-  /api/v1/message-service/chat:
+  /api/v1/message-service/chats:
     get:
       description: V1GetUserChats
       produces:

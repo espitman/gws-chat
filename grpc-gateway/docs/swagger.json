@@ -11,7 +11,7 @@
     },
     "basePath": "/",
     "paths": {
-        "/api/v1/message-service/chat": {
+        "/api/v1/message-service/chats": {
             "get": {
                 "security": [
                     {

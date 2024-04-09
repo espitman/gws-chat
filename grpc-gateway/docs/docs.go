@@ -18,7 +18,7 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "/api/v1/message-service/chat": {
+        "/api/v1/message-service/chats": {
             "get": {
                 "security": [
                     {

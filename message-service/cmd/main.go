@@ -34,7 +34,12 @@ func main() {
 		messageRepositoryPg,
 	)
 
-	chatService := service.NewChatService(memberRepositoryPg, messageRepositoryPg, userRepositoryGrpc)
+	chatService := service.NewChatService(
+		memberRepositoryPg,
+		messageRepositoryPg,
+		userRepositoryGrpc,
+		roomRepositoryPg,
+	)
 
 	// +salvation NewRepository
 	gRPC.Run(

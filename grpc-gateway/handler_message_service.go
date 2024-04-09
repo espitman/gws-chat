@@ -1,5 +1,5 @@
 // This file generated automatically by gRPC gateway generator
-// Generated at: 2024-04-10 01:10:28
+// Generated at: 2024-04-10 01:16:08
 
 package main
 
@@ -134,7 +134,7 @@ func (h *messageServiceHandler) V1GetRoomMessages(c *fiber.Ctx) error {
 // @Produce json
 // @Security BearerAuth
 // @Success 200 {object} messageServiceV1GetUserChatsResponseDto
-// @Router /api/v1/message-service/chat [Get]
+// @Router /api/v1/message-service/chats [Get]
 func (h *messageServiceHandler) V1GetUserChats(c *fiber.Ctx) error {
 	var fctx = fiberCtx{c}
 	ctx := getCtx(fctx)

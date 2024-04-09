@@ -13,4 +13,5 @@ import (
 type RoomRepositoryPg interface {
 	Crete(ctx context.Context, room domain.Room) (*domain.Room, bool, error)
 	Get(ctx context.Context, roomID string) (*domain.Room, error)
+	GetRooms(ctx context.Context, IDs []string) ([]*domain.Room, error)
 }

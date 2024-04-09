@@ -1,5 +1,5 @@
 // This file generated automatically by gRPC gateway generator
-// Generated at: 2024-04-10 01:10:28
+// Generated at: 2024-04-10 01:16:08
 
 package main
 
@@ -32,7 +32,7 @@ func (r *router) messageServiceRouter(v fiber.Router) {
 		r.messageServiceHandler.V1GetRoomMessages,
 	)
 	v.Get(
-		"/chat",
+		"/chats",
 		AuthMiddleware(r.userServiceClient),
 		r.messageServiceHandler.V1GetUserChats,
 	)
