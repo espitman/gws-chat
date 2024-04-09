@@ -54,7 +54,7 @@ func (r *MessageRepository) GetRoomMessages(ctx context.Context, roomID string) 
 }
 
 func (r *MessageRepository) GetRoomLastMessages(ctx context.Context, userID uint32, roomIDs ...string) ([]*domain.Message, error) {
-	messages, err := r.client.Debug().Message.Query().
+	messages, err := r.client.Message.Query().
 		Modify(func(s *sql.Selector) {
 			s.Select("DISTINCT ON (room_id) *")
 		}).

@@ -44,3 +44,27 @@ func (g *GrpcClientUser) Get(ctx context.Context, userID uint32) (*domain.User, 
 		Status: result.User.Status,
 	}, nil
 }
+
+func (g *GrpcClientUser) GetByIds(ctx context.Context, userIDs []uint32) ([]*domain.User, error) {
+	myUserIDCtx := ctx.Value("userID")
+	myUserID := myUserIDCtx.(string)
+	md := metadata.Pairs("Authorization", myUserID)
+	ctx = metadata.NewOutgoingContext(ctx, md)
+	reqDto := userpb.V1GetByIDsRequest{
+		UserIDs: userIDs,
+	}
+	result, err := g.pb.V1GetByIDs(ctx, &reqDto)
+	if err != nil {
+		return nil, err
+	}
+	var users []*domain.User
+	for _, user := range result.Users {
+		users = append(users, &domain.User{
+			ID:     uint32(user.Id),
+			Name:   user.Name,
+			Avatar: user.Avatar,
+			Status: user.Status,
+		})
+	}
+	return users, nil
+}

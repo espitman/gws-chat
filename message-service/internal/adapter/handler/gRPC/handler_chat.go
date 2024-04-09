@@ -19,10 +19,10 @@ func (h Handler) V1GetUserChats(ctx context.Context, _ *pb.V1GetUserChatsRequest
 	for _, chat := range chats {
 		resp.Chats = append(resp.Chats, &pb.UserChat{
 			User: &pb.MessageUser{
-				Id:     0,
-				Name:   "",
-				Avatar: "",
-				Status: "",
+				Id:     int32(chat.User.ID),
+				Name:   chat.User.Name,
+				Avatar: chat.User.Avatar,
+				Status: chat.User.Status,
 			},
 			Message: &pb.UserChatMessage{
 				RoomID: chat.RoomID,
