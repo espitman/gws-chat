@@ -19,15 +19,18 @@ import (
 type RoomService struct {
 	roomRepositoryPg port.RoomRepositoryPg
 	userService      port.UserService
+	memberService    port.MemberService
 }
 
 func NewRoomService(
 	roomRepositoryPg port.RoomRepositoryPg,
 	userService port.UserService,
+	memberService port.MemberService,
 ) *RoomService {
 	return &RoomService{
 		roomRepositoryPg: roomRepositoryPg,
 		userService:      userService,
+		memberService:    memberService,
 	}
 }
 
@@ -74,10 +77,18 @@ func (s *RoomService) Crete(ctx context.Context, roomInput domain.CreateRoomInpu
 		RoomID: uuid.NewString(),
 		Users:  s.generateRoomUsers(roomInput.User1, roomInput.User2),
 	}
-	pgRoom, err := s.roomRepositoryPg.Crete(ctx, room)
+	pgRoom, newRoom, err := s.roomRepositoryPg.Crete(ctx, room)
 	if err != nil {
 		return nil, err
 	}
+
+	if newRoom {
+		_, err = s.memberService.AddMember(ctx, pgRoom.RoomID, roomInput.User1, roomInput.User2)
+		if err != nil {
+			return nil, err
+		}
+	}
+
 	result.ID = pgRoom.ID
 	result.RoomID = pgRoom.RoomID
 	result.Users = pgRoom.Users

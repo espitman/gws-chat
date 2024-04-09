@@ -11,16 +11,17 @@ import (
 )
 
 func (h Handler) V1CreateRoom(ctx context.Context, req *pb.V1CreateRoomRequest) (*pb.V1CreateRoomResponse, error) {
-	userID := ctx.Value("userID").(string)
-	user1, _ := strconv.Atoi(userID)
+	userIDCtx := ctx.Value("userID").(string)
+	userID, _ := strconv.Atoi(userIDCtx)
 	room := domain.CreateRoomInput{
-		User1: uint32(user1),
+		User1: uint32(userID),
 		User2: uint32(req.UserId),
 	}
 	result, err := h.roomService.Crete(ctx, room)
 	if err != nil {
 		return nil, err
 	}
+
 	resp := pb.V1CreateRoomResponse{
 		Id: result.RoomID,
 	}

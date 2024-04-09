@@ -5,6 +5,7 @@ import (
 	"entgo.io/ent/dialect/entsql"
 	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/field"
+	"entgo.io/ent/schema/index"
 )
 
 // Member holds the schema definition for the Member entity.
@@ -23,6 +24,13 @@ func (Member) Fields() []ent.Field {
 	return []ent.Field{
 		field.String("RoomID"),
 		field.Uint32("UserID"),
+	}
+}
+
+func (Member) Indexes() []ent.Index {
+	return []ent.Index{
+		index.Fields("RoomID", "UserID").
+			Unique(),
 	}
 }
 

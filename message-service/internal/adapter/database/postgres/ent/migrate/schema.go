@@ -20,6 +20,13 @@ var (
 		Name:       "chat_rooms_members",
 		Columns:    ChatRoomsMembersColumns,
 		PrimaryKey: []*schema.Column{ChatRoomsMembersColumns[0]},
+		Indexes: []*schema.Index{
+			{
+				Name:    "member_room_id_user_id",
+				Unique:  true,
+				Columns: []*schema.Column{ChatRoomsMembersColumns[1], ChatRoomsMembersColumns[2]},
+			},
+		},
 	}
 	// ChatMessagesColumns holds the columns for the "chat_messages" table.
 	ChatMessagesColumns = []*schema.Column{

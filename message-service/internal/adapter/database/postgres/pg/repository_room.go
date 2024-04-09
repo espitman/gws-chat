@@ -22,10 +22,10 @@ func NewRoomRepository(client *ent.Client) *RoomRepository {
 	}
 }
 
-func (r *RoomRepository) Crete(ctx context.Context, d domain.Room) (*domain.Room, error) {
+func (r *RoomRepository) Crete(ctx context.Context, d domain.Room) (*domain.Room, bool, error) {
 	crRoom, err := r.client.Room.Query().Where(room.UsersEQ(d.Users)).First(ctx)
 	if crRoom != nil {
-		return roomSchemaToRoomDomainPointerMapper(crRoom), nil
+		return roomSchemaToRoomDomainPointerMapper(crRoom), false, nil
 	}
 	newRoom, err := r.client.Room.
 		Create().
@@ -33,9 +33,9 @@ func (r *RoomRepository) Crete(ctx context.Context, d domain.Room) (*domain.Room
 		SetUsers(d.Users).
 		Save(ctx)
 	if err != nil {
-		return nil, err
+		return nil, false, err
 	}
-	return roomSchemaToRoomDomainPointerMapper(newRoom), nil
+	return roomSchemaToRoomDomainPointerMapper(newRoom), true, nil
 }
 
 func (r *RoomRepository) Get(ctx context.Context, roomID string) (*domain.Room, error) {

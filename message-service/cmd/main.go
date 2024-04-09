@@ -17,15 +17,16 @@ func main() {
 	userRepositoryGrpc := grpcclientuser.NewGrpcClientUser()
 	userService := service.NewUserService(userRepositoryGrpc)
 
+	memberRepositoryPg := pg.NewMemberRepository(pgDB.Client)
+	memberService := service.NewMemberService(
+		memberRepositoryPg,
+	)
+
 	roomRepositoryPg := pg.NewRoomRepository(pgDB.Client)
 	roomService := service.NewRoomService(
 		roomRepositoryPg,
 		userService,
-	)
-
-	memberRepositoryPg := pg.NewMemberRepository(pgDB.Client)
-	memberService := service.NewMemberService(
-		memberRepositoryPg,
+		memberService,
 	)
 
 	messageRepositoryPg := pg.NewMessageRepository(pgDB.Client)
