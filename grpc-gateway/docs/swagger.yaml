@@ -82,8 +82,33 @@ definitions:
         type: string
       time:
         type: string
-      userId:
+      type:
+        $ref: '#/definitions/message_service.MessageType'
+      userAvatar:
+        type: string
+      userID:
         type: integer
+      userName:
+        type: string
+    type: object
+  message_service.MessageType:
+    enum:
+    - 0
+    - 1
+    type: integer
+    x-enum-varnames:
+    - MessageType_TYPE_SENT
+    - MessageType_TYPE_RECEIVED
+  message_service.MessageUser:
+    properties:
+      avatar:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      status:
+        type: string
     type: object
   message_service.RoomMember:
     properties:
@@ -141,16 +166,16 @@ definitions:
     type: object
   message_service.V1GetRoomResponse:
     properties:
+      audience:
+        $ref: '#/definitions/message_service.MessageUser'
+      messages:
+        items:
+          $ref: '#/definitions/message_service.Message'
+        type: array
       roomID:
         type: string
-      userAvatar:
-        type: string
-      userID:
-        type: integer
-      userName:
-        type: string
-      userStatus:
-        type: string
+      user:
+        $ref: '#/definitions/message_service.MessageUser'
     type: object
   user_service.User:
     properties:

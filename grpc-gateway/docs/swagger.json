@@ -411,8 +411,45 @@
                 "time": {
                     "type": "string"
                 },
-                "userId": {
+                "type": {
+                    "$ref": "#/definitions/message_service.MessageType"
+                },
+                "userAvatar": {
+                    "type": "string"
+                },
+                "userID": {
                     "type": "integer"
+                },
+                "userName": {
+                    "type": "string"
+                }
+            }
+        },
+        "message_service.MessageType": {
+            "type": "integer",
+            "enum": [
+                0,
+                1
+            ],
+            "x-enum-varnames": [
+                "MessageType_TYPE_SENT",
+                "MessageType_TYPE_RECEIVED"
+            ]
+        },
+        "message_service.MessageUser": {
+            "type": "object",
+            "properties": {
+                "avatar": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "status": {
+                    "type": "string"
                 }
             }
         },
@@ -504,20 +541,20 @@
         "message_service.V1GetRoomResponse": {
             "type": "object",
             "properties": {
+                "audience": {
+                    "$ref": "#/definitions/message_service.MessageUser"
+                },
+                "messages": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/message_service.Message"
+                    }
+                },
                 "roomID": {
                     "type": "string"
                 },
-                "userAvatar": {
-                    "type": "string"
-                },
-                "userID": {
-                    "type": "integer"
-                },
-                "userName": {
-                    "type": "string"
-                },
-                "userStatus": {
-                    "type": "string"
+                "user": {
+                    "$ref": "#/definitions/message_service.MessageUser"
                 }
             }
         },
