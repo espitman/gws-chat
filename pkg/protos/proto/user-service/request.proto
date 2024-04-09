@@ -19,3 +19,7 @@ message V1ValidateTokenRequest {
 message V1GetRequest {
   uint32 UserID = 1; // @gotags: validate:"required"
 }
+
+message V1GetByIDsRequest {
+  repeated uint32 UserIDs = 1; // @gotags: validate:"required"
+}

@@ -85,3 +85,22 @@ func (h Handler) V1Get(ctx context.Context, req *pb.V1GetRequest) (*pb.V1GetResp
 		},
 	}, nil
 }
+
+func (h Handler) V1GetByIDs(ctx context.Context, req *pb.V1GetByIDsRequest) (*pb.V1GetByIDsResponse, error) {
+	var users []*pb.UserPublic
+	result, err := h.userService.GetByIDs(ctx, req.UserIDs)
+	if err != nil {
+		return nil, err
+	}
+	for _, r := range result {
+		users = append(users, &pb.UserPublic{
+			Id:     int32(r.ID),
+			Name:   r.Name,
+			Avatar: r.Avatar,
+			Status: r.Status,
+		})
+	}
+	return &pb.V1GetByIDsResponse{
+		Users: users,
+	}, nil
+}

@@ -63,23 +63,10 @@ func (r *UserRepository) GetAll(ctx context.Context, me bool, userID int) ([]*do
 	return userSchemasToUserDomainsPointerMapper(users), nil
 }
 
-//
-//func (r *UserRepository) Update(ctx context.Context, ID int, d domain.User) (*domain.User, error) {
-//	u, err := r.client.User.UpdateOneID(ID).SetName(d.Name).Save(ctx)
-//	if err != nil {
-//		return nil, err
-//	}
-//	return userSchemaToUserDomainPointerMapper(u), nil
-//}
-//
-//func (r *UserRepository) Delete(ctx context.Context, ID int) (*domain.User, error) {
-//	u, err := r.client.User.GetByName(ctx, ID)
-//	if err != nil {
-//		return nil, err
-//	}
-//	err = r.client.User.DeleteOneID(ID).Exec(ctx)
-//	if err != nil {
-//		return nil, err
-//	}
-//	return userSchemaToUserDomainPointerMapper(u), nil
-//}
+func (r *UserRepository) GetByIDs(ctx context.Context, userIDs []int) ([]*domain.User, error) {
+	users, err := r.client.User.Query().Where(user.IDIn(userIDs...)).All(ctx)
+	if err != nil {
+		return nil, err
+	}
+	return userSchemasToUserDomainsPointerMapper(users), nil
+}

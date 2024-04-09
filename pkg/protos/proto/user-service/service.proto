@@ -11,4 +11,5 @@ service UserService {
   rpc V1GetAll(V1GetAllRequest) returns (V1GetAllResponse) {}
   rpc V1ValidateToken(V1ValidateTokenRequest) returns (V1ValidateTokenResponse) {}
   rpc V1Get(V1GetRequest) returns (V1GetResponse) {}
+  rpc V1GetByIDs(V1GetByIDsRequest) returns (V1GetByIDsResponse) {}
 }

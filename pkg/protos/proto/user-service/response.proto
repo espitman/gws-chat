@@ -16,7 +16,10 @@ message V1ValidateTokenResponse {
   UserPublic user = 1;
 }
 
-
 message V1GetResponse {
   UserPublic user = 1;
+}
+
+message V1GetByIDsResponse {
+  repeated UserPublic users = 1;
 }

@@ -132,3 +132,11 @@ func (s *UserService) Get(ctx context.Context, userID uint32) (*domain.User, err
 		Status: pgUser.Status,
 	}, nil
 }
+
+func (s *UserService) GetByIDs(ctx context.Context, userIDs []uint32) ([]*domain.User, error) {
+	var ids []int
+	for _, d := range userIDs {
+		ids = append(ids, int(d))
+	}
+	return s.userRepositoryPg.GetByIDs(ctx, ids)
+}
