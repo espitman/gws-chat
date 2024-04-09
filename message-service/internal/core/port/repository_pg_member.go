@@ -12,4 +12,5 @@ import (
 
 type MemberRepositoryPg interface {
 	AddMember(ctx context.Context, roomID string, userID uint32) (*domain.Member, error)
+	GetUserAllRooms(ctx context.Context, userID uint32) ([]*domain.Member, error)
 }

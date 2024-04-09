@@ -34,12 +34,15 @@ func main() {
 		messageRepositoryPg,
 	)
 
+	chatService := service.NewChatService(memberRepositoryPg, messageRepositoryPg)
+
 	// +salvation NewRepository
 	gRPC.Run(
 		validate,
 		roomService,
 		memberService,
 		messageService,
+		chatService,
 		// +salvation RunServiceGRPC
 	)
 }

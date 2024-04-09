@@ -12,6 +12,7 @@ type Handler struct {
 	roomService    port.RoomService
 	memberService  port.MemberService
 	messageService port.MessageService
+	chatService    port.ChatService
 	// +salvation Handler
 
 }
@@ -21,6 +22,7 @@ func NewHandler(
 	roomService port.RoomService,
 	memberService port.MemberService,
 	messageService port.MessageService,
+	chatService port.ChatService,
 	// +salvation NewHandlerType
 ) *Handler {
 	return &Handler{
@@ -28,6 +30,7 @@ func NewHandler(
 		roomService:    roomService,
 		memberService:  memberService,
 		messageService: messageService,
+		chatService:    chatService,
 		// +salvation NewHandler
 	}
 }

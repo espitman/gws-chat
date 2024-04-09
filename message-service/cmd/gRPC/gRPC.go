@@ -12,6 +12,7 @@ func Run(
 	roomService port.RoomService,
 	memberService port.MemberService,
 	messageService port.MessageService,
+	chatService port.ChatService,
 	// +salvation Run
 ) {
 	gRPC := grpc.NewServer(
@@ -20,6 +21,7 @@ func Run(
 		roomService,
 		memberService,
 		messageService,
+		chatService,
 		// +salvation RunService
 	)
 	gRPC.Run()

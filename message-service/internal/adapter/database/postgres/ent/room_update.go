@@ -17,8 +17,9 @@ import (
 // RoomUpdate is the builder for updating Room entities.
 type RoomUpdate struct {
 	config
-	hooks    []Hook
-	mutation *RoomMutation
+	hooks     []Hook
+	mutation  *RoomMutation
+	modifiers []func(*sql.UpdateBuilder)
 }
 
 // Where appends a list predicates to the RoomUpdate builder.
@@ -87,6 +88,12 @@ func (ru *RoomUpdate) ExecX(ctx context.Context) {
 	}
 }
 
+// Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
+func (ru *RoomUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *RoomUpdate {
+	ru.modifiers = append(ru.modifiers, modifiers...)
+	return ru
+}
+
 func (ru *RoomUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	_spec := sqlgraph.NewUpdateSpec(room.Table, room.Columns, sqlgraph.NewFieldSpec(room.FieldID, field.TypeInt))
 	if ps := ru.mutation.predicates; len(ps) > 0 {
@@ -102,6 +109,7 @@ func (ru *RoomUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if value, ok := ru.mutation.Users(); ok {
 		_spec.SetField(room.FieldUsers, field.TypeString, value)
 	}
+	_spec.AddModifiers(ru.modifiers...)
 	if n, err = sqlgraph.UpdateNodes(ctx, ru.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{room.Label}
@@ -117,9 +125,10 @@ func (ru *RoomUpdate) sqlSave(ctx context.Context) (n int, err error) {
 // RoomUpdateOne is the builder for updating a single Room entity.
 type RoomUpdateOne struct {
 	config
-	fields   []string
-	hooks    []Hook
-	mutation *RoomMutation
+	fields    []string
+	hooks     []Hook
+	mutation  *RoomMutation
+	modifiers []func(*sql.UpdateBuilder)
 }
 
 // SetRoomID sets the "RoomID" field.
@@ -195,6 +204,12 @@ func (ruo *RoomUpdateOne) ExecX(ctx context.Context) {
 	}
 }
 
+// Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
+func (ruo *RoomUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *RoomUpdateOne {
+	ruo.modifiers = append(ruo.modifiers, modifiers...)
+	return ruo
+}
+
 func (ruo *RoomUpdateOne) sqlSave(ctx context.Context) (_node *Room, err error) {
 	_spec := sqlgraph.NewUpdateSpec(room.Table, room.Columns, sqlgraph.NewFieldSpec(room.FieldID, field.TypeInt))
 	id, ok := ruo.mutation.ID()
@@ -227,6 +242,7 @@ func (ruo *RoomUpdateOne) sqlSave(ctx context.Context) (_node *Room, err error) 
 	if value, ok := ruo.mutation.Users(); ok {
 		_spec.SetField(room.FieldUsers, field.TypeString, value)
 	}
+	_spec.AddModifiers(ruo.modifiers...)
 	_node = &Room{config: ruo.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues

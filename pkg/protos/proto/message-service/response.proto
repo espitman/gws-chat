@@ -26,3 +26,7 @@ message V1AddMessageResponse {
 message V1GetRoomMessagesResponse {
   repeated Message messages = 1;
 }
+
+message V1GetUserChatsResponse {
+  repeated UserChat chats = 1;
+}

@@ -31,3 +31,14 @@ message MessageUser {
   string avatar = 3;
   string status = 4;
 }
+
+message UserChat {
+  MessageUser user = 1;
+  UserChatMessage message = 2;
+}
+
+message UserChatMessage {
+  string roomID = 1;
+  string body = 6;
+  string time = 7;
+}

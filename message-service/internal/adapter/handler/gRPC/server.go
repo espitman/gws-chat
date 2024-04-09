@@ -22,6 +22,7 @@ func NewServer(
 	roomService port.RoomService,
 	memberService port.MemberService,
 	messageService port.MessageService,
+	chatService port.ChatService,
 	// +salvation NewServer
 ) *Server {
 	handler := NewHandler(
@@ -29,6 +30,7 @@ func NewServer(
 		roomService,
 		memberService,
 		messageService,
+		chatService,
 		// +salvation NewHandler
 
 	)

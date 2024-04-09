@@ -3,6 +3,7 @@ package pg
 import (
 	"context"
 
+	"entgo.io/ent/dialect/sql"
 	"github.com/espitman/gws-chat/message-service/internal/adapter/database/postgres/ent"
 	"github.com/espitman/gws-chat/message-service/internal/adapter/database/postgres/ent/message"
 	"github.com/espitman/gws-chat/message-service/internal/core/domain"
@@ -46,6 +47,21 @@ func (r *MessageRepository) Get(ctx context.Context, ID int) (*domain.Message, e
 
 func (r *MessageRepository) GetRoomMessages(ctx context.Context, roomID string) ([]*domain.Message, error) {
 	messages, err := r.client.Message.Query().Where(message.RoomID(roomID)).All(ctx)
+	if err != nil {
+		return nil, err
+	}
+	return messageSchemasToMessageDomainsPointerMapper(messages), nil
+}
+
+func (r *MessageRepository) GetRoomLastMessages(ctx context.Context, userID uint32, roomIDs ...string) ([]*domain.Message, error) {
+	messages, err := r.client.Debug().Message.Query().
+		Modify(func(s *sql.Selector) {
+			s.Select("DISTINCT ON (room_id) *")
+		}).
+		Where(message.RoomIDIn(roomIDs...)).
+		Order(message.ByRoomID(sql.OrderDesc()), message.ByTime(sql.OrderDesc())).
+		All(ctx)
+
 	if err != nil {
 		return nil, err
 	}

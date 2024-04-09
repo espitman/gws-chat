@@ -4,6 +4,7 @@ import (
 	"context"
 
 	"github.com/espitman/gws-chat/message-service/internal/adapter/database/postgres/ent"
+	"github.com/espitman/gws-chat/message-service/internal/adapter/database/postgres/ent/member"
 	"github.com/espitman/gws-chat/message-service/internal/core/domain"
 )
 
@@ -31,4 +32,12 @@ func (r *MemberRepository) AddMember(ctx context.Context, roomID string, userID 
 		return nil, err
 	}
 	return memberSchemaToMemberDomainPointerMapper(newD), nil
+}
+
+func (r *MemberRepository) GetUserAllRooms(ctx context.Context, userID uint32) ([]*domain.Member, error) {
+	result, err := r.client.Member.Query().Where(member.UserID(userID)).All(ctx)
+	if err != nil {
+		return nil, err
+	}
+	return memberSchemasToMemberDomainsPointerMapper(result), nil
 }
