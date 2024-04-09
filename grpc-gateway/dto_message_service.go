@@ -1,5 +1,5 @@
 // This file generated automatically by gRPC gateway generator
-// Generated at: 2024-04-09 12:09:49
+// Generated at: 2024-04-10 01:10:28
 
 package main
 
@@ -28,4 +28,9 @@ type messageServiceV1GetRoomResponseDto struct {
 type messageServiceV1GetRoomMessagesResponseDto struct {
 	ResponseDto
 	Payload messagepb.V1GetRoomMessagesResponse
+}
+
+type messageServiceV1GetUserChatsResponseDto struct {
+	ResponseDto
+	Payload messagepb.V1GetUserChatsResponse
 }

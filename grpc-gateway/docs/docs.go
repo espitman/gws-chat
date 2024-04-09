@@ -18,6 +18,31 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/api/v1/message-service/chat": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "V1GetUserChats",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "message_service"
+                ],
+                "summary": "V1GetUserChats",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/main.messageServiceV1GetUserChatsResponseDto"
+                        }
+                    }
+                }
+            }
+        },
         "/api/v1/message-service/room": {
             "post": {
                 "security": [
@@ -263,6 +288,42 @@ const docTemplate = `{
                 }
             }
         },
+        "/api/v1/user-service/v1-get-by-i-ds": {
+            "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "V1GetByIDs",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "user_service"
+                ],
+                "summary": "V1GetByIDs",
+                "parameters": [
+                    {
+                        "description": "body",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/user_service.V1GetByIDsRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/main.userServiceV1GetByIDsResponseDto"
+                        }
+                    }
+                }
+            }
+        },
         "/api/v1/user-service/{userID}": {
             "get": {
                 "security": [
@@ -369,6 +430,20 @@ const docTemplate = `{
                 }
             }
         },
+        "main.messageServiceV1GetUserChatsResponseDto": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "integer"
+                },
+                "message": {
+                    "type": "string"
+                },
+                "payload": {
+                    "$ref": "#/definitions/message_service.V1GetUserChatsResponse"
+                }
+            }
+        },
         "main.userServiceV1GetAllResponseDto": {
             "type": "object",
             "properties": {
@@ -380,6 +455,20 @@ const docTemplate = `{
                 },
                 "payload": {
                     "$ref": "#/definitions/user_service.V1GetAllResponse"
+                }
+            }
+        },
+        "main.userServiceV1GetByIDsResponseDto": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "integer"
+                },
+                "message": {
+                    "type": "string"
+                },
+                "payload": {
+                    "$ref": "#/definitions/user_service.V1GetByIDsResponse"
                 }
             }
         },
@@ -482,6 +571,31 @@ const docTemplate = `{
                 }
             }
         },
+        "message_service.UserChat": {
+            "type": "object",
+            "properties": {
+                "message": {
+                    "$ref": "#/definitions/message_service.UserChatMessage"
+                },
+                "user": {
+                    "$ref": "#/definitions/message_service.MessageUser"
+                }
+            }
+        },
+        "message_service.UserChatMessage": {
+            "type": "object",
+            "properties": {
+                "body": {
+                    "type": "string"
+                },
+                "roomID": {
+                    "type": "string"
+                },
+                "time": {
+                    "type": "string"
+                }
+            }
+        },
         "message_service.V1AddMemberToRoomRequest": {
             "type": "object",
             "properties": {
@@ -573,6 +687,17 @@ const docTemplate = `{
                 }
             }
         },
+        "message_service.V1GetUserChatsResponse": {
+            "type": "object",
+            "properties": {
+                "chats": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/message_service.UserChat"
+                    }
+                }
+            }
+        },
         "user_service.User": {
             "type": "object",
             "properties": {
@@ -614,6 +739,32 @@ const docTemplate = `{
             }
         },
         "user_service.V1GetAllResponse": {
+            "type": "object",
+            "properties": {
+                "users": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/user_service.UserPublic"
+                    }
+                }
+            }
+        },
+        "user_service.V1GetByIDsRequest": {
+            "type": "object",
+            "required": [
+                "UserIDs"
+            ],
+            "properties": {
+                "UserIDs": {
+                    "description": "@gotags: validate:\"required\"",
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                }
+            }
+        },
+        "user_service.V1GetByIDsResponse": {
             "type": "object",
             "properties": {
                 "users": {

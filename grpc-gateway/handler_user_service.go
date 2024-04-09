@@ -1,5 +1,5 @@
 // This file generated automatically by gRPC gateway generator
-// Generated at: 2024-04-09 12:09:49
+// Generated at: 2024-04-10 01:10:28
 
 package main
 
@@ -54,6 +54,29 @@ func (h *userServiceHandler) V1GetAll(c *fiber.Ctx) error {
 	var reqDto userpb.V1GetAllRequest
 	_ = fctx.QueryParser(&reqDto)
 	res, err := h.pb.V1GetAll(ctx, &reqDto)
+	if err != nil {
+		return fctx.BadRequest(err)
+	}
+	return fctx.ResponseOk(res)
+}
+
+// V1GetByIDs
+// @Summary V1GetByIDs
+// @Description V1GetByIDs
+// @Tags user_service
+// @Produce json
+// @Security BearerAuth
+// @Param body body userpb.V1GetByIDsRequest true "body"
+// @Success 200 {object} userServiceV1GetByIDsResponseDto
+// @Router /api/v1/user-service/v1-get-by-i-ds [Post]
+func (h *userServiceHandler) V1GetByIDs(c *fiber.Ctx) error {
+	var fctx = fiberCtx{c}
+	ctx := getCtx(fctx)
+	var reqDto userpb.V1GetByIDsRequest
+	_ = fctx.QueryParser(&reqDto)
+	_ = fctx.ParamsParser(&reqDto)
+	_ = fctx.BodyParser(&reqDto)
+	res, err := h.pb.V1GetByIDs(ctx, &reqDto)
 	if err != nil {
 		return fctx.BadRequest(err)
 	}

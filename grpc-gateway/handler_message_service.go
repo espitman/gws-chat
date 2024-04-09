@@ -1,5 +1,5 @@
 // This file generated automatically by gRPC gateway generator
-// Generated at: 2024-04-09 12:09:49
+// Generated at: 2024-04-10 01:10:28
 
 package main
 
@@ -121,6 +121,25 @@ func (h *messageServiceHandler) V1GetRoomMessages(c *fiber.Ctx) error {
 	var reqDto messagepb.V1GetRoomMessagesRequest
 	_ = fctx.ParamsParser(&reqDto)
 	res, err := h.pb.V1GetRoomMessages(ctx, &reqDto)
+	if err != nil {
+		return fctx.BadRequest(err)
+	}
+	return fctx.ResponseOk(res)
+}
+
+// V1GetUserChats
+// @Summary V1GetUserChats
+// @Description V1GetUserChats
+// @Tags message_service
+// @Produce json
+// @Security BearerAuth
+// @Success 200 {object} messageServiceV1GetUserChatsResponseDto
+// @Router /api/v1/message-service/chat [Get]
+func (h *messageServiceHandler) V1GetUserChats(c *fiber.Ctx) error {
+	var fctx = fiberCtx{c}
+	ctx := getCtx(fctx)
+	var reqDto messagepb.V1GetUserChatsRequest
+	res, err := h.pb.V1GetUserChats(ctx, &reqDto)
 	if err != nil {
 		return fctx.BadRequest(err)
 	}
