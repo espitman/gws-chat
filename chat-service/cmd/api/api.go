@@ -19,12 +19,14 @@ func Run(
 
 	chatHandler := http.NewChatHandler(validate, messageService, socketConnectService, socketService, roomService, userService)
 	messageHandler := http.NewMessageHandler(validate, messageService, socketService)
+	indexHandler := http.NewIndexHandler()
 	// +salvation NewHandler
 
 	httpServer := http.NewServer(
 		superConf.Get("app.http.port"),
 		chatHandler,
 		messageHandler,
+		indexHandler,
 		// +salvation NewServerHandler
 	)
 	httpServer.Run()
