@@ -11,5 +11,5 @@ import (
  */
 
 type SocketConnetService interface {
-	Open(writer http.ResponseWriter, request *http.Request, userID string, roomID string) (*gws.Conn, error)
+	Open(writer http.ResponseWriter, request *http.Request, userID string, roomID string, token string) (*gws.Conn, error)
 }

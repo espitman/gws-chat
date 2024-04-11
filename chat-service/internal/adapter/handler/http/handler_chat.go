@@ -37,7 +37,6 @@ func NewChatHandler(
 }
 
 func (h *ChatHandler) ChatHandler(writer http.ResponseWriter, request *http.Request, ps httprouter.Params) {
-
 	ctx := request.Context()
 	queryValues := request.URL.Query()
 	token := queryValues.Get("jwt")
@@ -51,7 +50,7 @@ func (h *ChatHandler) ChatHandler(writer http.ResponseWriter, request *http.Requ
 		http.Error(writer, "Forbidden", 403)
 	}
 
-	socket, err := h.socketConnectService.Open(writer, request, strconv.Itoa(int(user.ID)), roomID)
+	socket, err := h.socketConnectService.Open(writer, request, strconv.Itoa(int(user.ID)), roomID, token)
 	if err != nil {
 		return
 	}

@@ -1,6 +1,8 @@
 package main
 
 import (
+	"github.com/ThreeDotsLabs/watermill"
+	"github.com/ThreeDotsLabs/watermill/pubsub/gochannel"
 	"github.com/espitman/gws-chat/chat-service/cmd/api"
 	"github.com/espitman/gws-chat/chat-service/internal/adapter/database/memdb"
 	grpcclientmessage "github.com/espitman/gws-chat/chat-service/internal/adapter/grpcclient/message"
@@ -12,6 +14,11 @@ import (
 func main() {
 	validate := validatorutil.NewValidator()
 
+	pubSub := gochannel.NewGoChannel(
+		gochannel.Config{},
+		watermill.NewStdLogger(false, false),
+	)
+
 	userRepositoryGrpc := grpcclientuser.NewGrpcClientUser()
 	userService := service.NewUserService(userRepositoryGrpc)
 
@@ -22,13 +29,14 @@ func main() {
 	socketService := service.NewSocketService(socketRepositoryMD)
 
 	roomRepositoryMD := memdb.NewRoomRepository()
-	roomService := service.NewRoomService(roomRepositoryMD)
+	roomService := service.NewRoomService(roomRepositoryMD, messageRepositoryGrpc)
 
-	socketConnectService := service.NewSocketConnectService(socketService, roomService, messageService)
+	socketConnectService := service.NewSocketConnectService(pubSub, socketService, roomService, messageService)
 
 	// +salvation NewRepository
 	api.Run(
 		validate,
+		pubSub,
 		messageService,
 		socketConnectService,
 		socketService,

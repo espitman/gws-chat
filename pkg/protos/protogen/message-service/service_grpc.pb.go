@@ -28,6 +28,7 @@ type MessageServiceClient interface {
 	V1AddMessage(ctx context.Context, in *V1AddMessageRequest, opts ...grpc.CallOption) (*V1AddMessageResponse, error)
 	V1GetRoomMessages(ctx context.Context, in *V1GetRoomMessagesRequest, opts ...grpc.CallOption) (*V1GetRoomMessagesResponse, error)
 	V1GetUserChats(ctx context.Context, in *V1GetUserChatsRequest, opts ...grpc.CallOption) (*V1GetUserChatsResponse, error)
+	V1GetAudienceID(ctx context.Context, in *V1GetAudienceIDRequest, opts ...grpc.CallOption) (*V1GetAudienceIDResponse, error)
 }
 
 type messageServiceClient struct {
@@ -92,6 +93,15 @@ func (c *messageServiceClient) V1GetUserChats(ctx context.Context, in *V1GetUser
 	return out, nil
 }
 
+func (c *messageServiceClient) V1GetAudienceID(ctx context.Context, in *V1GetAudienceIDRequest, opts ...grpc.CallOption) (*V1GetAudienceIDResponse, error) {
+	out := new(V1GetAudienceIDResponse)
+	err := c.cc.Invoke(ctx, "/proto.MessageService/V1GetAudienceID", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // MessageServiceServer is the server API for MessageService service.
 // All implementations must embed UnimplementedMessageServiceServer
 // for forward compatibility
@@ -102,6 +112,7 @@ type MessageServiceServer interface {
 	V1AddMessage(context.Context, *V1AddMessageRequest) (*V1AddMessageResponse, error)
 	V1GetRoomMessages(context.Context, *V1GetRoomMessagesRequest) (*V1GetRoomMessagesResponse, error)
 	V1GetUserChats(context.Context, *V1GetUserChatsRequest) (*V1GetUserChatsResponse, error)
+	V1GetAudienceID(context.Context, *V1GetAudienceIDRequest) (*V1GetAudienceIDResponse, error)
 	mustEmbedUnimplementedMessageServiceServer()
 }
 
@@ -126,6 +137,9 @@ func (UnimplementedMessageServiceServer) V1GetRoomMessages(context.Context, *V1G
 }
 func (UnimplementedMessageServiceServer) V1GetUserChats(context.Context, *V1GetUserChatsRequest) (*V1GetUserChatsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method V1GetUserChats not implemented")
+}
+func (UnimplementedMessageServiceServer) V1GetAudienceID(context.Context, *V1GetAudienceIDRequest) (*V1GetAudienceIDResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method V1GetAudienceID not implemented")
 }
 func (UnimplementedMessageServiceServer) mustEmbedUnimplementedMessageServiceServer() {}
 
@@ -248,6 +262,24 @@ func _MessageService_V1GetUserChats_Handler(srv interface{}, ctx context.Context
 	return interceptor(ctx, in, info, handler)
 }
 
+func _MessageService_V1GetAudienceID_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(V1GetAudienceIDRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MessageServiceServer).V1GetAudienceID(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/proto.MessageService/V1GetAudienceID",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MessageServiceServer).V1GetAudienceID(ctx, req.(*V1GetAudienceIDRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // MessageService_ServiceDesc is the grpc.ServiceDesc for MessageService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -278,6 +310,10 @@ var MessageService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "V1GetUserChats",
 			Handler:    _MessageService_V1GetUserChats_Handler,
+		},
+		{
+			MethodName: "V1GetAudienceID",
+			Handler:    _MessageService_V1GetAudienceID_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

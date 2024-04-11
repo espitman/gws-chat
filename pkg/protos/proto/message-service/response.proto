@@ -30,3 +30,8 @@ message V1GetRoomMessagesResponse {
 message V1GetUserChatsResponse {
   repeated UserChat chats = 1;
 }
+
+message V1GetAudienceIDResponse {
+  string roomID = 1;
+  uint32 audienceID = 3;
+}

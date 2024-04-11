@@ -4,6 +4,7 @@ go 1.22.1
 
 require (
 	entgo.io/ent v0.13.1
+	github.com/ThreeDotsLabs/watermill v1.3.5
 	github.com/arsmn/fiber-swagger/v2 v2.31.1
 	github.com/espitman/go-super-cli v0.0.0-20240326123910-d250f980ceea
 	github.com/espitman/go-super-conf v0.0.0-20240312154053-70e4f684e1dc
@@ -16,6 +17,7 @@ require (
 	github.com/julienschmidt/httprouter v1.3.0
 	github.com/lxzan/gws v1.8.1
 	github.com/magefile/mage v1.15.0
+	github.com/r3labs/sse/v2 v2.10.0
 	github.com/swaggo/swag v1.16.3
 	go.mongodb.org/mongo-driver v1.14.0
 	golang.org/x/crypto v0.22.0
@@ -47,7 +49,7 @@ require (
 	github.com/go-openapi/swag v0.23.0 // indirect
 	github.com/go-playground/locales v0.14.1 // indirect
 	github.com/go-playground/universal-translator v0.18.1 // indirect
-	github.com/golang/snappy v0.0.1 // indirect
+	github.com/golang/snappy v0.0.3 // indirect
 	github.com/google/go-cmp v0.6.0 // indirect
 	github.com/gookit/config/v2 v2.1.7 // indirect
 	github.com/gookit/goutil v0.5.15 // indirect
@@ -62,6 +64,7 @@ require (
 	github.com/json-iterator/go v1.1.12 // indirect
 	github.com/klauspost/compress v1.17.5 // indirect
 	github.com/leodido/go-urn v1.4.0 // indirect
+	github.com/lithammer/shortuuid/v3 v3.0.7 // indirect
 	github.com/lucasb-eyer/go-colorful v1.2.0 // indirect
 	github.com/mailru/easyjson v0.7.7 // indirect
 	github.com/mattn/go-colorable v0.1.13 // indirect
@@ -77,6 +80,8 @@ require (
 	github.com/muesli/cancelreader v0.2.2 // indirect
 	github.com/muesli/reflow v0.3.0 // indirect
 	github.com/muesli/termenv v0.15.2 // indirect
+	github.com/oklog/ulid v1.3.1 // indirect
+	github.com/pkg/errors v0.9.1 // indirect
 	github.com/rivo/uniseg v0.4.7 // indirect
 	github.com/rogpeppe/go-internal v1.12.0 // indirect
 	github.com/sahilm/fuzzy v0.1.1-0.20230530133925-c48e322e2a8f // indirect
@@ -97,4 +102,5 @@ require (
 	golang.org/x/text v0.14.0 // indirect
 	golang.org/x/tools v0.20.0 // indirect
 	google.golang.org/genproto/googleapis/rpc v0.0.0-20240227224415-6ceb2ff114de // indirect
+	gopkg.in/cenkalti/backoff.v1 v1.1.0 // indirect
 )

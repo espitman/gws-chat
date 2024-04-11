@@ -60,7 +60,7 @@ func (s *RoomService) getUseIDFromCtx(ctx context.Context) uint32 {
 	return uint32(userID)
 }
 
-func (s *RoomService) getAudienceID(userID uint32, users string) uint32 {
+func (s *RoomService) extractAudienceID(userID uint32, users string) uint32 {
 	allUsers := strings.Split(users, ",")
 	for _, user := range allUsers {
 		id, _ := strconv.Atoi(user)
@@ -112,7 +112,7 @@ func (s *RoomService) Get(ctx context.Context, roomID string) (*domain.RoomInfo,
 		return nil, err
 	}
 
-	audienceID := s.getAudienceID(userID, pgRoom.Users)
+	audienceID := s.extractAudienceID(userID, pgRoom.Users)
 	audience, err := s.userService.Get(ctx, audienceID)
 	if err != nil {
 		return nil, err
@@ -137,4 +137,13 @@ func (s *RoomService) Get(ctx context.Context, roomID string) (*domain.RoomInfo,
 			Status: audience.Status,
 		},
 	}, nil
+}
+
+func (s *RoomService) GetAudienceID(ctx context.Context, roomID string, userID uint32) (*uint32, error) {
+	pgRoom, err := s.roomRepositoryPg.Get(ctx, roomID)
+	if err != nil {
+		return nil, err
+	}
+	audienceID := s.extractAudienceID(userID, pgRoom.Users)
+	return &audienceID, err
 }

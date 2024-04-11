@@ -3,6 +3,7 @@ package service
 import (
 	"net/http"
 
+	"github.com/ThreeDotsLabs/watermill/pubsub/gochannel"
 	"github.com/espitman/gws-chat/chat-service/internal/adapter/handler/socket"
 	"github.com/espitman/gws-chat/chat-service/internal/core/port"
 	"github.com/google/uuid"
@@ -20,8 +21,8 @@ type SocketConnectService struct {
 	messageService port.MessageService
 }
 
-func NewSocketConnectService(socketService port.SocketService, roomService port.RoomService, messageService port.MessageService) *SocketConnectService {
-	sh := socket.NewHandler(socketService, roomService, messageService)
+func NewSocketConnectService(pubSub *gochannel.GoChannel, socketService port.SocketService, roomService port.RoomService, messageService port.MessageService) *SocketConnectService {
+	sh := socket.NewHandler(pubSub, socketService, roomService, messageService)
 	upgrader := gws.NewUpgrader(&sh, &gws.ServerOption{
 		ParallelEnabled:   true,         // Parallel message processing
 		Recovery:          gws.Recovery, // Exception recovery
@@ -33,7 +34,7 @@ func NewSocketConnectService(socketService port.SocketService, roomService port.
 	}
 }
 
-func (s *SocketConnectService) Open(writer http.ResponseWriter, request *http.Request, userID string, roomID string) (*gws.Conn, error) {
+func (s *SocketConnectService) Open(writer http.ResponseWriter, request *http.Request, userID string, roomID string, token string) (*gws.Conn, error) {
 	socketID := uuid.NewString()
 	iSocket, err := s.upgrader.Upgrade(writer, request)
 	if err != nil {
@@ -42,5 +43,6 @@ func (s *SocketConnectService) Open(writer http.ResponseWriter, request *http.Re
 	iSocket.Session().Store("socketID", socketID)
 	iSocket.Session().Store("roomID", roomID)
 	iSocket.Session().Store("userID", userID)
+	iSocket.Session().Store("token", token)
 	return iSocket, nil
 }

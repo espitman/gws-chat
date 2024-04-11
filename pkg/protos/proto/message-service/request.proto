@@ -28,3 +28,7 @@ message V1GetRoomMessagesRequest {
 
 message V1GetUserChatsRequest {
 }
+
+message V1GetAudienceIDRequest {
+  string roomID = 1;
+}

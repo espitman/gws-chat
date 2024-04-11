@@ -13,4 +13,5 @@ service MessageService {
   rpc V1AddMessage(V1AddMessageRequest) returns (V1AddMessageResponse) {}
   rpc V1GetRoomMessages(V1GetRoomMessagesRequest) returns (V1GetRoomMessagesResponse) {}
   rpc V1GetUserChats(V1GetUserChatsRequest) returns (V1GetUserChatsResponse) {}
+  rpc V1GetAudienceID(V1GetAudienceIDRequest) returns (V1GetAudienceIDResponse) {}
 }

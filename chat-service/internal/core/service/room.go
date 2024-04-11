@@ -1,17 +1,21 @@
 package service
 
 import (
+	"context"
+
 	"github.com/espitman/gws-chat/chat-service/internal/core/port"
 	"github.com/lxzan/gws"
 )
 
 type RoomService struct {
-	roomRepositoryMD port.RoomRepositoryMD
+	roomRepositoryMD      port.RoomRepositoryMD
+	messageRepositoryGrpc port.MessageRepositoryGrpc
 }
 
-func NewRoomService(roomRepositoryMD port.RoomRepositoryMD) *RoomService {
+func NewRoomService(roomRepositoryMD port.RoomRepositoryMD, messageRepositoryGrpc port.MessageRepositoryGrpc) *RoomService {
 	return &RoomService{
-		roomRepositoryMD: roomRepositoryMD,
+		roomRepositoryMD:      roomRepositoryMD,
+		messageRepositoryGrpc: messageRepositoryGrpc,
 	}
 }
 
@@ -27,4 +31,8 @@ func (s *RoomService) Subscribe(socket *gws.Conn) error {
 
 func (s *RoomService) GetSubscribers(roomID string) []*gws.Conn {
 	return s.roomRepositoryMD.GetSubscribers(roomID)
+}
+
+func (s *RoomService) GetAudience(ctx context.Context, roomID string, userID uint32) (uint32, error) {
+	return s.messageRepositoryGrpc.GetAudienceID(ctx, roomID, userID)
 }

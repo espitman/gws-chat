@@ -146,3 +146,18 @@ func (h Handler) V1GetRoomMessages(ctx context.Context, req *pb.V1GetRoomMessage
 	}
 	return &pb.V1GetRoomMessagesResponse{Messages: messages}, nil
 }
+
+func (h Handler) V1GetAudienceID(ctx context.Context, req *pb.V1GetAudienceIDRequest) (*pb.V1GetAudienceIDResponse, error) {
+	userIDCtx := ctx.Value("userID").(string)
+	userID, _ := strconv.Atoi(userIDCtx)
+
+	audienceID, err := h.roomService.GetAudienceID(ctx, req.RoomID, uint32(userID))
+	if err != nil {
+		return nil, err
+	}
+
+	return &pb.V1GetAudienceIDResponse{
+		RoomID:     req.RoomID,
+		AudienceID: *audienceID,
+	}, nil
+}

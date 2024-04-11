@@ -13,4 +13,5 @@ import (
 type RoomService interface {
 	Crete(ctx context.Context, room domain.CreateRoomInput) (*domain.Room, error)
 	Get(ctx context.Context, roomID string) (*domain.RoomInfo, error)
+	GetAudienceID(ctx context.Context, roomID string, userID uint32) (*uint32, error)
 }

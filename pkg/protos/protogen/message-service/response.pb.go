@@ -326,6 +326,61 @@ func (x *V1GetUserChatsResponse) GetChats() []*UserChat {
 	return nil
 }
 
+type V1GetAudienceIDResponse struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	RoomID     string `protobuf:"bytes,1,opt,name=roomID,proto3" json:"roomID,omitempty"`
+	AudienceID uint32 `protobuf:"varint,3,opt,name=audienceID,proto3" json:"audienceID,omitempty"`
+}
+
+func (x *V1GetAudienceIDResponse) Reset() {
+	*x = V1GetAudienceIDResponse{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_proto_message_service_response_proto_msgTypes[6]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *V1GetAudienceIDResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*V1GetAudienceIDResponse) ProtoMessage() {}
+
+func (x *V1GetAudienceIDResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_message_service_response_proto_msgTypes[6]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use V1GetAudienceIDResponse.ProtoReflect.Descriptor instead.
+func (*V1GetAudienceIDResponse) Descriptor() ([]byte, []int) {
+	return file_proto_message_service_response_proto_rawDescGZIP(), []int{6}
+}
+
+func (x *V1GetAudienceIDResponse) GetRoomID() string {
+	if x != nil {
+		return x.RoomID
+	}
+	return ""
+}
+
+func (x *V1GetAudienceIDResponse) GetAudienceID() uint32 {
+	if x != nil {
+		return x.AudienceID
+	}
+	return 0
+}
+
 var File_proto_message_service_response_proto protoreflect.FileDescriptor
 
 var file_proto_message_service_response_proto_rawDesc = []byte{
@@ -365,11 +420,16 @@ var file_proto_message_service_response_proto_rawDesc = []byte{
 	0x74, 0x73, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x25, 0x0a, 0x05, 0x63, 0x68,
 	0x61, 0x74, 0x73, 0x18, 0x01, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x0f, 0x2e, 0x70, 0x72, 0x6f, 0x74,
 	0x6f, 0x2e, 0x55, 0x73, 0x65, 0x72, 0x43, 0x68, 0x61, 0x74, 0x52, 0x05, 0x63, 0x68, 0x61, 0x74,
-	0x73, 0x42, 0x42, 0x5a, 0x40, 0x67, 0x69, 0x74, 0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f,
-	0x65, 0x73, 0x70, 0x69, 0x74, 0x6d, 0x61, 0x6e, 0x2f, 0x67, 0x77, 0x73, 0x2d, 0x63, 0x68, 0x61,
-	0x74, 0x2f, 0x70, 0x6b, 0x67, 0x2f, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x73, 0x2f, 0x70, 0x72, 0x6f,
-	0x74, 0x6f, 0x67, 0x65, 0x6e, 0x2f, 0x6d, 0x65, 0x73, 0x73, 0x61, 0x67, 0x65, 0x2d, 0x73, 0x65,
-	0x72, 0x76, 0x69, 0x63, 0x65, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
+	0x73, 0x22, 0x51, 0x0a, 0x17, 0x56, 0x31, 0x47, 0x65, 0x74, 0x41, 0x75, 0x64, 0x69, 0x65, 0x6e,
+	0x63, 0x65, 0x49, 0x44, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x16, 0x0a, 0x06,
+	0x72, 0x6f, 0x6f, 0x6d, 0x49, 0x44, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x06, 0x72, 0x6f,
+	0x6f, 0x6d, 0x49, 0x44, 0x12, 0x1e, 0x0a, 0x0a, 0x61, 0x75, 0x64, 0x69, 0x65, 0x6e, 0x63, 0x65,
+	0x49, 0x44, 0x18, 0x03, 0x20, 0x01, 0x28, 0x0d, 0x52, 0x0a, 0x61, 0x75, 0x64, 0x69, 0x65, 0x6e,
+	0x63, 0x65, 0x49, 0x44, 0x42, 0x42, 0x5a, 0x40, 0x67, 0x69, 0x74, 0x68, 0x75, 0x62, 0x2e, 0x63,
+	0x6f, 0x6d, 0x2f, 0x65, 0x73, 0x70, 0x69, 0x74, 0x6d, 0x61, 0x6e, 0x2f, 0x67, 0x77, 0x73, 0x2d,
+	0x63, 0x68, 0x61, 0x74, 0x2f, 0x70, 0x6b, 0x67, 0x2f, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x73, 0x2f,
+	0x70, 0x72, 0x6f, 0x74, 0x6f, 0x67, 0x65, 0x6e, 0x2f, 0x6d, 0x65, 0x73, 0x73, 0x61, 0x67, 0x65,
+	0x2d, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
 }
 
 var (
@@ -384,7 +444,7 @@ func file_proto_message_service_response_proto_rawDescGZIP() []byte {
 	return file_proto_message_service_response_proto_rawDescData
 }
 
-var file_proto_message_service_response_proto_msgTypes = make([]protoimpl.MessageInfo, 6)
+var file_proto_message_service_response_proto_msgTypes = make([]protoimpl.MessageInfo, 7)
 var file_proto_message_service_response_proto_goTypes = []interface{}{
 	(*V1CreateRoomResponse)(nil),      // 0: proto.V1CreateRoomResponse
 	(*V1AddMemberToRoomResponse)(nil), // 1: proto.V1AddMemberToRoomResponse
@@ -392,24 +452,25 @@ var file_proto_message_service_response_proto_goTypes = []interface{}{
 	(*V1AddMessageResponse)(nil),      // 3: proto.V1AddMessageResponse
 	(*V1GetRoomMessagesResponse)(nil), // 4: proto.V1GetRoomMessagesResponse
 	(*V1GetUserChatsResponse)(nil),    // 5: proto.V1GetUserChatsResponse
-	(*RoomMember)(nil),                // 6: proto.RoomMember
-	(*MessageUser)(nil),               // 7: proto.MessageUser
-	(*Message)(nil),                   // 8: proto.Message
-	(*UserChat)(nil),                  // 9: proto.UserChat
+	(*V1GetAudienceIDResponse)(nil),   // 6: proto.V1GetAudienceIDResponse
+	(*RoomMember)(nil),                // 7: proto.RoomMember
+	(*MessageUser)(nil),               // 8: proto.MessageUser
+	(*Message)(nil),                   // 9: proto.Message
+	(*UserChat)(nil),                  // 10: proto.UserChat
 }
 var file_proto_message_service_response_proto_depIdxs = []int32{
-	6, // 0: proto.V1AddMemberToRoomResponse.members:type_name -> proto.RoomMember
-	7, // 1: proto.V1GetRoomResponse.user:type_name -> proto.MessageUser
-	7, // 2: proto.V1GetRoomResponse.audience:type_name -> proto.MessageUser
-	8, // 3: proto.V1GetRoomResponse.messages:type_name -> proto.Message
-	8, // 4: proto.V1AddMessageResponse.message:type_name -> proto.Message
-	8, // 5: proto.V1GetRoomMessagesResponse.messages:type_name -> proto.Message
-	9, // 6: proto.V1GetUserChatsResponse.chats:type_name -> proto.UserChat
-	7, // [7:7] is the sub-list for method output_type
-	7, // [7:7] is the sub-list for method input_type
-	7, // [7:7] is the sub-list for extension type_name
-	7, // [7:7] is the sub-list for extension extendee
-	0, // [0:7] is the sub-list for field type_name
+	7,  // 0: proto.V1AddMemberToRoomResponse.members:type_name -> proto.RoomMember
+	8,  // 1: proto.V1GetRoomResponse.user:type_name -> proto.MessageUser
+	8,  // 2: proto.V1GetRoomResponse.audience:type_name -> proto.MessageUser
+	9,  // 3: proto.V1GetRoomResponse.messages:type_name -> proto.Message
+	9,  // 4: proto.V1AddMessageResponse.message:type_name -> proto.Message
+	9,  // 5: proto.V1GetRoomMessagesResponse.messages:type_name -> proto.Message
+	10, // 6: proto.V1GetUserChatsResponse.chats:type_name -> proto.UserChat
+	7,  // [7:7] is the sub-list for method output_type
+	7,  // [7:7] is the sub-list for method input_type
+	7,  // [7:7] is the sub-list for extension type_name
+	7,  // [7:7] is the sub-list for extension extendee
+	0,  // [0:7] is the sub-list for field type_name
 }
 
 func init() { file_proto_message_service_response_proto_init() }
@@ -491,6 +552,18 @@ func file_proto_message_service_response_proto_init() {
 				return nil
 			}
 		}
+		file_proto_message_service_response_proto_msgTypes[6].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*V1GetAudienceIDResponse); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
 	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
@@ -498,7 +571,7 @@ func file_proto_message_service_response_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: file_proto_message_service_response_proto_rawDesc,
 			NumEnums:      0,
-			NumMessages:   6,
+			NumMessages:   7,
 			NumExtensions: 0,
 			NumServices:   0,
 		},

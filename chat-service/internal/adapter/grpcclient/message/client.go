@@ -46,3 +46,14 @@ func (g *GrpcClientMessage) Create(ctx context.Context, message domain.Message) 
 		Time:   result.Message.Time,
 	}, nil
 }
+
+func (g *GrpcClientMessage) GetAudienceID(ctx context.Context, roomID string, userID uint32) (uint32, error) {
+	md := metadata.Pairs("Authorization", strconv.Itoa(int(userID)))
+	ctx = metadata.NewOutgoingContext(ctx, md)
+	reqDto := messagepb.V1GetAudienceIDRequest{RoomID: roomID}
+	result, err := g.pb.V1GetAudienceID(ctx, &reqDto)
+	if err != nil {
+		return 0, err
+	}
+	return result.AudienceID, nil
+}
