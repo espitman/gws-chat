@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/ThreeDotsLabs/watermill/message"
 	"github.com/ThreeDotsLabs/watermill/pubsub/gochannel"
 	"github.com/julienschmidt/httprouter"
 	"github.com/r3labs/sse/v2"
@@ -12,13 +11,13 @@ import (
 
 type SSEHandler struct {
 	sseServer *sse.Server
-	pbuSub    *gochannel.GoChannel
+	pubSub    *gochannel.GoChannel
 }
 
-func NewSSEHandler(sseServer *sse.Server, pbuSub *gochannel.GoChannel) *SSEHandler {
+func NewSSEHandler(sseServer *sse.Server, pubSub *gochannel.GoChannel) *SSEHandler {
 	return &SSEHandler{
 		sseServer: sseServer,
-		pbuSub:    pbuSub,
+		pubSub:    pubSub,
 	}
 }
 
@@ -35,14 +34,12 @@ func (h *SSEHandler) SSEHandler(w http.ResponseWriter, r *http.Request, ps httpr
 	h.setHeaders(w)
 
 	userID := ps.ByName("id")
-	fmt.Println("userID..", userID)
 
 	ctx := r.Context()
-	messages, _ := h.pbuSub.Subscribe(ctx, userID)
-	//go process(messages)
+	messages, _ := h.pubSub.Subscribe(ctx, userID)
 
 	for msg := range messages {
-		fmt.Printf("received message: %s, payload: %s\n", msg.UUID, string(msg.Payload))
+		//fmt.Printf("received message: %s, payload: %s\n", msg.UUID, string(msg.Payload))
 		//fmt.Fprintf(w, string(msg.Payload))
 		fmt.Fprintf(w, "data: %s\n\n", fmt.Sprintf("%s", msg.Payload))
 		w.(http.Flusher).Flush()
@@ -63,15 +60,4 @@ func (h *SSEHandler) SSEHandler(w http.ResponseWriter, r *http.Request, ps httpr
 	//		w.(http.Flusher).Flush()
 	//	}
 	//}
-}
-
-func process(messages <-chan *message.Message) {
-	for msg := range messages {
-		fmt.Printf("received message: %s, payload: %s\n", msg.UUID, string(msg.Payload))
-
-		// we need to Acknowledge that we received and processed the message,
-		// otherwise, it will be resent over and over again.
-		msg.Ack()
-		fmt.Println("ACK")
-	}
 }

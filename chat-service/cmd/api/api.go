@@ -11,7 +11,7 @@ import (
 
 func Run(
 	validate *validator.Validate,
-	pbuSub *gochannel.GoChannel,
+	pubSub *gochannel.GoChannel,
 	messageService port.MessageService,
 	socketConnectService port.SocketConnetService,
 	socketService port.SocketService,
@@ -25,7 +25,7 @@ func Run(
 	chatHandler := http.NewChatHandler(validate, messageService, socketConnectService, socketService, roomService, userService)
 	messageHandler := http.NewMessageHandler(validate, messageService, socketService)
 	indexHandler := http.NewIndexHandler()
-	sseHandler := http.NewSSEHandler(sseServer, pbuSub)
+	sseHandler := http.NewSSEHandler(sseServer, pubSub)
 	// +salvation NewHandler
 
 	httpServer := http.NewServer(

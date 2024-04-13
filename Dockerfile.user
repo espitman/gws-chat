@@ -1,0 +1,25 @@
+# Use the official Go image as the base image
+FROM golang:latest
+
+# Set the working directory inside the container
+WORKDIR /app
+
+# Copy the Go module files
+COPY ./go.mod ./go.sum ./
+COPY ./user-service /app/user-service
+COPY ./user-service/config /app/config
+COPY ./pkg /app/pkg
+
+RUN rm -rf /chat-service /grpc-gateway /message-service
+
+
+# Download and cache Go dependencies
+RUN go mod download
+
+# Build the Go application
+RUN go build -o main ./user-service/cmd
+
+RUN ls -l
+
+# Set the command to run the executable
+CMD ["./main"]

@@ -2,6 +2,7 @@ package socket
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"strconv"
 	"time"
@@ -71,22 +72,23 @@ func (h *Handler) OnMessage(socket *gws.Conn, message *gws.Message) {
 	fmt.Println("OnMessage", roomID, socketID, message.Data, userID)
 
 	u, _ := strconv.Atoi(userID.(string))
+	audienceID, err := h.roomService.GetAudience(context.TODO(), roomID.(string), uint32(u))
+	if err != nil {
+		fmt.Println(err)
+	}
 
 	msg := domain.Message{
-		RoomID: roomID.(string),
-		UserID: uint32(u),
-		Body:   message.Data.String(),
+		RoomID:     roomID.(string),
+		UserID:     uint32(u),
+		Body:       message.Data.String(),
+		AudienceID: audienceID,
 	}
-	_, err := h.messageService.Create(context.Background(), msg)
+	_, err = h.messageService.Create(context.Background(), msg)
 	if err != nil {
 		fmt.Println(err)
 	}
 
-	audienceID, err := h.roomService.GetAudience(context.TODO(), roomID.(string), uint32(u))
-	h.publishMessages(strconv.Itoa(int(audienceID)), message)
-	if err != nil {
-		fmt.Println(err)
-	}
+	go h.publishMessages(strconv.Itoa(int(audienceID)), msg)
 
 	subscribers := h.roomService.GetSubscribers(roomID.(string))
 	for _, s := range subscribers {
@@ -97,10 +99,25 @@ func (h *Handler) OnMessage(socket *gws.Conn, message *gws.Message) {
 	}
 }
 
-func (h *Handler) publishMessages(token string, data *gws.Message) {
-	msg := message.NewMessage(watermill.NewUUID(), data.Bytes())
+func (h *Handler) publishMessages(userID string, data domain.Message) {
+	go h.publishSSE(userID, data)
+	go h.publishPush(userID, data)
+}
 
-	if err := h.pubSub.Publish(token, msg); err != nil {
-		panic(err)
+func (h *Handler) publishSSE(userID string, data domain.Message) {
+	msg := message.NewMessage(watermill.NewUUID(), message.Payload(data.Body))
+	if err := h.pubSub.Publish(userID, msg); err != nil {
+		fmt.Println(err)
+	}
+}
+
+func (h *Handler) publishPush(userID string, data domain.Message) {
+	jsonData, err := json.Marshal(data)
+	if err != nil {
+		fmt.Println(err)
+	}
+	msg := message.NewMessage(watermill.NewUUID(), jsonData)
+	if err := h.pubSub.Publish("chat-message", msg); err != nil {
+		fmt.Println(err)
 	}
 }

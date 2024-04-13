@@ -4,6 +4,7 @@ import (
 	"github.com/ThreeDotsLabs/watermill"
 	"github.com/ThreeDotsLabs/watermill/pubsub/gochannel"
 	"github.com/espitman/gws-chat/chat-service/cmd/api"
+	"github.com/espitman/gws-chat/chat-service/cmd/subsctib"
 	"github.com/espitman/gws-chat/chat-service/internal/adapter/database/memdb"
 	grpcclientmessage "github.com/espitman/gws-chat/chat-service/internal/adapter/grpcclient/message"
 	grpcclientuser "github.com/espitman/gws-chat/chat-service/internal/adapter/grpcclient/user"
@@ -32,6 +33,10 @@ func main() {
 	roomService := service.NewRoomService(roomRepositoryMD, messageRepositoryGrpc)
 
 	socketConnectService := service.NewSocketConnectService(pubSub, socketService, roomService, messageService)
+
+	pusherService := service.NewPusherService()
+
+	go subsctib.Run(pubSub, pusherService)
 
 	// +salvation NewRepository
 	api.Run(
