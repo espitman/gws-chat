@@ -62,8 +62,4 @@ func (h *ChatHandler) ChatHandler(writer http.ResponseWriter, request *http.Requ
 	go func() {
 		socket.ReadLoop() // Blocking prevents the context from being GC.
 	}()
-
-	//socket.WriteMessage(1, []byte(generateRandomString(8)))
-	//rand := generateRandomString(8)
-
 }
