@@ -1,5 +1,5 @@
 // This file generated automatically by gRPC gateway generator
-// Generated at: 2024-04-10 01:16:08
+// Generated at: 2024-04-14 21:17:44
 
 package main
 
@@ -79,6 +79,29 @@ func (h *messageServiceHandler) V1CreateRoom(c *fiber.Ctx) error {
 	var reqDto messagepb.V1CreateRoomRequest
 	_ = fctx.BodyParser(&reqDto)
 	res, err := h.pb.V1CreateRoom(ctx, &reqDto)
+	if err != nil {
+		return fctx.BadRequest(err)
+	}
+	return fctx.ResponseOk(res)
+}
+
+// V1GetAudienceID
+// @Summary V1GetAudienceID
+// @Description V1GetAudienceID
+// @Tags message_service
+// @Produce json
+// @Security BearerAuth
+// @Param body body messagepb.V1GetAudienceIDRequest true "body"
+// @Success 200 {object} messageServiceV1GetAudienceIDResponseDto
+// @Router /api/v1/message-service/v1-get-audience-i-d [Post]
+func (h *messageServiceHandler) V1GetAudienceID(c *fiber.Ctx) error {
+	var fctx = fiberCtx{c}
+	ctx := getCtx(fctx)
+	var reqDto messagepb.V1GetAudienceIDRequest
+	_ = fctx.QueryParser(&reqDto)
+	_ = fctx.ParamsParser(&reqDto)
+	_ = fctx.BodyParser(&reqDto)
+	res, err := h.pb.V1GetAudienceID(ctx, &reqDto)
 	if err != nil {
 		return fctx.BadRequest(err)
 	}

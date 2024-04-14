@@ -31,7 +31,7 @@ type User struct {
 	Avatar   string `protobuf:"bytes,4,opt,name=avatar,proto3" json:"avatar,omitempty"`
 	Status   string `protobuf:"bytes,5,opt,name=status,proto3" json:"status,omitempty"`
 	Token    string `protobuf:"bytes,6,opt,name=token,proto3" json:"token,omitempty"`
-	IsOnline bool   `protobuf:"varint,7,opt,name=isOnline,proto3" json:"isOnline,omitempty"`
+	IsOnline bool   `protobuf:"varint,7,opt,name=isOnline,proto3" json:"isOnline"` // @gotags: json:"isOnline"
 }
 
 func (x *User) Reset() {
@@ -124,7 +124,7 @@ type UserPublic struct {
 	Name     string `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
 	Avatar   string `protobuf:"bytes,3,opt,name=avatar,proto3" json:"avatar,omitempty"`
 	Status   string `protobuf:"bytes,4,opt,name=status,proto3" json:"status,omitempty"`
-	IsOnline bool   `protobuf:"varint,5,opt,name=isOnline,proto3" json:"isOnline,omitempty"`
+	IsOnline bool   `protobuf:"varint,5,opt,name=isOnline,proto3" json:"isOnline"` // @gotags: json:"isOnline"
 }
 
 func (x *UserPublic) Reset() {

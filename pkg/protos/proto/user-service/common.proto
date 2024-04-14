@@ -10,7 +10,7 @@ message User {
   string avatar = 4;
   string status = 5;
   string token = 6;
-  bool isOnline = 7;
+  bool isOnline = 7; // @gotags: json:"isOnline"
 }
 
 
@@ -19,5 +19,5 @@ message UserPublic {
   string name = 2;
   string avatar = 3;
   string status = 4;
-  bool isOnline = 5;
+  bool isOnline = 5; // @gotags: json:"isOnline"
 }

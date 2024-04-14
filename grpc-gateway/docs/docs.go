@@ -219,6 +219,42 @@ const docTemplate = `{
                 }
             }
         },
+        "/api/v1/message-service/v1-get-audience-i-d": {
+            "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "V1GetAudienceID",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "message_service"
+                ],
+                "summary": "V1GetAudienceID",
+                "parameters": [
+                    {
+                        "description": "body",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/message_service.V1GetAudienceIDRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/main.messageServiceV1GetAudienceIDResponseDto"
+                        }
+                    }
+                }
+            }
+        },
         "/api/v1/user-service/all": {
             "get": {
                 "security": [
@@ -324,6 +360,42 @@ const docTemplate = `{
                 }
             }
         },
+        "/api/v1/user-service/v1-set-online": {
+            "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "V1SetOnline",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "user_service"
+                ],
+                "summary": "V1SetOnline",
+                "parameters": [
+                    {
+                        "description": "body",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/user_service.V1SetOnlineRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/main.userServiceV1SetOnlineResponseDto"
+                        }
+                    }
+                }
+            }
+        },
         "/api/v1/user-service/{userID}": {
             "get": {
                 "security": [
@@ -399,6 +471,20 @@ const docTemplate = `{
                 },
                 "payload": {
                     "$ref": "#/definitions/message_service.V1CreateRoomResponse"
+                }
+            }
+        },
+        "main.messageServiceV1GetAudienceIDResponseDto": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "integer"
+                },
+                "message": {
+                    "type": "string"
+                },
+                "payload": {
+                    "$ref": "#/definitions/message_service.V1GetAudienceIDResponse"
                 }
             }
         },
@@ -497,6 +583,20 @@ const docTemplate = `{
                 },
                 "payload": {
                     "$ref": "#/definitions/user_service.V1LoginResponse"
+                }
+            }
+        },
+        "main.userServiceV1SetOnlineResponseDto": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "integer"
+                },
+                "message": {
+                    "type": "string"
+                },
+                "payload": {
+                    "$ref": "#/definitions/user_service.V1SetOnlineResponse"
                 }
             }
         },
@@ -656,6 +756,25 @@ const docTemplate = `{
                 }
             }
         },
+        "message_service.V1GetAudienceIDRequest": {
+            "type": "object",
+            "properties": {
+                "roomID": {
+                    "type": "string"
+                }
+            }
+        },
+        "message_service.V1GetAudienceIDResponse": {
+            "type": "object",
+            "properties": {
+                "audienceID": {
+                    "type": "integer"
+                },
+                "roomID": {
+                    "type": "string"
+                }
+            }
+        },
         "message_service.V1GetRoomMessagesResponse": {
             "type": "object",
             "properties": {
@@ -707,6 +826,9 @@ const docTemplate = `{
                 "id": {
                     "type": "integer"
                 },
+                "isOnline": {
+                    "type": "boolean"
+                },
                 "name": {
                     "type": "string"
                 },
@@ -729,6 +851,9 @@ const docTemplate = `{
                 },
                 "id": {
                     "type": "integer"
+                },
+                "isOnline": {
+                    "type": "boolean"
                 },
                 "name": {
                     "type": "string"
@@ -805,6 +930,30 @@ const docTemplate = `{
             "properties": {
                 "user": {
                     "$ref": "#/definitions/user_service.User"
+                }
+            }
+        },
+        "user_service.V1SetOnlineRequest": {
+            "type": "object",
+            "required": [
+                "UserID"
+            ],
+            "properties": {
+                "IsOnline": {
+                    "description": "@gotags: validate:\"boolean\"",
+                    "type": "boolean"
+                },
+                "UserID": {
+                    "description": "@gotags: validate:\"required\"",
+                    "type": "integer"
+                }
+            }
+        },
+        "user_service.V1SetOnlineResponse": {
+            "type": "object",
+            "properties": {
+                "user": {
+                    "$ref": "#/definitions/user_service.UserPublic"
                 }
             }
         }

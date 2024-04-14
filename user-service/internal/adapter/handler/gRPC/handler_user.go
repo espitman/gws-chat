@@ -79,10 +79,11 @@ func (h Handler) V1Get(ctx context.Context, req *pb.V1GetRequest) (*pb.V1GetResp
 	}
 	return &pb.V1GetResponse{
 		User: &pb.UserPublic{
-			Id:     int32(result.ID),
-			Name:   result.Name,
-			Avatar: result.Avatar,
-			Status: result.Status,
+			Id:       int32(result.ID),
+			Name:     result.Name,
+			Avatar:   result.Avatar,
+			Status:   result.Status,
+			IsOnline: result.IsOnline,
 		},
 	}, nil
 }
@@ -95,10 +96,11 @@ func (h Handler) V1GetByIDs(ctx context.Context, req *pb.V1GetByIDsRequest) (*pb
 	}
 	for _, r := range result {
 		users = append(users, &pb.UserPublic{
-			Id:     int32(r.ID),
-			Name:   r.Name,
-			Avatar: r.Avatar,
-			Status: r.Status,
+			Id:       int32(r.ID),
+			Name:     r.Name,
+			Avatar:   r.Avatar,
+			Status:   r.Status,
+			IsOnline: r.IsOnline,
 		})
 	}
 	return &pb.V1GetByIDsResponse{

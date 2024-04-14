@@ -1,5 +1,5 @@
 // This file generated automatically by gRPC gateway generator
-// Generated at: 2024-04-10 01:16:08
+// Generated at: 2024-04-14 21:17:44
 
 package main
 
@@ -100,6 +100,29 @@ func (h *userServiceHandler) V1Login(c *fiber.Ctx) error {
 	_ = fctx.ParamsParser(&reqDto)
 	_ = fctx.BodyParser(&reqDto)
 	res, err := h.pb.V1Login(ctx, &reqDto)
+	if err != nil {
+		return fctx.BadRequest(err)
+	}
+	return fctx.ResponseOk(res)
+}
+
+// V1SetOnline
+// @Summary V1SetOnline
+// @Description V1SetOnline
+// @Tags user_service
+// @Produce json
+// @Security BearerAuth
+// @Param body body userpb.V1SetOnlineRequest true "body"
+// @Success 200 {object} userServiceV1SetOnlineResponseDto
+// @Router /api/v1/user-service/v1-set-online [Post]
+func (h *userServiceHandler) V1SetOnline(c *fiber.Ctx) error {
+	var fctx = fiberCtx{c}
+	ctx := getCtx(fctx)
+	var reqDto userpb.V1SetOnlineRequest
+	_ = fctx.QueryParser(&reqDto)
+	_ = fctx.ParamsParser(&reqDto)
+	_ = fctx.BodyParser(&reqDto)
+	res, err := h.pb.V1SetOnline(ctx, &reqDto)
 	if err != nil {
 		return fctx.BadRequest(err)
 	}

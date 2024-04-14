@@ -27,6 +27,15 @@ definitions:
       payload:
         $ref: '#/definitions/message_service.V1CreateRoomResponse'
     type: object
+  main.messageServiceV1GetAudienceIDResponseDto:
+    properties:
+      code:
+        type: integer
+      message:
+        type: string
+      payload:
+        $ref: '#/definitions/message_service.V1GetAudienceIDResponse'
+    type: object
   main.messageServiceV1GetRoomMessagesResponseDto:
     properties:
       code:
@@ -89,6 +98,15 @@ definitions:
         type: string
       payload:
         $ref: '#/definitions/user_service.V1LoginResponse'
+    type: object
+  main.userServiceV1SetOnlineResponseDto:
+    properties:
+      code:
+        type: integer
+      message:
+        type: string
+      payload:
+        $ref: '#/definitions/user_service.V1SetOnlineResponse'
     type: object
   message_service.Message:
     properties:
@@ -191,6 +209,18 @@ definitions:
       id:
         type: string
     type: object
+  message_service.V1GetAudienceIDRequest:
+    properties:
+      roomID:
+        type: string
+    type: object
+  message_service.V1GetAudienceIDResponse:
+    properties:
+      audienceID:
+        type: integer
+      roomID:
+        type: string
+    type: object
   message_service.V1GetRoomMessagesResponse:
     properties:
       messages:
@@ -224,6 +254,8 @@ definitions:
         type: string
       id:
         type: integer
+      isOnline:
+        type: boolean
       name:
         type: string
       password:
@@ -239,6 +271,8 @@ definitions:
         type: string
       id:
         type: integer
+      isOnline:
+        type: boolean
       name:
         type: string
       status:
@@ -289,6 +323,22 @@ definitions:
     properties:
       user:
         $ref: '#/definitions/user_service.User'
+    type: object
+  user_service.V1SetOnlineRequest:
+    properties:
+      IsOnline:
+        description: '@gotags: validate:"boolean"'
+        type: boolean
+      UserID:
+        description: '@gotags: validate:"required"'
+        type: integer
+    required:
+    - UserID
+    type: object
+  user_service.V1SetOnlineResponse:
+    properties:
+      user:
+        $ref: '#/definitions/user_service.UserPublic'
     type: object
 info:
   contact:
@@ -421,6 +471,28 @@ paths:
       summary: V1AddMessage
       tags:
       - message_service
+  /api/v1/message-service/v1-get-audience-i-d:
+    post:
+      description: V1GetAudienceID
+      parameters:
+      - description: body
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/message_service.V1GetAudienceIDRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/main.messageServiceV1GetAudienceIDResponseDto'
+      security:
+      - BearerAuth: []
+      summary: V1GetAudienceID
+      tags:
+      - message_service
   /api/v1/user-service/{userID}:
     get:
       description: V1Get
@@ -504,6 +576,28 @@ paths:
       security:
       - BearerAuth: []
       summary: V1GetByIDs
+      tags:
+      - user_service
+  /api/v1/user-service/v1-set-online:
+    post:
+      description: V1SetOnline
+      parameters:
+      - description: body
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/user_service.V1SetOnlineRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/main.userServiceV1SetOnlineResponseDto'
+      security:
+      - BearerAuth: []
+      summary: V1SetOnline
       tags:
       - user_service
 securityDefinitions:

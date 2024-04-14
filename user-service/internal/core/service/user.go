@@ -98,10 +98,11 @@ func (s *UserService) Login(ctx context.Context, user domain.User) (*domain.User
 		return nil, errors.New("invalid password")
 	}
 	resp := domain.User{
-		ID:     pgUser.ID,
-		Name:   pgUser.Name,
-		Avatar: pgUser.Avatar,
-		Status: pgUser.Status,
+		ID:       pgUser.ID,
+		Name:     pgUser.Name,
+		Avatar:   pgUser.Avatar,
+		Status:   pgUser.Status,
+		IsOnline: pgUser.IsOnline,
 	}
 	token, _ := generateJWTToken(resp)
 	resp.Token = token
@@ -126,10 +127,11 @@ func (s *UserService) Get(ctx context.Context, userID uint32) (*domain.User, err
 		return nil, err
 	}
 	return &domain.User{
-		ID:     pgUser.ID,
-		Name:   pgUser.Name,
-		Avatar: pgUser.Avatar,
-		Status: pgUser.Status,
+		ID:       pgUser.ID,
+		Name:     pgUser.Name,
+		Avatar:   pgUser.Avatar,
+		Status:   pgUser.Status,
+		IsOnline: pgUser.IsOnline,
 	}, nil
 }
 
