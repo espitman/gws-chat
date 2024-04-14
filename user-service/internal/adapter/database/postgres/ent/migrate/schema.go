@@ -16,6 +16,7 @@ var (
 		{Name: "password", Type: field.TypeString},
 		{Name: "avatar", Type: field.TypeString, Default: ""},
 		{Name: "status", Type: field.TypeString, Default: "available"},
+		{Name: "is_online", Type: field.TypeBool, Default: false},
 	}
 	// ChatUsersTable holds the schema information for the "chat_users" table.
 	ChatUsersTable = &schema.Table{

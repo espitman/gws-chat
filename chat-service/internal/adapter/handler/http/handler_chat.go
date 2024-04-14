@@ -56,9 +56,9 @@ func (h *ChatHandler) ChatHandler(writer http.ResponseWriter, request *http.Requ
 		fmt.Println(err)
 	}
 
-	h.socketService.Save(socket)
-	h.roomService.Create(socket)
-	h.roomService.Subscribe(socket)
+	go h.socketService.Save(socket)
+	go h.roomService.Create(socket)
+	go h.roomService.Subscribe(socket)
 
 	go func() {
 		socket.ReadLoop() // Blocking prevents the context from being GC.

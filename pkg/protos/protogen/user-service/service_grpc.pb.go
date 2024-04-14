@@ -27,6 +27,7 @@ type UserServiceClient interface {
 	V1ValidateToken(ctx context.Context, in *V1ValidateTokenRequest, opts ...grpc.CallOption) (*V1ValidateTokenResponse, error)
 	V1Get(ctx context.Context, in *V1GetRequest, opts ...grpc.CallOption) (*V1GetResponse, error)
 	V1GetByIDs(ctx context.Context, in *V1GetByIDsRequest, opts ...grpc.CallOption) (*V1GetByIDsResponse, error)
+	V1SetOnline(ctx context.Context, in *V1SetOnlineRequest, opts ...grpc.CallOption) (*V1SetOnlineResponse, error)
 }
 
 type userServiceClient struct {
@@ -82,6 +83,15 @@ func (c *userServiceClient) V1GetByIDs(ctx context.Context, in *V1GetByIDsReques
 	return out, nil
 }
 
+func (c *userServiceClient) V1SetOnline(ctx context.Context, in *V1SetOnlineRequest, opts ...grpc.CallOption) (*V1SetOnlineResponse, error) {
+	out := new(V1SetOnlineResponse)
+	err := c.cc.Invoke(ctx, "/proto.UserService/V1SetOnline", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // UserServiceServer is the server API for UserService service.
 // All implementations must embed UnimplementedUserServiceServer
 // for forward compatibility
@@ -91,6 +101,7 @@ type UserServiceServer interface {
 	V1ValidateToken(context.Context, *V1ValidateTokenRequest) (*V1ValidateTokenResponse, error)
 	V1Get(context.Context, *V1GetRequest) (*V1GetResponse, error)
 	V1GetByIDs(context.Context, *V1GetByIDsRequest) (*V1GetByIDsResponse, error)
+	V1SetOnline(context.Context, *V1SetOnlineRequest) (*V1SetOnlineResponse, error)
 	mustEmbedUnimplementedUserServiceServer()
 }
 
@@ -112,6 +123,9 @@ func (UnimplementedUserServiceServer) V1Get(context.Context, *V1GetRequest) (*V1
 }
 func (UnimplementedUserServiceServer) V1GetByIDs(context.Context, *V1GetByIDsRequest) (*V1GetByIDsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method V1GetByIDs not implemented")
+}
+func (UnimplementedUserServiceServer) V1SetOnline(context.Context, *V1SetOnlineRequest) (*V1SetOnlineResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method V1SetOnline not implemented")
 }
 func (UnimplementedUserServiceServer) mustEmbedUnimplementedUserServiceServer() {}
 
@@ -216,6 +230,24 @@ func _UserService_V1GetByIDs_Handler(srv interface{}, ctx context.Context, dec f
 	return interceptor(ctx, in, info, handler)
 }
 
+func _UserService_V1SetOnline_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(V1SetOnlineRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(UserServiceServer).V1SetOnline(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/proto.UserService/V1SetOnline",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(UserServiceServer).V1SetOnline(ctx, req.(*V1SetOnlineRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // UserService_ServiceDesc is the grpc.ServiceDesc for UserService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -242,6 +274,10 @@ var UserService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "V1GetByIDs",
 			Handler:    _UserService_V1GetByIDs_Handler,
+		},
+		{
+			MethodName: "V1SetOnline",
+			Handler:    _UserService_V1SetOnline_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

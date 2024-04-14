@@ -61,6 +61,20 @@ func (uc *UserCreate) SetNillableStatus(s *string) *UserCreate {
 	return uc
 }
 
+// SetIsOnline sets the "IsOnline" field.
+func (uc *UserCreate) SetIsOnline(b bool) *UserCreate {
+	uc.mutation.SetIsOnline(b)
+	return uc
+}
+
+// SetNillableIsOnline sets the "IsOnline" field if the given value is not nil.
+func (uc *UserCreate) SetNillableIsOnline(b *bool) *UserCreate {
+	if b != nil {
+		uc.SetIsOnline(*b)
+	}
+	return uc
+}
+
 // Mutation returns the UserMutation object of the builder.
 func (uc *UserCreate) Mutation() *UserMutation {
 	return uc.mutation
@@ -104,6 +118,10 @@ func (uc *UserCreate) defaults() {
 		v := user.DefaultStatus
 		uc.mutation.SetStatus(v)
 	}
+	if _, ok := uc.mutation.IsOnline(); !ok {
+		v := user.DefaultIsOnline
+		uc.mutation.SetIsOnline(v)
+	}
 }
 
 // check runs all checks and user-defined validators on the builder.
@@ -119,6 +137,9 @@ func (uc *UserCreate) check() error {
 	}
 	if _, ok := uc.mutation.Status(); !ok {
 		return &ValidationError{Name: "Status", err: errors.New(`ent: missing required field "User.Status"`)}
+	}
+	if _, ok := uc.mutation.IsOnline(); !ok {
+		return &ValidationError{Name: "IsOnline", err: errors.New(`ent: missing required field "User.IsOnline"`)}
 	}
 	return nil
 }
@@ -162,6 +183,10 @@ func (uc *UserCreate) createSpec() (*User, *sqlgraph.CreateSpec) {
 	if value, ok := uc.mutation.Status(); ok {
 		_spec.SetField(user.FieldStatus, field.TypeString, value)
 		_node.Status = value
+	}
+	if value, ok := uc.mutation.IsOnline(); ok {
+		_spec.SetField(user.FieldIsOnline, field.TypeBool, value)
+		_node.IsOnline = value
 	}
 	return _node, _spec
 }
@@ -263,6 +288,18 @@ func (u *UserUpsert) UpdateStatus() *UserUpsert {
 	return u
 }
 
+// SetIsOnline sets the "IsOnline" field.
+func (u *UserUpsert) SetIsOnline(v bool) *UserUpsert {
+	u.Set(user.FieldIsOnline, v)
+	return u
+}
+
+// UpdateIsOnline sets the "IsOnline" field to the value that was provided on create.
+func (u *UserUpsert) UpdateIsOnline() *UserUpsert {
+	u.SetExcluded(user.FieldIsOnline)
+	return u
+}
+
 // UpdateNewValues updates the mutable fields using the new values that were set on create.
 // Using this option is equivalent to using:
 //
@@ -356,6 +393,20 @@ func (u *UserUpsertOne) SetStatus(v string) *UserUpsertOne {
 func (u *UserUpsertOne) UpdateStatus() *UserUpsertOne {
 	return u.Update(func(s *UserUpsert) {
 		s.UpdateStatus()
+	})
+}
+
+// SetIsOnline sets the "IsOnline" field.
+func (u *UserUpsertOne) SetIsOnline(v bool) *UserUpsertOne {
+	return u.Update(func(s *UserUpsert) {
+		s.SetIsOnline(v)
+	})
+}
+
+// UpdateIsOnline sets the "IsOnline" field to the value that was provided on create.
+func (u *UserUpsertOne) UpdateIsOnline() *UserUpsertOne {
+	return u.Update(func(s *UserUpsert) {
+		s.UpdateIsOnline()
 	})
 }
 
@@ -616,6 +667,20 @@ func (u *UserUpsertBulk) SetStatus(v string) *UserUpsertBulk {
 func (u *UserUpsertBulk) UpdateStatus() *UserUpsertBulk {
 	return u.Update(func(s *UserUpsert) {
 		s.UpdateStatus()
+	})
+}
+
+// SetIsOnline sets the "IsOnline" field.
+func (u *UserUpsertBulk) SetIsOnline(v bool) *UserUpsertBulk {
+	return u.Update(func(s *UserUpsert) {
+		s.SetIsOnline(v)
+	})
+}
+
+// UpdateIsOnline sets the "IsOnline" field to the value that was provided on create.
+func (u *UserUpsertBulk) UpdateIsOnline() *UserUpsertBulk {
+	return u.Update(func(s *UserUpsert) {
+		s.UpdateIsOnline()
 	})
 }
 

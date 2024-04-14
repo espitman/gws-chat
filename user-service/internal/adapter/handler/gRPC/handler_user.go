@@ -43,10 +43,11 @@ func (h Handler) V1GetAll(ctx context.Context, req *pb.V1GetAllRequest) (*pb.V1G
 	}
 	for _, r := range result {
 		users = append(users, &pb.UserPublic{
-			Id:     int32(r.ID),
-			Name:   r.Name,
-			Avatar: r.Avatar,
-			Status: r.Status,
+			Id:       int32(r.ID),
+			Name:     r.Name,
+			Avatar:   r.Avatar,
+			Status:   r.Status,
+			IsOnline: r.IsOnline,
 		})
 	}
 	resp.Users = users
@@ -102,5 +103,21 @@ func (h Handler) V1GetByIDs(ctx context.Context, req *pb.V1GetByIDsRequest) (*pb
 	}
 	return &pb.V1GetByIDsResponse{
 		Users: users,
+	}, nil
+}
+
+func (h Handler) V1SetOnline(ctx context.Context, req *pb.V1SetOnlineRequest) (*pb.V1SetOnlineResponse, error) {
+	result, err := h.userService.SetOnline(ctx, req.UserID, req.IsOnline)
+	if err != nil {
+		return nil, err
+	}
+	return &pb.V1SetOnlineResponse{
+		User: &pb.UserPublic{
+			Id:       int32(result.ID),
+			Name:     result.Name,
+			Avatar:   result.Avatar,
+			Status:   result.Status,
+			IsOnline: result.IsOnline,
+		},
 	}, nil
 }

@@ -72,6 +72,11 @@ func Status(v string) predicate.User {
 	return predicate.User(sql.FieldEQ(FieldStatus, v))
 }
 
+// IsOnline applies equality check predicate on the "IsOnline" field. It's identical to IsOnlineEQ.
+func IsOnline(v bool) predicate.User {
+	return predicate.User(sql.FieldEQ(FieldIsOnline, v))
+}
+
 // NameEQ applies the EQ predicate on the "Name" field.
 func NameEQ(v string) predicate.User {
 	return predicate.User(sql.FieldEQ(FieldName, v))
@@ -330,6 +335,16 @@ func StatusEqualFold(v string) predicate.User {
 // StatusContainsFold applies the ContainsFold predicate on the "Status" field.
 func StatusContainsFold(v string) predicate.User {
 	return predicate.User(sql.FieldContainsFold(FieldStatus, v))
+}
+
+// IsOnlineEQ applies the EQ predicate on the "IsOnline" field.
+func IsOnlineEQ(v bool) predicate.User {
+	return predicate.User(sql.FieldEQ(FieldIsOnline, v))
+}
+
+// IsOnlineNEQ applies the NEQ predicate on the "IsOnline" field.
+func IsOnlineNEQ(v bool) predicate.User {
+	return predicate.User(sql.FieldNEQ(FieldIsOnline, v))
 }
 
 // And groups predicates with the AND operator between them.

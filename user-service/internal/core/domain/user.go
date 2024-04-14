@@ -7,4 +7,5 @@ type User struct {
 	Avatar   string
 	Status   string
 	Token    string
+	IsOnline bool
 }

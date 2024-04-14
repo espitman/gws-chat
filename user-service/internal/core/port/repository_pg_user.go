@@ -16,4 +16,5 @@ type UserRepositoryPg interface {
 	GetAll(ctx context.Context, me bool, userID int) ([]*domain.User, error)
 	Get(ctx context.Context, userID uint32) (*domain.User, error)
 	GetByIDs(ctx context.Context, userIDs []int) ([]*domain.User, error)
+	SetOnline(ctx context.Context, userID uint32, isOnline bool) (*domain.User, error)
 }

@@ -83,6 +83,20 @@ func (uu *UserUpdate) SetNillableStatus(s *string) *UserUpdate {
 	return uu
 }
 
+// SetIsOnline sets the "IsOnline" field.
+func (uu *UserUpdate) SetIsOnline(b bool) *UserUpdate {
+	uu.mutation.SetIsOnline(b)
+	return uu
+}
+
+// SetNillableIsOnline sets the "IsOnline" field if the given value is not nil.
+func (uu *UserUpdate) SetNillableIsOnline(b *bool) *UserUpdate {
+	if b != nil {
+		uu.SetIsOnline(*b)
+	}
+	return uu
+}
+
 // Mutation returns the UserMutation object of the builder.
 func (uu *UserUpdate) Mutation() *UserMutation {
 	return uu.mutation
@@ -135,6 +149,9 @@ func (uu *UserUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if value, ok := uu.mutation.Status(); ok {
 		_spec.SetField(user.FieldStatus, field.TypeString, value)
+	}
+	if value, ok := uu.mutation.IsOnline(); ok {
+		_spec.SetField(user.FieldIsOnline, field.TypeBool, value)
 	}
 	if n, err = sqlgraph.UpdateNodes(ctx, uu.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
@@ -208,6 +225,20 @@ func (uuo *UserUpdateOne) SetStatus(s string) *UserUpdateOne {
 func (uuo *UserUpdateOne) SetNillableStatus(s *string) *UserUpdateOne {
 	if s != nil {
 		uuo.SetStatus(*s)
+	}
+	return uuo
+}
+
+// SetIsOnline sets the "IsOnline" field.
+func (uuo *UserUpdateOne) SetIsOnline(b bool) *UserUpdateOne {
+	uuo.mutation.SetIsOnline(b)
+	return uuo
+}
+
+// SetNillableIsOnline sets the "IsOnline" field if the given value is not nil.
+func (uuo *UserUpdateOne) SetNillableIsOnline(b *bool) *UserUpdateOne {
+	if b != nil {
+		uuo.SetIsOnline(*b)
 	}
 	return uuo
 }
@@ -294,6 +325,9 @@ func (uuo *UserUpdateOne) sqlSave(ctx context.Context) (_node *User, err error) 
 	}
 	if value, ok := uuo.mutation.Status(); ok {
 		_spec.SetField(user.FieldStatus, field.TypeString, value)
+	}
+	if value, ok := uuo.mutation.IsOnline(); ok {
+		_spec.SetField(user.FieldIsOnline, field.TypeBool, value)
 	}
 	_node = &User{config: uuo.config}
 	_spec.Assign = _node.assignValues

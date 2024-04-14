@@ -23,3 +23,8 @@ message V1GetRequest {
 message V1GetByIDsRequest {
   repeated uint32 UserIDs = 1; // @gotags: validate:"required"
 }
+
+message V1SetOnlineRequest {
+  uint32 UserID = 1; // @gotags: validate:"required"
+  bool IsOnline = 2; // @gotags: validate:"boolean"
+}

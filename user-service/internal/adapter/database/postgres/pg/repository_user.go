@@ -28,6 +28,7 @@ func (r *UserRepository) Crete(ctx context.Context, d domain.User) (*domain.User
 		SetName(d.Name).
 		SetPassword(d.Password).
 		SetAvatar(d.Avatar).
+		SetIsOnline(false).
 		Save(ctx)
 	if err != nil {
 		return nil, err
@@ -69,4 +70,16 @@ func (r *UserRepository) GetByIDs(ctx context.Context, userIDs []int) ([]*domain
 		return nil, err
 	}
 	return userSchemasToUserDomainsPointerMapper(users), nil
+}
+
+func (r *UserRepository) SetOnline(ctx context.Context, userID uint32, isOnline bool) (*domain.User, error) {
+	u, err := r.client.User.Query().Where(user.ID(int(userID))).First(ctx)
+	if err != nil {
+		return nil, err
+	}
+	res, err := u.Update().SetIsOnline(isOnline).Save(ctx)
+	if err != nil {
+		return nil, err
+	}
+	return userSchemaToUserDomainPointerMapper(res), nil
 }

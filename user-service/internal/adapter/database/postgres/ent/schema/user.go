@@ -25,6 +25,7 @@ func (User) Fields() []ent.Field {
 		field.String("Password"),
 		field.String("Avatar").Nillable().Default(""),
 		field.String("Status").Default("available"),
+		field.Bool("IsOnline").Default(false),
 	}
 }
 

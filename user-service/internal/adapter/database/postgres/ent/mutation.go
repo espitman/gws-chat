@@ -36,6 +36,7 @@ type UserMutation struct {
 	_Password     *string
 	_Avatar       *string
 	_Status       *string
+	_IsOnline     *bool
 	clearedFields map[string]struct{}
 	done          bool
 	oldValue      func(context.Context) (*User, error)
@@ -284,6 +285,42 @@ func (m *UserMutation) ResetStatus() {
 	m._Status = nil
 }
 
+// SetIsOnline sets the "IsOnline" field.
+func (m *UserMutation) SetIsOnline(b bool) {
+	m._IsOnline = &b
+}
+
+// IsOnline returns the value of the "IsOnline" field in the mutation.
+func (m *UserMutation) IsOnline() (r bool, exists bool) {
+	v := m._IsOnline
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldIsOnline returns the old "IsOnline" field's value of the User entity.
+// If the User object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *UserMutation) OldIsOnline(ctx context.Context) (v bool, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldIsOnline is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldIsOnline requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldIsOnline: %w", err)
+	}
+	return oldValue.IsOnline, nil
+}
+
+// ResetIsOnline resets all changes to the "IsOnline" field.
+func (m *UserMutation) ResetIsOnline() {
+	m._IsOnline = nil
+}
+
 // Where appends a list predicates to the UserMutation builder.
 func (m *UserMutation) Where(ps ...predicate.User) {
 	m.predicates = append(m.predicates, ps...)
@@ -318,7 +355,7 @@ func (m *UserMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *UserMutation) Fields() []string {
-	fields := make([]string, 0, 4)
+	fields := make([]string, 0, 5)
 	if m._Name != nil {
 		fields = append(fields, user.FieldName)
 	}
@@ -330,6 +367,9 @@ func (m *UserMutation) Fields() []string {
 	}
 	if m._Status != nil {
 		fields = append(fields, user.FieldStatus)
+	}
+	if m._IsOnline != nil {
+		fields = append(fields, user.FieldIsOnline)
 	}
 	return fields
 }
@@ -347,6 +387,8 @@ func (m *UserMutation) Field(name string) (ent.Value, bool) {
 		return m.Avatar()
 	case user.FieldStatus:
 		return m.Status()
+	case user.FieldIsOnline:
+		return m.IsOnline()
 	}
 	return nil, false
 }
@@ -364,6 +406,8 @@ func (m *UserMutation) OldField(ctx context.Context, name string) (ent.Value, er
 		return m.OldAvatar(ctx)
 	case user.FieldStatus:
 		return m.OldStatus(ctx)
+	case user.FieldIsOnline:
+		return m.OldIsOnline(ctx)
 	}
 	return nil, fmt.Errorf("unknown User field %s", name)
 }
@@ -400,6 +444,13 @@ func (m *UserMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetStatus(v)
+		return nil
+	case user.FieldIsOnline:
+		v, ok := value.(bool)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetIsOnline(v)
 		return nil
 	}
 	return fmt.Errorf("unknown User field %s", name)
@@ -461,6 +512,9 @@ func (m *UserMutation) ResetField(name string) error {
 		return nil
 	case user.FieldStatus:
 		m.ResetStatus()
+		return nil
+	case user.FieldIsOnline:
+		m.ResetIsOnline()
 		return nil
 	}
 	return fmt.Errorf("unknown User field %s", name)

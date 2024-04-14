@@ -12,6 +12,7 @@ func userSchemaToUserDomainPointerMapper(c *ent.User) *domain.User {
 		Password: c.Password,
 		Avatar:   *c.Avatar,
 		Status:   c.Status,
+		IsOnline: c.IsOnline,
 	}
 }
 

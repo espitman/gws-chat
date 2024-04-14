@@ -23,3 +23,7 @@ message V1GetResponse {
 message V1GetByIDsResponse {
   repeated UserPublic users = 1;
 }
+
+message V1SetOnlineResponse {
+  UserPublic user = 1;
+}

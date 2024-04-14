@@ -140,3 +140,7 @@ func (s *UserService) GetByIDs(ctx context.Context, userIDs []uint32) ([]*domain
 	}
 	return s.userRepositoryPg.GetByIDs(ctx, ids)
 }
+
+func (s *UserService) SetOnline(ctx context.Context, userID uint32, isOnline bool) (*domain.User, error) {
+	return s.userRepositoryPg.SetOnline(ctx, userID, isOnline)
+}

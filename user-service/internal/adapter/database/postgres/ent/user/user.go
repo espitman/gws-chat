@@ -19,6 +19,8 @@ const (
 	FieldAvatar = "avatar"
 	// FieldStatus holds the string denoting the status field in the database.
 	FieldStatus = "status"
+	// FieldIsOnline holds the string denoting the isonline field in the database.
+	FieldIsOnline = "is_online"
 	// Table holds the table name of the user in the database.
 	Table = "chat_users"
 )
@@ -30,6 +32,7 @@ var Columns = []string{
 	FieldPassword,
 	FieldAvatar,
 	FieldStatus,
+	FieldIsOnline,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -47,6 +50,8 @@ var (
 	DefaultAvatar string
 	// DefaultStatus holds the default value on creation for the "Status" field.
 	DefaultStatus string
+	// DefaultIsOnline holds the default value on creation for the "IsOnline" field.
+	DefaultIsOnline bool
 )
 
 // OrderOption defines the ordering options for the User queries.
@@ -75,4 +80,9 @@ func ByAvatar(opts ...sql.OrderTermOption) OrderOption {
 // ByStatus orders the results by the Status field.
 func ByStatus(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldStatus, opts...).ToFunc()
+}
+
+// ByIsOnline orders the results by the IsOnline field.
+func ByIsOnline(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldIsOnline, opts...).ToFunc()
 }

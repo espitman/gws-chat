@@ -21,4 +21,8 @@ func init() {
 	userDescStatus := userFields[3].Descriptor()
 	// user.DefaultStatus holds the default value on creation for the Status field.
 	user.DefaultStatus = userDescStatus.Default.(string)
+	// userDescIsOnline is the schema descriptor for IsOnline field.
+	userDescIsOnline := userFields[4].Descriptor()
+	// user.DefaultIsOnline holds the default value on creation for the IsOnline field.
+	user.DefaultIsOnline = userDescIsOnline.Default.(bool)
 }

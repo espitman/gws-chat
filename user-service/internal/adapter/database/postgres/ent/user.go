@@ -23,7 +23,9 @@ type User struct {
 	// Avatar holds the value of the "Avatar" field.
 	Avatar *string `json:"Avatar,omitempty"`
 	// Status holds the value of the "Status" field.
-	Status       string `json:"Status,omitempty"`
+	Status string `json:"Status,omitempty"`
+	// IsOnline holds the value of the "IsOnline" field.
+	IsOnline     bool `json:"IsOnline,omitempty"`
 	selectValues sql.SelectValues
 }
 
@@ -32,6 +34,8 @@ func (*User) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
+		case user.FieldIsOnline:
+			values[i] = new(sql.NullBool)
 		case user.FieldID:
 			values[i] = new(sql.NullInt64)
 		case user.FieldName, user.FieldPassword, user.FieldAvatar, user.FieldStatus:
@@ -82,6 +86,12 @@ func (u *User) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				u.Status = value.String
 			}
+		case user.FieldIsOnline:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field IsOnline", values[i])
+			} else if value.Valid {
+				u.IsOnline = value.Bool
+			}
 		default:
 			u.selectValues.Set(columns[i], values[i])
 		}
@@ -131,6 +141,9 @@ func (u *User) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("Status=")
 	builder.WriteString(u.Status)
+	builder.WriteString(", ")
+	builder.WriteString("IsOnline=")
+	builder.WriteString(fmt.Sprintf("%v", u.IsOnline))
 	builder.WriteByte(')')
 	return builder.String()
 }
