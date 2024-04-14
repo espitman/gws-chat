@@ -7,8 +7,6 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/ThreeDotsLabs/watermill"
-	"github.com/ThreeDotsLabs/watermill/message"
 	"github.com/ThreeDotsLabs/watermill/pubsub/gochannel"
 	"github.com/espitman/gws-chat/chat-service/internal/core/domain"
 	"github.com/espitman/gws-chat/chat-service/internal/core/port"
@@ -65,59 +63,44 @@ func (h *Handler) OnPong(socket *gws.Conn, payload []byte) {
 
 func (h *Handler) OnMessage(socket *gws.Conn, message *gws.Message) {
 	defer message.Close()
+	ctx := context.TODO()
 	roomID, _ := socket.Session().Load("roomID")
 	socketID, _ := socket.Session().Load("socketID")
 	userID, _ := socket.Session().Load("userID")
 	//token, _ := socket.Session().Load("token")
 	fmt.Println("OnMessage", roomID, socketID, message.Data, userID)
 
+	var messageBody domain.MessageBody
+	err := json.Unmarshal(message.Data.Bytes(), &messageBody)
+	if err != nil {
+		fmt.Println(err)
+	}
+
 	u, _ := strconv.Atoi(userID.(string))
-	audienceID, err := h.roomService.GetAudience(context.TODO(), roomID.(string), uint32(u))
-	if err != nil {
-		fmt.Println(err)
-	}
-
-	msg := domain.Message{
-		RoomID:     roomID.(string),
-		UserID:     uint32(u),
-		Body:       message.Data.String(),
-		AudienceID: audienceID,
-	}
-	_, err = h.messageService.Create(context.Background(), msg)
-	if err != nil {
-		fmt.Println(err)
-	}
-
-	go h.publishMessages(strconv.Itoa(int(audienceID)), msg)
-
-	subscribers := h.roomService.GetSubscribers(roomID.(string))
-	for _, s := range subscribers {
-		sid, _ := s.Session().Load("socketID")
-		if sid != socketID {
-			s.WriteMessage(message.Opcode, message.Bytes())
-		}
-	}
-}
-
-func (h *Handler) publishMessages(userID string, data domain.Message) {
-	go h.publishSSE(userID, data)
-	go h.publishPush(userID, data)
-}
-
-func (h *Handler) publishSSE(userID string, data domain.Message) {
-	msg := message.NewMessage(watermill.NewUUID(), message.Payload(data.Body))
-	if err := h.pubSub.Publish(userID, msg); err != nil {
-		fmt.Println(err)
-	}
-}
-
-func (h *Handler) publishPush(userID string, data domain.Message) {
-	jsonData, err := json.Marshal(data)
-	if err != nil {
-		fmt.Println(err)
-	}
-	msg := message.NewMessage(watermill.NewUUID(), jsonData)
-	if err := h.pubSub.Publish("chat-message", msg); err != nil {
-		fmt.Println(err)
-	}
+	h.messageService.Text(ctx, message, socketID.(string), roomID.(string), uint32(u), messageBody)
+	//audienceID, err := h.roomService.GetAudience(context.TODO(), roomID.(string), uint32(u))
+	//if err != nil {
+	//	fmt.Println(err)
+	//}
+	//
+	//msg := domain.Message{
+	//	RoomID:     roomID.(string),
+	//	UserID:     uint32(u),
+	//	Body:       messageBody,
+	//	AudienceID: audienceID,
+	//}
+	//_, err = h.messageService.Create(context.Background(), msg)
+	//if err != nil {
+	//	fmt.Println(err)
+	//}
+	//
+	//go h.publishMessages(strconv.Itoa(int(audienceID)), msg)
+	//
+	//subscribers := h.roomService.GetSubscribers(roomID.(string))
+	//for _, s := range subscribers {
+	//	sid, _ := s.Session().Load("socketID")
+	//	if sid != socketID {
+	//		s.WriteMessage(message.Opcode, message.Bytes())
+	//	}
+	//}
 }

@@ -28,7 +28,7 @@ func NewGrpcClientMessage() *GrpcClientMessage {
 func (g *GrpcClientMessage) Create(ctx context.Context, message domain.Message) (*domain.Message, error) {
 	reqDto := messagepb.V1AddMessageRequest{
 		RoomID: message.RoomID,
-		Body:   message.Body,
+		Body:   message.Body.Body,
 		Time:   message.Time,
 	}
 	md := metadata.Pairs("Authorization", strconv.Itoa(int(message.UserID)))
@@ -42,8 +42,11 @@ func (g *GrpcClientMessage) Create(ctx context.Context, message domain.Message) 
 		ID:     result.Message.Id,
 		RoomID: result.Message.RoomID,
 		UserID: uint32(result.Message.UserID),
-		Body:   result.Message.Body,
-		Time:   result.Message.Time,
+		Body: domain.MessageBody{
+			Type: "message",
+			Body: result.Message.Body,
+		},
+		Time: result.Message.Time,
 	}, nil
 }
 

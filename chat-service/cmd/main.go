@@ -24,13 +24,13 @@ func main() {
 	userService := service.NewUserService(userRepositoryGrpc)
 
 	messageRepositoryGrpc := grpcclientmessage.NewGrpcClientMessage()
-	messageService := service.NewMessageService(*messageRepositoryGrpc)
+	roomRepositoryMD := memdb.NewRoomRepository()
+	roomService := service.NewRoomService(roomRepositoryMD, messageRepositoryGrpc)
+
+	messageService := service.NewMessageService(pubSub, *messageRepositoryGrpc, roomService)
 
 	socketRepositoryMD := memdb.NewSocketRepository()
 	socketService := service.NewSocketService(socketRepositoryMD)
-
-	roomRepositoryMD := memdb.NewRoomRepository()
-	roomService := service.NewRoomService(roomRepositoryMD, messageRepositoryGrpc)
 
 	socketConnectService := service.NewSocketConnectService(pubSub, socketService, roomService, messageService)
 
