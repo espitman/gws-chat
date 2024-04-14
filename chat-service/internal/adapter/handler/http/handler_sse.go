@@ -1,23 +1,28 @@
 package http
 
 import (
+	"context"
 	"fmt"
 	"net/http"
+	"strconv"
 
 	"github.com/ThreeDotsLabs/watermill/pubsub/gochannel"
+	"github.com/espitman/gws-chat/chat-service/internal/core/port"
 	"github.com/julienschmidt/httprouter"
 	"github.com/r3labs/sse/v2"
 )
 
 type SSEHandler struct {
-	sseServer *sse.Server
-	pubSub    *gochannel.GoChannel
+	sseServer   *sse.Server
+	pubSub      *gochannel.GoChannel
+	userService port.UserService
 }
 
-func NewSSEHandler(sseServer *sse.Server, pubSub *gochannel.GoChannel) *SSEHandler {
+func NewSSEHandler(sseServer *sse.Server, pubSub *gochannel.GoChannel, userService port.UserService) *SSEHandler {
 	return &SSEHandler{
-		sseServer: sseServer,
-		pubSub:    pubSub,
+		sseServer:   sseServer,
+		pubSub:      pubSub,
+		userService: userService,
 	}
 }
 
@@ -34,30 +39,27 @@ func (h *SSEHandler) SSEHandler(w http.ResponseWriter, r *http.Request, ps httpr
 	h.setHeaders(w)
 
 	userID := ps.ByName("id")
+	uid, _ := strconv.Atoi(userID)
+
+	go h.userService.SetOnline(context.TODO(), uint32(uid), true)
 
 	ctx := r.Context()
 	messages, _ := h.pubSub.Subscribe(ctx, userID)
 
 	for msg := range messages {
-		//fmt.Printf("received message: %s, payload: %s\n", msg.UUID, string(msg.Payload))
-		//fmt.Fprintf(w, string(msg.Payload))
 		fmt.Fprintf(w, "data: %s\n\n", fmt.Sprintf("%s", msg.Payload))
 		w.(http.Flusher).Flush()
 		msg.Ack()
 	}
 
-	//for {
-	//	select {
-	//	case <-ctx.Done():
-	//		fmt.Println("left")
-	//		ctx.Done()
-	//		return
-	//	default:
-	//		i++
-	//		fmt.Println(i)
-	//		fmt.Fprintf(w, "data: %s\n\n", fmt.Sprintf("Event %d", i))
-	//		time.Sleep(2 * time.Second)
-	//		w.(http.Flusher).Flush()
-	//	}
-	//}
+	for {
+		select {
+		case <-ctx.Done():
+			go h.userService.SetOnline(context.TODO(), uint32(uid), false)
+			fmt.Println("left")
+			ctx.Done()
+			return
+		default:
+		}
+	}
 }

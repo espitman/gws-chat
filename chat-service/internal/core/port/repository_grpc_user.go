@@ -8,4 +8,5 @@ import (
 
 type UserRepositoryGrpc interface {
 	Validate(ctx context.Context, token string) (*domain.User, error)
+	SetOnline(ctx context.Context, userID uint32, isOnline bool) (*domain.User, error)
 }
