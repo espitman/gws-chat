@@ -42,13 +42,12 @@ func (h *Handler) OnOpen(socket *gws.Conn) {
 }
 
 func (h *Handler) OnClose(socket *gws.Conn, err error) {
-	id, _ := socket.Session().Load("roomID")
+	roomID, _ := socket.Session().Load("roomID")
 	socketID, _ := socket.Session().Load("socketID")
-
 	h.socketService.Delete(socketID.(string))
-	//TODO: unsubscribe
-
-	fmt.Println("OnClose", id, socketID)
+	h.roomService.Delete(roomID.(string))
+	h.roomService.UnSubscribe(roomID.(string))
+	fmt.Println("OnClose", roomID, socketID)
 }
 
 func (h *Handler) OnPing(socket *gws.Conn, payload []byte) {
@@ -78,29 +77,4 @@ func (h *Handler) OnMessage(socket *gws.Conn, message *gws.Message) {
 
 	u, _ := strconv.Atoi(userID.(string))
 	h.messageService.Text(ctx, message, socketID.(string), roomID.(string), uint32(u), messageBody)
-	//audienceID, err := h.roomService.GetAudience(context.TODO(), roomID.(string), uint32(u))
-	//if err != nil {
-	//	fmt.Println(err)
-	//}
-	//
-	//msg := domain.Message{
-	//	RoomID:     roomID.(string),
-	//	UserID:     uint32(u),
-	//	Body:       messageBody,
-	//	AudienceID: audienceID,
-	//}
-	//_, err = h.messageService.Create(context.Background(), msg)
-	//if err != nil {
-	//	fmt.Println(err)
-	//}
-	//
-	//go h.publishMessages(strconv.Itoa(int(audienceID)), msg)
-	//
-	//subscribers := h.roomService.GetSubscribers(roomID.(string))
-	//for _, s := range subscribers {
-	//	sid, _ := s.Session().Load("socketID")
-	//	if sid != socketID {
-	//		s.WriteMessage(message.Opcode, message.Bytes())
-	//	}
-	//}
 }

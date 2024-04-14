@@ -1,6 +1,7 @@
 package http
 
 import (
+	"fmt"
 	"net/http"
 	"strconv"
 
@@ -52,7 +53,7 @@ func (h *ChatHandler) ChatHandler(writer http.ResponseWriter, request *http.Requ
 
 	socket, err := h.socketConnectService.Open(writer, request, strconv.Itoa(int(user.ID)), roomID, token)
 	if err != nil {
-		return
+		fmt.Println(err)
 	}
 
 	h.socketService.Save(socket)

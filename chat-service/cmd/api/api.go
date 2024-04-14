@@ -24,7 +24,7 @@ func Run(
 
 	chatHandler := http.NewChatHandler(validate, messageService, socketConnectService, socketService, roomService, userService)
 	messageHandler := http.NewMessageHandler(validate, messageService, socketService)
-	indexHandler := http.NewIndexHandler()
+	indexHandler := http.NewIndexHandler(roomService)
 	sseHandler := http.NewSSEHandler(sseServer, pubSub)
 	// +salvation NewHandler
 

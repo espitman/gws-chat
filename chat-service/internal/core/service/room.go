@@ -3,6 +3,7 @@ package service
 import (
 	"context"
 
+	"github.com/espitman/gws-chat/chat-service/internal/core/domain"
 	"github.com/espitman/gws-chat/chat-service/internal/core/port"
 	"github.com/lxzan/gws"
 )
@@ -35,4 +36,20 @@ func (s *RoomService) GetSubscribers(roomID string) []*gws.Conn {
 
 func (s *RoomService) GetAudience(ctx context.Context, roomID string, userID uint32) (uint32, error) {
 	return s.messageRepositoryGrpc.GetAudienceID(ctx, roomID, userID)
+}
+
+func (s *RoomService) Delete(roomID string) {
+	s.roomRepositoryMD.Delete(roomID)
+}
+
+func (s *RoomService) UnSubscribe(roomID string) {
+	s.roomRepositoryMD.UnSubscribe(roomID)
+}
+
+func (s *RoomService) GetAllRooms() []domain.Room {
+	return s.roomRepositoryMD.GetAllRooms()
+}
+
+func (s *RoomService) GetAllSubscribers() []domain.Subscriber {
+	return s.roomRepositoryMD.GetAllSubscribers()
 }
